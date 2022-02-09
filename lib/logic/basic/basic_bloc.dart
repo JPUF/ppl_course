@@ -7,16 +7,16 @@ part 'basic_state.dart';
 
 abstract class BasicEvent {}
 
-class Fetch implements BasicEvent {}
+class FetchBasic implements BasicEvent {}
 
 class BasicBloc extends Bloc<BasicEvent, Response<BasicState>> {
   final BasicRepository _basicRepository = BasicRepository();
 
   BasicBloc() : super(Response.completed(BasicState(basicText: ''))) {
-    on<Fetch>(_onFetch);
+    on<FetchBasic>(_onFetch);
   }
 
-  void _onFetch(Fetch event, Emitter<Response<BasicState>> emit) async {
+  void _onFetch(FetchBasic event, Emitter<Response<BasicState>> emit) async {
     emit(Response.loading("Loading TODO"));
     try {
       Todo todo = await _basicRepository.getTodo();

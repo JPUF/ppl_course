@@ -1,5 +1,6 @@
 import 'package:ppl_course/data/network/response.dart';
 import 'package:ppl_course/logic/basic/basic_bloc.dart';
+import 'package:ppl_course/logic/cycles/cycles_bloc.dart';
 import 'package:ppl_course/presentation/navigation/destination.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -51,12 +52,29 @@ class _HomePageState extends State<HomePage> {
                 }
               },
             ),
+            BlocConsumer<CyclesBloc, Response<CyclesState>>(
+                builder: (context, state) {
+              switch (state.status) {
+                case Status.completed:
+                  return Text(
+                    state.data?.cycles[0].sessions?[0].exercises[0].name ?? "",
+                    style: Theme.of(context).textTheme.headline5,
+                  );
+                default:
+                  return Text(
+                    "Error",
+                    style: Theme.of(context).textTheme.headline5,
+                  );
+              }
+            }, listener: (context, state) {
+              state.data?.cycles;
+            }),
             const SizedBox(height: 16),
             FloatingActionButton(
                 heroTag: 'primaryCta',
                 child: const Icon(Icons.gavel_outlined),
                 onPressed: () {
-                  BlocProvider.of<BasicBloc>(context).add(Fetch());
+                  BlocProvider.of<BasicBloc>(context).add(FetchBasic());
                 }),
             const SizedBox(height: 16),
             FloatingActionButton(
@@ -65,7 +83,15 @@ class _HomePageState extends State<HomePage> {
                 Navigator.of(context).pushNamed(Destination.second);
               },
               child: const Icon(Icons.navigate_next_rounded),
-            )
+            ),
+            const SizedBox(height: 16),
+            FloatingActionButton(
+              heroTag: 'cycleCta',
+              onPressed: () {
+                BlocProvider.of<CyclesBloc>(context).add(FetchCycles());
+              },
+              child: const Icon(Icons.accessibility)
+            ),
           ],
         ),
       ),
