@@ -3,11 +3,12 @@ import 'package:ppl_course/logic/cycles/cycles_bloc.dart';
 import 'package:ppl_course/presentation/navigation/app_router.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:ppl_course/res/color/colors.dart';
 
 import 'data/models/cycle/session.dart';
 import 'data/models/exercise/exercise.dart';
 import 'logic/basic/basic_bloc.dart';
-import 'presentation/pages/home_page.dart';
+import 'presentation/pages/home/home_page.dart';
 
 void main() {
   runApp(MyApp());
@@ -21,9 +22,9 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'PPL Course Demo',
       theme: ThemeData(
-        primarySwatch: Colors.lightGreen,
+        primarySwatch: AppColor.dark,
+        scaffoldBackgroundColor: AppColor.light
       ),
       onGenerateRoute: _router.onGenerateRoute,
       home: MultiBlocProvider(

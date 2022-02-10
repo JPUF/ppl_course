@@ -1,5 +1,5 @@
-import 'package:ppl_course/presentation/pages/home_page.dart';
-import 'package:ppl_course/presentation/pages/second_page.dart';
+import 'package:ppl_course/presentation/pages/home/home_page.dart';
+import 'package:ppl_course/presentation/pages/second/second_page.dart';
 import 'package:flutter/material.dart';
 
 import 'destination.dart';
