@@ -11,3 +11,16 @@ class Session {
 enum SessionType {
   push, pull, legs
 }
+
+extension SessionString on SessionType {
+  String toSessionString() {
+    switch(this) {
+      case SessionType.push:
+        return 'Push';
+      case SessionType.pull:
+        return 'Pull';
+      case SessionType.legs:
+        return 'Legs';
+    }
+  }
+}

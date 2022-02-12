@@ -28,29 +28,32 @@ class _SessionWidgetState extends State<SessionWidget> {
   @override
   Widget build(BuildContext context) {
     populateExerciseWidgets(widget.session.exercises);
-    return Container(
-      width: double.infinity,
-      decoration: BoxDecoration(
-          color: AppColor.secondary, borderRadius: BorderRadius.circular(4)),
-      child: Column(
-        children: [
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Row(
-              textBaseline: TextBaseline.alphabetic,
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.baseline,
-              children: [
-                Text("1", style: Theme.of(context).textTheme.headline3),
-                const SizedBox(width: 16),
-                Text("Pull", style: Theme.of(context).textTheme.headline4)
-              ],
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(0, 0, 0, 16),
+      child: Container(
+        width: double.infinity,
+        decoration: BoxDecoration(
+            color: AppColor.secondary, borderRadius: BorderRadius.circular(4)),
+        child: Column(
+          children: [
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Row(
+                textBaseline: TextBaseline.alphabetic,
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.baseline,
+                children: [
+                  Text('${widget.session.cycleNumber}', style: Theme.of(context).textTheme.headline3),
+                  const SizedBox(width: 16),
+                  Text(widget.session.type.toSessionString(), style: Theme.of(context).textTheme.headline4)
+                ],
+              ),
             ),
-          ),
-          Divider(color: AppColor.dark, thickness: 2),
-          Column(children: exerciseWidgets),
-          const SizedBox(height: 8),
-        ],
+            Divider(color: AppColor.dark, thickness: 2),
+            Column(children: exerciseWidgets),
+            const SizedBox(height: 9),
+          ],
+        ),
       ),
     );
   }
