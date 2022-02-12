@@ -6,5 +6,6 @@ class Exercise {
   late SetsReps setsReps;
   Weight? weight;
 
-  Exercise(this.name, this.setsReps);
+  Exercise.weighted(this.name, this.setsReps, this.weight);
+  Exercise.noWeight(this.name, this.setsReps);
 }
