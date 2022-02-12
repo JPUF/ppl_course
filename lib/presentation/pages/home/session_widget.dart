@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:ppl_course/data/models/cycle/session.dart';
 import 'package:ppl_course/data/models/exercise/exercise.dart';
-import 'package:ppl_course/data/models/exercise/sets_reps.dart';
-import 'package:ppl_course/data/models/exercise/weight.dart';
 import 'package:ppl_course/presentation/pages/home/exercise_widget.dart';
 import 'package:ppl_course/res/color/colors.dart';
 

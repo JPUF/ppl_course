@@ -1,12 +1,9 @@
-import 'package:ppl_course/data/models/exercise/sets_reps.dart';
-import 'package:ppl_course/logic/cycles/cycles_bloc.dart';
-import 'package:ppl_course/presentation/navigation/app_router.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:ppl_course/logic/cycles/cycles_bloc.dart';
+import 'package:ppl_course/presentation/navigation/app_router.dart';
 import 'package:ppl_course/res/color/colors.dart';
 
-import 'data/models/cycle/session.dart';
-import 'data/models/exercise/exercise.dart';
 import 'logic/basic/basic_bloc.dart';
 import 'presentation/pages/home/home_page.dart';
 

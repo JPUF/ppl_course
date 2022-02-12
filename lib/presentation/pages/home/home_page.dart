@@ -1,13 +1,9 @@
-import 'package:ppl_course/data/models/cycle/session.dart';
-import 'package:ppl_course/data/models/exercise/exercise.dart';
-import 'package:ppl_course/data/models/exercise/sets_reps.dart';
-import 'package:ppl_course/data/models/exercise/weight.dart';
-import 'package:ppl_course/data/network/response.dart';
-import 'package:ppl_course/logic/basic/basic_bloc.dart';
-import 'package:ppl_course/logic/cycles/cycles_bloc.dart';
-import 'package:ppl_course/presentation/navigation/destination.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:ppl_course/data/models/cycle/session.dart';
+import 'package:ppl_course/data/network/response.dart';
+import 'package:ppl_course/logic/cycles/cycles_bloc.dart';
+import 'package:ppl_course/presentation/navigation/destination.dart';
 import 'package:ppl_course/presentation/pages/home/session_widget.dart';
 import 'package:ppl_course/res/color/colors.dart';
 

@@ -1,7 +1,7 @@
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ppl_course/data/models/basic/todo_model.dart';
 import 'package:ppl_course/data/network/response.dart';
 import 'package:ppl_course/data/repositories/basic/basic_repository.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 
 part 'basic_state.dart';
 
