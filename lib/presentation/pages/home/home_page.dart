@@ -1,3 +1,7 @@
+import 'package:ppl_course/data/models/cycle/session.dart';
+import 'package:ppl_course/data/models/exercise/exercise.dart';
+import 'package:ppl_course/data/models/exercise/sets_reps.dart';
+import 'package:ppl_course/data/models/exercise/weight.dart';
 import 'package:ppl_course/data/network/response.dart';
 import 'package:ppl_course/logic/basic/basic_bloc.dart';
 import 'package:ppl_course/logic/cycles/cycles_bloc.dart';
@@ -19,6 +23,9 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
+
+    BlocProvider.of<CyclesBloc>(context).add(FetchCycles());
+
     return Scaffold(
       appBar: AppBar(title: Text(widget.title)),
       body: Align(
@@ -28,60 +35,18 @@ class _HomePageState extends State<HomePage> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.start,
             children: <Widget>[
-              Text("Sessions", style: Theme.of(context).textTheme.headline5),
               const SizedBox(height: 16),
-              const SessionWidget(),
-              BlocConsumer<BasicBloc, Response<BasicState>>(
-                listener: (context, state) {
-                  ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-                    content: Text("Fetched"),
-                    duration: Duration(seconds: 1),
-                  ));
-                },
-                builder: (context, state) {
-                  switch (state.status) {
-                    case Status.loading:
-                      return Text(
-                        "Loading",
-                        style: Theme.of(context).textTheme.headline5,
-                      );
-                    case Status.completed:
-                      return Text(
-                        state.data?.basicText ?? "",
-                        style: Theme.of(context).textTheme.headline5,
-                      );
-                    default:
-                      return Text(
-                        "Error",
-                        style: Theme.of(context).textTheme.headline5,
-                      );
-                  }
-                },
-              ),
-              BlocConsumer<CyclesBloc, Response<CyclesState>>(
-                  builder: (context, state) {
+              BlocBuilder<CyclesBloc, Response<CyclesState>>(builder: (context, state) {
                 switch (state.status) {
                   case Status.completed:
-                    return Text(
-                      state.data?.cycles[0].sessions[0].exercises[0].name ?? "",
-                      style: Theme.of(context).textTheme.headline5,
-                    );
+                    Session? session = state.data?.cycles[0].sessions[0];
+                    if(session != null) return SessionWidget(session: session);
+                    return const SizedBox(height: 16);
                   default:
-                    return Text(
-                      "Error",
-                      style: Theme.of(context).textTheme.headline5,
-                    );
+                    return const SizedBox(height: 16);
                 }
-              }, listener: (context, state) {
-                state.data?.cycles;
               }),
-              const SizedBox(height: 16),
-              FloatingActionButton(
-                  heroTag: 'primaryCta',
-                  child: const Icon(Icons.gavel_outlined),
-                  onPressed: () {
-                    BlocProvider.of<BasicBloc>(context).add(FetchBasic());
-                  }),
+
               const SizedBox(height: 16),
               FloatingActionButton(
                 heroTag: 'routeCta',
@@ -92,12 +57,6 @@ class _HomePageState extends State<HomePage> {
                 child: const Icon(Icons.navigate_next_rounded),
               ),
               const SizedBox(height: 16),
-              FloatingActionButton(
-                  heroTag: 'cycleCta',
-                  onPressed: () {
-                    BlocProvider.of<CyclesBloc>(context).add(FetchCycles());
-                  },
-                  child: const Icon(Icons.accessibility)),
             ],
           ),
         ),
