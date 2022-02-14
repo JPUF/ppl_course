@@ -1,4 +1,4 @@
 class Destination {
   static const root = '/';
-  static const second = root + 'second';
+  static const exercise = root + 'exercise';
 }

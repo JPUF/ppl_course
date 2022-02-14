@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:ppl_course/data/models/cycle/session.dart';
-import 'package:ppl_course/data/models/exercise/exercise.dart';
 import 'package:ppl_course/presentation/pages/home/exercise_widget.dart';
 import 'package:ppl_course/res/color/colors.dart';
 
@@ -9,50 +8,63 @@ class SessionWidget extends StatefulWidget {
 
   final Session session;
 
+  List<Widget> buildExerciseList() {
+    var exerciseWidgets = <Widget>[];
+    for (var exercise in session.exercises) {
+      exerciseWidgets.add(ExerciseWidget(exercise: exercise));
+      if (exercise != session.exercises.last) {
+        exerciseWidgets.add(Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 8),
+          child: Divider(color: AppColor.light, thickness: 1),
+        ));
+      }
+    }
+    return exerciseWidgets;
+  }
+
   @override
   State<SessionWidget> createState() => _SessionWidgetState();
 }
 
 class _SessionWidgetState extends State<SessionWidget> {
-  var exerciseWidgets = <Widget>[];
-
-  void populateExerciseWidgets(List<Exercise> exercises) {
-    for (var exercise in exercises) {
-      exerciseWidgets.add(ExerciseWidget(exercise: exercise));
-      if (exercise != exercises.last) {
-        exerciseWidgets.add(Divider(color: AppColor.dark, thickness: 1));
-      }
-    }
-  }
 
   @override
   Widget build(BuildContext context) {
-    populateExerciseWidgets(widget.session.exercises);
     return Padding(
       padding: const EdgeInsets.fromLTRB(0, 0, 0, 16),
-      child: Container(
-        width: double.infinity,
-        decoration: BoxDecoration(
-            color: AppColor.secondary, borderRadius: BorderRadius.circular(4)),
-        child: Column(
-          children: [
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Row(
-                textBaseline: TextBaseline.alphabetic,
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.baseline,
-                children: [
-                  Text('${widget.session.cycleNumber}', style: Theme.of(context).textTheme.headline3),
-                  const SizedBox(width: 16),
-                  Text(widget.session.type.toSessionString(), style: Theme.of(context).textTheme.headline4)
-                ],
+      child: Card(
+        elevation: 16,
+        clipBehavior: Clip.antiAlias,
+        child: Container(
+          width: double.infinity,
+          decoration: BoxDecoration(
+              color: AppColor.secondary,
+              borderRadius: BorderRadius.circular(4)),
+          child: Column(
+            children: [
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Row(
+                  textBaseline: TextBaseline.alphabetic,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.baseline,
+                  children: [
+                    Text('${widget.session.cycleNumber}',
+                        style: Theme.of(context).textTheme.headline3),
+                    const SizedBox(width: 16),
+                    Text(widget.session.type.toSessionString(),
+                        style: Theme.of(context).textTheme.headline4)
+                  ],
+                ),
               ),
-            ),
-            Divider(color: AppColor.dark, thickness: 2),
-            Column(children: exerciseWidgets),
-            const SizedBox(height: 9),
-          ],
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 8),
+                child: Divider(color: AppColor.light, thickness: 2),
+              ),
+              Column(children: widget.buildExerciseList()),
+              const SizedBox(height: 16),
+            ],
+          ),
         ),
       ),
     );

@@ -22,6 +22,7 @@ class _ExerciseWidgetState extends State<ExerciseWidget> {
               flex: 8,
               child: Text(widget.exercise.name,
                   style: Theme.of(context).textTheme.bodyText1)),
+          const SizedBox(width: 16),
           Expanded(
               flex: 3,
               child: Text(widget.exercise.setsReps.toString(),

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:page_transition/page_transition.dart';
+import 'package:ppl_course/presentation/pages/exercise/exercise_page.dart';
 import 'package:ppl_course/presentation/pages/home/home_page.dart';
-import 'package:ppl_course/presentation/pages/second/second_page.dart';
 
 import 'destination.dart';
 
@@ -8,9 +9,13 @@ class AppRouter {
   Route? onGenerateRoute(RouteSettings routeSettings) {
     switch (routeSettings.name) {
       case Destination.root:
-        return MaterialPageRoute(builder: (_) => const HomePage(title: "Home"));
-      case Destination.second:
-        return MaterialPageRoute(builder: (_) => const SecondPage(title: "Second"));
+        return PageTransition(
+            child: const HomePage(title: "Home"),
+            type: PageTransitionType.fade);
+      case Destination.exercise:
+        return PageTransition(
+            child: const ExercisePage(title: "Exercise"),
+            type: PageTransitionType.rightToLeftWithFade);
       default:
         return null;
     }
