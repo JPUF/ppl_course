@@ -39,6 +39,7 @@ class _SessionWidgetState extends State<SessionWidget> {
           width: double.infinity,
           decoration: BoxDecoration(
               color: AppColor.secondary,
+              border: Border.all(color: AppColor.dark),
               borderRadius: BorderRadius.circular(4)),
           child: Column(
             children: [
