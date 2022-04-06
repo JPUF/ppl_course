@@ -49,7 +49,7 @@ class _SessionWidgetState extends State<SessionWidget> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   crossAxisAlignment: CrossAxisAlignment.baseline,
                   children: [
-                    Text('${widget.session.cycleNumber}',
+                    Text('${widget.session.sessionNumber}',
                         style: Theme.of(context).textTheme.headline3),
                     const SizedBox(width: 16),
                     Text(widget.session.type.toSessionString(),

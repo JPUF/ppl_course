@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:ppl_course/data/models/cycle/session.dart';
 import 'package:ppl_course/data/network/response.dart';
 import 'package:ppl_course/logic/cycles/cycles_bloc.dart';
+import 'package:ppl_course/presentation/navigation/args/session_args.dart';
 import 'package:ppl_course/presentation/navigation/destination.dart';
 import 'package:ppl_course/presentation/pages/home/session_widget.dart';
-import 'package:ppl_course/res/color/colors.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key, required this.title}) : super(key: key);
@@ -21,22 +20,27 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     BlocProvider.of<CyclesBloc>(context).add(FetchCycles());
 
+    const cycleNumber = 0;
+
     final sessionBuilder = BlocBuilder<CyclesBloc, Response<CyclesState>>(
         builder: (context, state) {
-      if (state.status != Status.completed) return const SizedBox(height: 16);
-
-      final List<Session>? sessions = state.data?.cycles[0].sessions;
-      if (sessions == null) return const SizedBox(height: 16);
-      return Column(
-        children: sessions
-            .map((session) => GestureDetector(
-                  child: SessionWidget(session: session),
-                  onTap: () {
-                    Navigator.of(context).pushNamed(Destination.exercise);
-                  },
-                ))
-            .toList(),
-      );
+      final data = state.data;
+      if (state.status == Status.completed && data is AllCyclesState) {
+        return Column(
+          children: data.cycles[cycleNumber].sessions
+              .map((session) => GestureDetector(
+                    child: SessionWidget(session: session),
+                    onTap: () {
+                      Navigator.of(context).pushNamed(Destination.exercise,
+                          arguments:
+                              SessionArgs(cycleNumber, session.sessionNumber));
+                    },
+                  ))
+              .toList(),
+        );
+      } else {
+        return const SizedBox(height: 16);
+      }
     });
 
     return Scaffold(

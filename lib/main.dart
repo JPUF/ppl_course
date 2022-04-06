@@ -18,19 +18,17 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      theme: ThemeData(
-        primarySwatch: AppColor.dark,
-        scaffoldBackgroundColor: AppColor.light
-      ),
-      onGenerateRoute: _router.onGenerateRoute,
-      home: MultiBlocProvider(
-        providers: [
-          BlocProvider<BasicBloc>(create: (context) => BasicBloc()),
-          BlocProvider<CyclesBloc>(create: (context) => CyclesBloc())
-        ],
-        child: const HomePage(title: 'PPL  Course Demo'),
-      ),
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider<BasicBloc>(create: (context) => BasicBloc()),
+        BlocProvider<CyclesBloc>(create: (context) => CyclesBloc())
+      ],
+      child: MaterialApp(
+          theme: ThemeData(
+              primarySwatch: AppColor.dark,
+              scaffoldBackgroundColor: AppColor.light),
+          onGenerateRoute: _router.onGenerateRoute,
+          home: const HomePage(title: 'PPL  Course Demo')),
     );
   }
 }

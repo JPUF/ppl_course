@@ -15,6 +15,7 @@ class AppRouter {
       case Destination.exercise:
         return PageTransition(
             child: const ExercisePage(title: "Exercise"),
+            settings: routeSettings,
             type: PageTransitionType.rightToLeftWithFade);
       default:
         return null;

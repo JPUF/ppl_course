@@ -1,11 +1,11 @@
 import 'package:ppl_course/data/models/exercise/exercise.dart';
 
 class Session {
-  late int cycleNumber;
+  late int sessionNumber;
   late SessionType type;
   late List<Exercise> exercises;
 
-  Session(this.cycleNumber, this.type, this.exercises);
+  Session(this.sessionNumber, this.type, this.exercises);
 }
 
 enum SessionType {
