@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:ppl_course/data/models/cycle/session.dart';
 
 class AppColor {
   static Map<int, Color> colorMap(Color color) {
@@ -23,8 +24,26 @@ class AppColor {
   static MaterialAppColor secondary = MaterialAppColor(0xff98C1D9);
   static MaterialAppColor light = MaterialAppColor(0xffE0FBFC);
   static MaterialColor dark = MaterialAppColor(0xff3D5A80);
-  static MaterialColor black = MaterialAppColor(0xff000000);
   static MaterialAppColor accent = MaterialAppColor(0xffEE6C4D);
+
+  static MaterialAppColor push = MaterialAppColor(0xff3D5A80);
+  static MaterialAppColor pull = MaterialAppColor(0xff803D5A);
+  static MaterialAppColor legs = MaterialAppColor(0xff5A803D);
+
+  static MaterialAppColor transparent = MaterialAppColor(0x00000000);
+  static MaterialColor black = MaterialAppColor(0xff000000);
+  static MaterialColor white = MaterialAppColor(0xffFFFFFF);
+
+  static MaterialAppColor getPplColor(SessionType type) {
+    switch (type) {
+      case SessionType.push:
+        return AppColor.push;
+      case SessionType.pull:
+        return AppColor.pull;
+      case SessionType.legs:
+        return AppColor.legs;
+    }
+  }
 }
 
 class MaterialAppColor extends MaterialColor {

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:ppl_course/data/models/cycle/session.dart';
-import 'package:ppl_course/presentation/pages/home/exercise_widget.dart';
+import 'package:ppl_course/presentation/pages/home/components/exercise_widget.dart';
 import 'package:ppl_course/res/color/colors.dart';
 import 'package:ppl_course/res/styles/app_text_styles.dart';
 
@@ -39,7 +39,8 @@ class _SessionWidgetState extends State<SessionWidget> {
           width: double.infinity,
           decoration: BoxDecoration(
               color: AppColor.secondary,
-              border: Border.all(color: AppColor.dark, width: 2),
+              border: Border.all(
+                  color: AppColor.getPplColor(widget.session.type), width: 3),
               borderRadius: BorderRadius.circular(4)),
           child: Column(
             children: [
@@ -51,13 +52,14 @@ class _SessionWidgetState extends State<SessionWidget> {
                   crossAxisAlignment: CrossAxisAlignment.baseline,
                   children: [
                     Text(widget.session.type.toSessionString(),
-                        style: AppTextStyles.headline3)
+                        style: AppTextStyles.headline3.apply(
+                            color: AppColor.getPplColor(widget.session.type)))
                   ],
                 ),
               ),
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 8),
-                child: Divider(color: AppColor.dark, thickness: 2),
+                child: Divider(color: AppColor.getPplColor(widget.session.type), thickness: 2),
               ),
               Column(children: widget.buildExerciseList()),
               const SizedBox(height: 16),

@@ -24,7 +24,11 @@ class AppTextStyles {
   static TextStyle headline3 = TextStyle(
       color: AppColor.dark,
       fontSize: 24.0,
-      fontWeight: FontWeight.bold,
+      fontFamily: AppFontFamilies.poetsen);
+
+  static TextStyle headline2 = TextStyle(
+      color: AppColor.dark,
+      fontSize: 32.0,
       fontFamily: AppFontFamilies.poetsen);
 }
 
