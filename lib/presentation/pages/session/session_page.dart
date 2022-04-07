@@ -23,6 +23,7 @@ class _SessionPageState extends State<SessionPage> {
           children: [
             SizedBox(
               height: double.infinity,
+              width: double.infinity,
               child: SingleChildScrollView(
                 child: Padding(
                   padding: const EdgeInsets.all(8.0),
@@ -38,7 +39,7 @@ class _SessionPageState extends State<SessionPage> {
               padding: const EdgeInsets.only(bottom: 24.0),
               child: PhysicalModel(
                 elevation: 8,
-                shadowColor: AppColor.dark,
+                shadowColor: AppColor.black,
                 color: AppColor.accent,
                 shape: BoxShape.circle,
                 child: CircleAvatar(

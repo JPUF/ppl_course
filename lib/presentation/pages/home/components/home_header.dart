@@ -10,19 +10,22 @@ class HomeHeader extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Row(
-      mainAxisSize: MainAxisSize.min,
-      mainAxisAlignment: MainAxisAlignment.center,
+    return Column(
       children: [
-        Text(Strings.push,
-            style: AppTextStyles.headline2.apply(color: AppColor.push)),
-        Text(Strings.pull,
-            style: AppTextStyles.headline2.apply(color: AppColor.pull)),
-        Text(Strings.legs,
-            style: AppTextStyles.headline2.apply(color: AppColor.legs)),
-        const SizedBox(width: 8),
+        Row(
+          mainAxisSize: MainAxisSize.min,
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Text(Strings.push,
+                style: AppTextStyles.headline2.apply(color: AppColor.push)),
+            Text(Strings.pull,
+                style: AppTextStyles.headline2.apply(color: AppColor.pull)),
+            Text(Strings.legs,
+                style: AppTextStyles.headline2.apply(color: AppColor.legs)),
+          ],
+        ),
         Text(Strings.planner,
-            style: AppTextStyles.headline2.apply(color: AppColor.dark)),
+            style: AppTextStyles.headline2.apply(color: AppColor.pull)),
       ],
     );
   }

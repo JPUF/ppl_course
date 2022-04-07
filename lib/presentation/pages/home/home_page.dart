@@ -53,6 +53,7 @@ class _HomePageState extends State<HomePage> {
           children: [
             SizedBox(
               height: double.infinity,
+              width: double.infinity,
               child: SingleChildScrollView(
                 child: Align(
                   alignment: Alignment.topLeft,

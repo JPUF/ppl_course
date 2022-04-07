@@ -28,7 +28,7 @@ class MyApp extends StatelessWidget {
               primarySwatch: AppColor.dark,
               scaffoldBackgroundColor: AppColor.white),
           onGenerateRoute: _router.onGenerateRoute,
-          home: const HomePage(title: 'PPL  Course Demo')),
+          home: const HomePage(title: 'PPL Course Demo')),
     );
   }
 }
