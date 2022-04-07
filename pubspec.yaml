@@ -48,3 +48,14 @@ flutter:
       fonts:
         - asset: assets/fonts/PoetsenOne-Regular.ttf
           weight: 700
+    - family: Andala
+      fonts:
+        - asset: assets/fonts/Andala.ttf
+          weight: 400
+        - asset: assets/fonts/Andala-Italic.ttf
+          weight: 400
+        - asset: assets/fonts/Andala-Bold.ttf
+          weight: 700
+        - asset: assets/fonts/Andala-BoldItalic.ttf
+          weight: 700
+

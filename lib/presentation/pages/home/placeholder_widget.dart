@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:ppl_course/res/color/colors.dart';
+import 'package:ppl_course/res/styles/app_text_styles.dart';
 
 class PlaceholderWidget extends StatefulWidget {
   const PlaceholderWidget({Key? key, required this.text, required this.onTap})
@@ -29,7 +30,7 @@ class _PlaceholderWidgetState extends State<PlaceholderWidget> {
               padding: const EdgeInsets.all(16.0),
               child: Text(
                 widget.text,
-                style: Theme.of(context).textTheme.bodyText1,
+                style: AppTextStyles.body15,
                 textAlign: TextAlign.center,
               ),
             ),

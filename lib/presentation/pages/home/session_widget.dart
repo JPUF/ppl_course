@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:ppl_course/data/models/cycle/session.dart';
 import 'package:ppl_course/presentation/pages/home/exercise_widget.dart';
 import 'package:ppl_course/res/color/colors.dart';
+import 'package:ppl_course/res/styles/app_text_styles.dart';
 
 class SessionWidget extends StatefulWidget {
   const SessionWidget({Key? key, required this.session}) : super(key: key);
@@ -15,7 +16,7 @@ class SessionWidget extends StatefulWidget {
       if (exercise != session.exercises.last) {
         exerciseWidgets.add(Padding(
           padding: const EdgeInsets.symmetric(horizontal: 8),
-          child: Divider(color: AppColor.light, thickness: 1),
+          child: Divider(color: AppColor.dark, thickness: 1),
         ));
       }
     }
@@ -27,7 +28,6 @@ class SessionWidget extends StatefulWidget {
 }
 
 class _SessionWidgetState extends State<SessionWidget> {
-
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -39,7 +39,7 @@ class _SessionWidgetState extends State<SessionWidget> {
           width: double.infinity,
           decoration: BoxDecoration(
               color: AppColor.secondary,
-              border: Border.all(color: AppColor.dark),
+              border: Border.all(color: AppColor.dark, width: 2),
               borderRadius: BorderRadius.circular(4)),
           child: Column(
             children: [
@@ -50,17 +50,14 @@ class _SessionWidgetState extends State<SessionWidget> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   crossAxisAlignment: CrossAxisAlignment.baseline,
                   children: [
-                    Text('${widget.session.sessionNumber}',
-                        style: Theme.of(context).textTheme.headline3),
-                    const SizedBox(width: 16),
                     Text(widget.session.type.toSessionString(),
-                        style: Theme.of(context).textTheme.headline4)
+                        style: AppTextStyles.headline3)
                   ],
                 ),
               ),
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 8),
-                child: Divider(color: AppColor.light, thickness: 2),
+                child: Divider(color: AppColor.dark, thickness: 2),
               ),
               Column(children: widget.buildExerciseList()),
               const SizedBox(height: 16),
