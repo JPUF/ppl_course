@@ -4,7 +4,7 @@ import 'package:ppl_course/res/color/colors.dart';
 class AppTextStyles {
   static TextStyle button = TextStyle(
       color: AppColor.black,
-      fontSize: 15.0,
+      fontSize: 17.0,
       fontWeight: FontWeight.bold,
       fontFamily: AppFontFamilies.poetsen);
 

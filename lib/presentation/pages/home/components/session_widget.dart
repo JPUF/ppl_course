@@ -12,11 +12,15 @@ class SessionWidget extends StatefulWidget {
   List<Widget> buildExerciseList() {
     var exerciseWidgets = <Widget>[];
     for (var exercise in session.exercises) {
-      exerciseWidgets.add(ExerciseWidget(exercise: exercise));
+      exerciseWidgets.add(ExerciseWidget(
+        exercise: exercise,
+        sessionType: session.type,
+      ));
       if (exercise != session.exercises.last) {
         exerciseWidgets.add(Padding(
           padding: const EdgeInsets.symmetric(horizontal: 8),
-          child: Divider(color: AppColor.dark, thickness: 1),
+          child:
+              Divider(color: AppColor.getPplColor(session.type), thickness: 1),
         ));
       }
     }
@@ -38,7 +42,7 @@ class _SessionWidgetState extends State<SessionWidget> {
         child: Container(
           width: double.infinity,
           decoration: BoxDecoration(
-              color: AppColor.secondary,
+              color: AppColor.getPplColor(widget.session.type).shade50,
               border: Border.all(
                   color: AppColor.getPplColor(widget.session.type), width: 3),
               borderRadius: BorderRadius.circular(4)),
@@ -59,7 +63,9 @@ class _SessionWidgetState extends State<SessionWidget> {
               ),
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 8),
-                child: Divider(color: AppColor.getPplColor(widget.session.type), thickness: 2),
+                child: Divider(
+                    color: AppColor.getPplColor(widget.session.type),
+                    thickness: 2),
               ),
               Column(children: widget.buildExerciseList()),
               const SizedBox(height: 16),

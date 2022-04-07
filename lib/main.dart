@@ -26,7 +26,7 @@ class MyApp extends StatelessWidget {
       child: MaterialApp(
           theme: ThemeData(
               primarySwatch: AppColor.dark,
-              scaffoldBackgroundColor: AppColor.light),
+              scaffoldBackgroundColor: AppColor.white),
           onGenerateRoute: _router.onGenerateRoute,
           home: const HomePage(title: 'PPL  Course Demo')),
     );

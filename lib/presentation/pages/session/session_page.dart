@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:ppl_course/presentation/pages/home/components/placeholder_widget.dart';
 import 'package:ppl_course/res/color/colors.dart';
 
+import 'components/ppl_selector_switch.dart';
+
 class SessionPage extends StatefulWidget {
   const SessionPage({Key? key, required this.title}) : super(key: key);
 
@@ -25,8 +27,8 @@ class _SessionPageState extends State<SessionPage> {
                 child: Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: Column(
-                    children: [
-                      PlaceholderWidget(text: "Add an exercise", onTap: () {})
+                    children: const [
+                      PplSelectorSwitch()
                     ],
                   ),
                 ),
