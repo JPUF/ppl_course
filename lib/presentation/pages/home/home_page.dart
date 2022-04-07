@@ -62,7 +62,7 @@ class _HomePageState extends State<HomePage> {
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: <Widget>[
                         const HomeHeader(),
-                        const SizedBox(height: 32),
+                        const SizedBox(height: 16),
                         sessionBuilder,
                         const SizedBox(height: 16),
                       ],

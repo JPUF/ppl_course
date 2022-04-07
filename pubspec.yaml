@@ -49,6 +49,10 @@ flutter:
       fonts:
         - asset: assets/fonts/PoetsenOne-Regular.ttf
           weight: 700
+    - family: Mont
+      fonts:
+        - asset: assets/fonts/Mont-Heavy.otf
+          weight: 700
     - family: Andala
       fonts:
         - asset: assets/fonts/Andala.ttf

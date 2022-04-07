@@ -30,6 +30,18 @@ class CycleRepository {
         Exercise.weighted(
             'Overhead Tri Extends', SetsReps.range(3, 8, 12), Weight(12.5)),
       ]),
+      Session(3, SessionType.legs, [
+        Exercise.weighted(
+            'Squat', SetsReps.fixedEndSet(2, 5, 5), Weight(80)),
+        Exercise.weighted(
+            'Romanian Deadlift', SetsReps.range(3, 8, 12), Weight(50)),
+        Exercise.weighted(
+            'Leg Press', SetsReps.range(3, 8, 12), Weight(80)),
+        Exercise.weighted(
+            'Leg Curls', SetsReps.range(3, 8, 12), Weight(30)),
+        Exercise.weighted(
+            'Calf Raises', SetsReps.range(5, 8, 12), Weight(12.5)),
+      ]),
     ])
   ];
 
