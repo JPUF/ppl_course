@@ -4,9 +4,8 @@ import 'package:ppl_course/data/network/response.dart';
 import 'package:ppl_course/logic/cycles/cycles_bloc.dart';
 import 'package:ppl_course/presentation/navigation/args/session_args.dart';
 import 'package:ppl_course/presentation/navigation/destination.dart';
-import 'package:ppl_course/presentation/pages/home/placeholder_session_widget.dart';
+import 'package:ppl_course/presentation/pages/home/plan_session_button.dart';
 import 'package:ppl_course/presentation/pages/home/session_widget.dart';
-import 'package:ppl_course/res/color/colors.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key, required this.title}) : super(key: key);
@@ -58,7 +57,6 @@ class _HomePageState extends State<HomePage> {
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: <Widget>[
-                      const PlaceholderSession(),
                       const SizedBox(height: 16),
                       sessionBuilder,
                       const SizedBox(height: 16),
@@ -67,16 +65,7 @@ class _HomePageState extends State<HomePage> {
                 ),
               ),
             ),
-            Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: CircleAvatar(
-                radius: 25,
-                backgroundColor: AppColor.accent,
-                child: IconButton(
-                    icon: const Icon(Icons.add, color: Colors.white, size: 30),
-                    onPressed: () {}),
-              ),
-            ),
+            const PlanSessionButton()
           ],
         ),
       ),

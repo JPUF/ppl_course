@@ -33,7 +33,7 @@ class _SessionWidgetState extends State<SessionWidget> {
     return Padding(
       padding: const EdgeInsets.fromLTRB(0, 0, 0, 16),
       child: Card(
-        elevation: 16,
+        elevation: 8,
         clipBehavior: Clip.antiAlias,
         child: Container(
           width: double.infinity,

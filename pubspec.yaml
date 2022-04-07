@@ -27,6 +27,7 @@ dependencies:
   flutter_bloc: ^8.0.1
   http: ^0.13.4
   lottie: ^1.2.1
+  flutter_svg: ^1.0.3
   cupertino_icons: ^1.0.2
   intl: ^0.17.0
   page_transition: ^2.0.5
@@ -40,4 +41,10 @@ flutter:
   uses-material-design: true
 
   assets:
-    - assets/
+    - assets/images/
+
+  fonts:
+    - family: Poetsen One
+      fonts:
+        - asset: assets/fonts/PoetsenOne-Regular.ttf
+          weight: 700
