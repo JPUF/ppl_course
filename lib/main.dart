@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ppl_course/logic/cycles/cycles_bloc.dart';
 import 'package:ppl_course/presentation/navigation/app_router.dart';
 import 'package:ppl_course/res/color/colors.dart';
+import 'package:ppl_course/res/string/strings.dart';
 
 import 'logic/basic/basic_bloc.dart';
 import 'presentation/pages/home/home_page.dart';
@@ -28,7 +29,7 @@ class MyApp extends StatelessWidget {
               primarySwatch: AppColor.dark,
               scaffoldBackgroundColor: AppColor.white),
           onGenerateRoute: _router.onGenerateRoute,
-          home: const HomePage(title: 'PPL Course Demo')),
+          home: const HomePage(title: Strings.appTitle)),
     );
   }
 }

@@ -25,7 +25,8 @@ class _PplSelectorSwitchState extends State<PplSelectorSwitch> {
       child: AnimatedToggleSwitch<int>.size(
         current: value,
         values: const [0, 1, 2],
-        iconOpacity: 0.2,
+        iconOpacity: 0.25,
+        animationDuration: const Duration(milliseconds: 300),
         indicatorSize: const Size.fromWidth(100),
         customIconBuilder: (context, local, global) {
           return Row(
