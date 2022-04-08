@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:ppl_course/common/components/custom_text_field.dart';
 import 'package:ppl_course/res/color/colors.dart';
 import 'package:ppl_course/res/string/strings.dart';
 import 'package:ppl_course/res/styles/app_text_styles.dart';
@@ -17,20 +18,20 @@ class SessionPage extends StatefulWidget {
 }
 
 class _SessionPageState extends State<SessionPage> {
-  late TextEditingController _editingController;
+  late TextEditingController _editNotesController;
   late FocusNode _notesFocusNode;
   String _notesText = "";
 
   @override
   void initState() {
     super.initState();
-    _editingController = TextEditingController(text: _notesText);
+    _editNotesController = TextEditingController(text: _notesText);
     _notesFocusNode = FocusNode();
   }
 
   @override
   void dispose() {
-    _editingController.dispose();
+    _editNotesController.dispose();
     _notesFocusNode.dispose();
     super.dispose();
   }
@@ -63,7 +64,10 @@ class _SessionPageState extends State<SessionPage> {
                         const SizedBox(height: 16),
                         const PplSelectorSwitch(),
                         const SizedBox(height: 32),
-                        notesTextField()
+                        CustomTextField(
+                            controller: _editNotesController,
+                            focusNode: _notesFocusNode,
+                            onChanged: (newValue) {})
                       ],
                     ),
                   ),
@@ -79,7 +83,7 @@ class _SessionPageState extends State<SessionPage> {
 
   void showBottomSheet() {
     showModalBottomSheet<void>(
-      isScrollControlled: true,
+        isScrollControlled: true,
         context: context,
         shape: const RoundedRectangleBorder(
             borderRadius: BorderRadius.only(
@@ -87,44 +91,5 @@ class _SessionPageState extends State<SessionPage> {
         builder: (BuildContext context) {
           return const AddExerciseBottomSheet();
         });
-  }
-
-  Center notesTextField() {
-    return Center(
-      child: TextField(
-        focusNode: _notesFocusNode,
-        onTap: () {
-          setState(() {
-            FocusScope.of(context).requestFocus(_notesFocusNode);
-          });
-        },
-        keyboardType: TextInputType.multiline,
-        minLines: 1,
-        maxLines: 4,
-        style: AppTextStyles.body15.apply(
-            color: _notesFocusNode.hasFocus ? AppColor.black : AppColor.grey50),
-        cursorColor: AppColor.dark,
-        decoration: InputDecoration(
-            labelText: Strings.generalNotesHint,
-            floatingLabelStyle: AppTextStyles.body12.apply(
-                color:
-                    _notesFocusNode.hasFocus ? AppColor.dark : AppColor.grey75),
-            labelStyle: AppTextStyles.body12.apply(color: AppColor.grey75),
-            enabledBorder: OutlineInputBorder(
-              borderSide: BorderSide(width: 2, color: AppColor.grey75),
-              borderRadius: BorderRadius.circular(8),
-            ),
-            focusedBorder: OutlineInputBorder(
-                borderSide: BorderSide(width: 2, color: AppColor.dark),
-                borderRadius: BorderRadius.circular(8))),
-        onSubmitted: (newValue) {
-          setState(() {
-            _notesText = newValue;
-          });
-        },
-        autofocus: false,
-        controller: _editingController,
-      ),
-    );
   }
 }

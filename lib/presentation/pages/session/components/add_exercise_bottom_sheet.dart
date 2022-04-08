@@ -11,6 +11,24 @@ class AddExerciseBottomSheet extends StatefulWidget {
 }
 
 class _AddExerciseBottomSheetState extends State<AddExerciseBottomSheet> {
+  late TextEditingController _editNameController;
+  late FocusNode _nameFocusNode;
+  String _nameText = "";
+
+  @override
+  void initState() {
+    super.initState();
+    _editNameController = TextEditingController(text: _nameText);
+    _nameFocusNode = FocusNode();
+  }
+
+  @override
+  void dispose() {
+    _editNameController.dispose();
+    _nameFocusNode.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     return SizedBox(
@@ -34,8 +52,8 @@ class _AddExerciseBottomSheetState extends State<AddExerciseBottomSheet> {
                     size: 32,
                   ),
                 )),
-            AccentButton(text: Strings.addActivityCTA,
-                onTap: () => dismissBottomSheet())
+            AccentButton(
+                text: Strings.addActivityCTA, onTap: () => dismissBottomSheet())
           ],
         ));
   }
