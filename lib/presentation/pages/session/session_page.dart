@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:ppl_course/res/color/colors.dart';
 import 'package:ppl_course/res/string/strings.dart';
 import 'package:ppl_course/res/styles/app_text_styles.dart';
-import 'package:simple_animations/simple_animations.dart';
 
-import 'components/add_exercise.dart';
+import 'components/add_exercise_bottom_sheet.dart';
+import 'components/add_exercise_button.dart';
 import 'components/ppl_selector_switch.dart';
 
 class SessionPage extends StatefulWidget {
@@ -21,7 +21,7 @@ class _SessionPageState extends State<SessionPage> {
   late FocusNode _notesFocusNode;
   String _notesText = "";
 
-  CustomAnimationControl _control = CustomAnimationControl.stop;
+  bool _addButtonVisibility = true;
 
   @override
   void initState() {
@@ -71,20 +71,18 @@ class _SessionPageState extends State<SessionPage> {
                   ),
                 ),
               ),
-              CustomAnimation<double>(
-                  duration: const Duration(milliseconds: 250),
-                  curve: Curves.easeIn,
-                  control: _control,
-                  tween: Tween(begin: 0, end: 90),
-                  builder: (context, child, value) {
-                    return Transform.translate(
-                        offset: Offset(0, value), child: child);
+              AnimatedOpacity(
+                opacity: _addButtonVisibility ? 1.0 : 0.5,
+                duration: const Duration(milliseconds: 150),
+                onEnd: () {
+                  if (!_addButtonVisibility) showBottomSheet();
+                },
+                child: AddExerciseButton(
+                  onTap: () {
+                    dismissAddButton();
                   },
-                  child: AddExercise(
-                    onTap: () {
-                      dismissAddButton();
-                    },
-                  ))
+                ),
+              )
             ],
           ),
         ),
@@ -94,8 +92,22 @@ class _SessionPageState extends State<SessionPage> {
 
   void dismissAddButton() {
     setState(() {
-      _control = CustomAnimationControl.play;
+      _addButtonVisibility = false;
     });
+  }
+
+  void showBottomSheet() {
+    showModalBottomSheet<void>(
+        context: context,
+        builder: (BuildContext context) {
+          return AddExerciseBottomSheet(
+            onDismiss: () {
+              setState(() {
+                _addButtonVisibility = true;
+              });
+            },
+          );
+        });
   }
 
   Center notesTextField() {

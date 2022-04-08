@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:ppl_course/res/color/colors.dart';
 
-class AddExercise extends StatelessWidget {
-  const AddExercise({Key? key, required this.onTap}) : super(key: key);
+class AddExerciseButton extends StatelessWidget {
+  const AddExerciseButton({Key? key, required this.onTap}) : super(key: key);
 
   final VoidCallback onTap;
 
