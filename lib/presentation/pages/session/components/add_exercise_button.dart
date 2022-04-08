@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg_provider/flutter_svg_provider.dart';
 import 'package:ppl_course/res/color/colors.dart';
 
 class AddExerciseButton extends StatelessWidget {
@@ -10,21 +11,17 @@ class AddExerciseButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       padding: const EdgeInsets.only(bottom: 16.0),
-      child: PhysicalModel(
-        elevation: 8,
-        shadowColor: AppColor.black,
+      child: Material(
+        elevation: 4.0,
+        shape: const CircleBorder(),
+        clipBehavior: Clip.hardEdge,
         color: AppColor.accent,
-        shape: BoxShape.circle,
-        child: GestureDetector(
-          onTap: onTap,
-          child: CircleAvatar(
-            backgroundColor: AppColor.accent,
-            radius: 32.0,
-            child: Icon(
-              Icons.add,
-              color: AppColor.white,
-              size: 48.0,
-            ),
+        child: Ink.image(
+          image: const Svg('assets/images/ic_plus.svg', size: Size(32, 32)),
+          width: 48,
+          height: 48,
+          child: InkWell(
+            onTap: () => onTap(),
           ),
         ),
       ),

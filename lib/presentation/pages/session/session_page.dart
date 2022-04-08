@@ -21,8 +21,6 @@ class _SessionPageState extends State<SessionPage> {
   late FocusNode _notesFocusNode;
   String _notesText = "";
 
-  bool _addButtonVisibility = true;
-
   @override
   void initState() {
     super.initState();
@@ -71,18 +69,7 @@ class _SessionPageState extends State<SessionPage> {
                   ),
                 ),
               ),
-              AnimatedOpacity(
-                opacity: _addButtonVisibility ? 1.0 : 0.5,
-                duration: const Duration(milliseconds: 150),
-                onEnd: () {
-                  if (!_addButtonVisibility) showBottomSheet();
-                },
-                child: AddExerciseButton(
-                  onTap: () {
-                    dismissAddButton();
-                  },
-                ),
-              )
+              AddExerciseButton(onTap: () => showBottomSheet())
             ],
           ),
         ),
@@ -90,23 +77,15 @@ class _SessionPageState extends State<SessionPage> {
     );
   }
 
-  void dismissAddButton() {
-    setState(() {
-      _addButtonVisibility = false;
-    });
-  }
-
   void showBottomSheet() {
     showModalBottomSheet<void>(
+      isScrollControlled: true,
         context: context,
+        shape: const RoundedRectangleBorder(
+            borderRadius: BorderRadius.only(
+                topLeft: Radius.circular(12), topRight: Radius.circular(12))),
         builder: (BuildContext context) {
-          return AddExerciseBottomSheet(
-            onDismiss: () {
-              setState(() {
-                _addButtonVisibility = true;
-              });
-            },
-          );
+          return const AddExerciseBottomSheet();
         });
   }
 

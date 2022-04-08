@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:ppl_course/data/network/response.dart';
 import 'package:ppl_course/logic/cycles/cycles_bloc.dart';
 import 'package:ppl_course/presentation/navigation/args/session_args.dart';
 import 'package:ppl_course/presentation/navigation/destination.dart';
-import 'package:ppl_course/presentation/pages/home/components/plan_session_button.dart';
+import 'package:ppl_course/common/components/asset_button.dart';
 import 'package:ppl_course/presentation/pages/home/components/session_widget.dart';
+import 'package:ppl_course/res/string/strings.dart';
 
 import 'components/home_header.dart';
 
@@ -72,7 +74,15 @@ class _HomePageState extends State<HomePage> {
                 ),
               ),
             ),
-            const PlanSessionButton()
+            AccentButton(
+              text: Strings.planSessionCTA,
+              onTap: () => Navigator.of(context).pushNamed(Destination.session),
+              endIcon: SvgPicture.asset(
+                'assets/images/ic_weight.svg',
+                width: 24,
+                height: 24,
+              ),
+            )
           ],
         ),
       ),

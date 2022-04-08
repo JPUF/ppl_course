@@ -1,21 +1,22 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:ppl_course/presentation/navigation/destination.dart';
 import 'package:ppl_course/res/color/colors.dart';
 import 'package:ppl_course/res/string/strings.dart';
 import 'package:ppl_course/res/styles/app_text_styles.dart';
 
-class PlanSessionButton extends StatelessWidget {
-  const PlanSessionButton({
-    Key? key,
-  }) : super(key: key);
+class AccentButton extends StatelessWidget {
+  const AccentButton(
+      {Key? key, required this.text, required this.onTap, this.endIcon})
+      : super(key: key);
+
+  final String text;
+  final VoidCallback onTap;
+  final SvgPicture? endIcon;
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: () {
-        Navigator.of(context).pushNamed(Destination.session);
-      },
+      onTap: () => onTap(),
       child: Card(
         color: AppColor.accent,
         elevation: 4,
@@ -31,20 +32,21 @@ class PlanSessionButton extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.end,
             children: [
               Text(
-                Strings.planSessionCTA,
+                text,
                 textAlign: TextAlign.center,
                 style: AppTextStyles.button,
               ),
-              const SizedBox(width: 8),
-              SvgPicture.asset(
-                'assets/images/ic_weight.svg',
-                width: 24,
-                height: 24,
-              )
+              _optionalEndIcon()
             ],
           ),
         ),
       ),
     );
+  }
+
+  Widget _optionalEndIcon() {
+    final icon = endIcon;
+    if (icon == null) return Container();
+    return Row(children: [const SizedBox(width: 8), icon]);
   }
 }
