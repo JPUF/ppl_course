@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:ppl_course/res/color/colors.dart';
 import 'package:ppl_course/res/string/strings.dart';
 import 'package:ppl_course/res/styles/app_text_styles.dart';
+import 'package:simple_animations/simple_animations.dart';
 
 import 'components/add_exercise.dart';
 import 'components/ppl_selector_switch.dart';
@@ -19,6 +20,8 @@ class _SessionPageState extends State<SessionPage> {
   late TextEditingController _editingController;
   late FocusNode _notesFocusNode;
   String _notesText = "";
+
+  CustomAnimationControl _control = CustomAnimationControl.stop;
 
   @override
   void initState() {
@@ -68,12 +71,31 @@ class _SessionPageState extends State<SessionPage> {
                   ),
                 ),
               ),
-              const AddExercise()
+              CustomAnimation<double>(
+                  duration: const Duration(milliseconds: 250),
+                  curve: Curves.easeIn,
+                  control: _control,
+                  tween: Tween(begin: 0, end: 90),
+                  builder: (context, child, value) {
+                    return Transform.translate(
+                        offset: Offset(0, value), child: child);
+                  },
+                  child: AddExercise(
+                    onTap: () {
+                      dismissAddButton();
+                    },
+                  ))
             ],
           ),
         ),
       ),
     );
+  }
+
+  void dismissAddButton() {
+    setState(() {
+      _control = CustomAnimationControl.play;
+    });
   }
 
   Center notesTextField() {
@@ -88,7 +110,8 @@ class _SessionPageState extends State<SessionPage> {
         keyboardType: TextInputType.multiline,
         minLines: 1,
         maxLines: 4,
-        style: AppTextStyles.body15.apply(color: _notesFocusNode.hasFocus ? AppColor.black : AppColor.grey50),
+        style: AppTextStyles.body15.apply(
+            color: _notesFocusNode.hasFocus ? AppColor.black : AppColor.grey50),
         cursorColor: AppColor.dark,
         decoration: InputDecoration(
             labelText: Strings.generalNotesHint,
