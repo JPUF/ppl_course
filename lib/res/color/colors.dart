@@ -34,6 +34,7 @@ class AppColor {
   static MaterialColor black = MaterialAppColor(0xff000000);
   static MaterialColor white = MaterialAppColor(0xffFFFFFF);
   static MaterialColor grey75 = MaterialAppColor(0xffBEBEBE);
+  static MaterialColor grey50 = MaterialAppColor(0xff808080);
 
   static MaterialAppColor getPplColor(SessionType type) {
     switch (type) {

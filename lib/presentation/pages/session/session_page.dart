@@ -51,66 +51,66 @@ class _SessionPageState extends State<SessionPage> {
           child: Stack(
             alignment: AlignmentDirectional.bottomCenter,
             children: [
-            SizedBox(
-            height: double.infinity,
-            width: double.infinity,
-            child: SingleChildScrollView(
-              child: Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Column(
-                    children: [
-                    const SizedBox(height: 16),
-                const PplSelectorSwitch(),
-                const SizedBox(height: 32),
-                Center(
-                  child: TextField(
-                    focusNode: _notesFocusNode,
-                    onTap: () {
-                      setState(() {
-                        FocusScope.of(context).requestFocus(_notesFocusNode);
-                      });
-                    },
-                    keyboardType: TextInputType.multiline,
-                    minLines: 1,
-                    maxLines: 4,
-                    style: AppTextStyles.body15.apply(color: AppColor.black),
-                    cursorColor: AppColor.dark,
-                    decoration: InputDecoration(
-                        labelText: Strings.generalNotesHint,
-                        floatingLabelStyle: AppTextStyles.body12.apply(
-                            color:
-                            _notesFocusNode.hasFocus ? AppColor.dark : AppColor
-                                .grey75),
-                        labelStyle: AppTextStyles.body12.apply(
-                            color: AppColor.grey75),
-                        enabledBorder: OutlineInputBorder(
-                          borderSide: BorderSide(width: 2, color: AppColor
-                              .grey75),
-                          borderRadius: BorderRadius.circular(8),
-                        ),
-                        focusedBorder: OutlineInputBorder(
-                            borderSide: BorderSide(width: 2, color: AppColor
-                                .dark),
-                            borderRadius: BorderRadius.circular(8))),
-                    onSubmitted: (newValue) {
-                      setState(() {
-                        _notesText = newValue;
-                      });
-                    },
-                    autofocus: false,
-                    controller: _editingController,
+              SizedBox(
+                height: double.infinity,
+                width: double.infinity,
+                child: SingleChildScrollView(
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Column(
+                      children: [
+                        const SizedBox(height: 16),
+                        const PplSelectorSwitch(),
+                        const SizedBox(height: 32),
+                        notesTextField()
+                      ],
+                    ),
                   ),
-                )
-                ],
+                ),
               ),
-            ),
+              const AddExercise()
+            ],
           ),
         ),
-        const AddExercise()
-        ],
       ),
-    ),)
-    ,
+    );
+  }
+
+  Center notesTextField() {
+    return Center(
+      child: TextField(
+        focusNode: _notesFocusNode,
+        onTap: () {
+          setState(() {
+            FocusScope.of(context).requestFocus(_notesFocusNode);
+          });
+        },
+        keyboardType: TextInputType.multiline,
+        minLines: 1,
+        maxLines: 4,
+        style: AppTextStyles.body15.apply(color: _notesFocusNode.hasFocus ? AppColor.black : AppColor.grey50),
+        cursorColor: AppColor.dark,
+        decoration: InputDecoration(
+            labelText: Strings.generalNotesHint,
+            floatingLabelStyle: AppTextStyles.body12.apply(
+                color:
+                    _notesFocusNode.hasFocus ? AppColor.dark : AppColor.grey75),
+            labelStyle: AppTextStyles.body12.apply(color: AppColor.grey75),
+            enabledBorder: OutlineInputBorder(
+              borderSide: BorderSide(width: 2, color: AppColor.grey75),
+              borderRadius: BorderRadius.circular(8),
+            ),
+            focusedBorder: OutlineInputBorder(
+                borderSide: BorderSide(width: 2, color: AppColor.dark),
+                borderRadius: BorderRadius.circular(8))),
+        onSubmitted: (newValue) {
+          setState(() {
+            _notesText = newValue;
+          });
+        },
+        autofocus: false,
+        controller: _editingController,
+      ),
     );
   }
 }
