@@ -65,6 +65,7 @@ class _SessionPageState extends State<SessionPage> {
                         const PplSelectorSwitch(),
                         const SizedBox(height: 32),
                         CustomTextField(
+                          hint: Strings.generalNotesHint,
                             controller: _editNotesController,
                             focusNode: _notesFocusNode,
                             onChanged: (newValue) {})

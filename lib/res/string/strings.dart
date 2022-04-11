@@ -14,4 +14,7 @@ class Strings {
   static const String planSessionTitle = "PLAN A SESSION";
   static const String generalNotesHint = "General session notes";
   static const String addActivityCTA = "ADD ACTIVITY";
+  static const String activityNameHint = "Activity name";
+  static const String activityWeightHint = "Weight (kg)";
+
 }

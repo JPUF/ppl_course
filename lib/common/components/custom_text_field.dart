@@ -1,18 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:ppl_course/res/color/colors.dart';
-import 'package:ppl_course/res/string/strings.dart';
 import 'package:ppl_course/res/styles/app_text_styles.dart';
 
 class CustomTextField extends StatefulWidget {
   const CustomTextField(
       {Key? key,
+      required this.hint,
       required this.controller,
       required this.focusNode,
+      this.keyboardType,
       required this.onChanged})
       : super(key: key);
 
+  final String hint;
   final TextEditingController controller;
   final FocusNode focusNode;
+  final TextInputType? keyboardType;
   final ValueSetter<String> onChanged;
 
   @override
@@ -32,7 +35,7 @@ class _CustomTextFieldState extends State<CustomTextField> {
               FocusScope.of(context).requestFocus(widget.focusNode);
             });
           },
-          keyboardType: TextInputType.multiline,
+          keyboardType: widget.keyboardType ?? TextInputType.text,
           minLines: 1,
           maxLines: 4,
           style: AppTextStyles.body15.apply(
@@ -40,7 +43,7 @@ class _CustomTextFieldState extends State<CustomTextField> {
                   widget.focusNode.hasFocus ? AppColor.black : AppColor.grey50),
           cursorColor: AppColor.dark,
           decoration: InputDecoration(
-              labelText: Strings.generalNotesHint,
+              labelText: widget.hint,
               floatingLabelStyle: AppTextStyles.body12.apply(
                   color: widget.focusNode.hasFocus
                       ? AppColor.dark
