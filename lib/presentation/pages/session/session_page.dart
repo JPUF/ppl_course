@@ -65,7 +65,7 @@ class _SessionPageState extends State<SessionPage> {
                         const PplSelectorSwitch(),
                         const SizedBox(height: 32),
                         CustomTextField(
-                          hint: Strings.generalNotesHint,
+                            hint: Strings.generalNotesHint,
                             controller: _editNotesController,
                             focusNode: _notesFocusNode,
                             onChanged: (newValue) {})
@@ -90,7 +90,48 @@ class _SessionPageState extends State<SessionPage> {
             borderRadius: BorderRadius.only(
                 topLeft: Radius.circular(12), topRight: Radius.circular(12))),
         builder: (BuildContext context) {
-          return const AddExerciseBottomSheet();
+          return FractionallySizedBox(
+              heightFactor: 0.8, child: Column(
+                children: [
+                  buildSheetHeader(),
+                  const Expanded(child: AddExerciseBottomSheet()),
+                ],
+              ));
         });
+  }
+
+  Widget buildSheetHeader() {
+    return Column(
+      children: [
+        Stack(
+          children: [
+            SizedBox(
+                width: double.infinity,
+                child: Container(
+                  padding: const EdgeInsets.only(top: 10, bottom: 4),
+                  child: Text(
+                    Strings.activityTitle,
+                    style: AppTextStyles.headline3.apply(color: AppColor.black),
+                    textAlign: TextAlign.center,
+                  ),
+                )),
+            Positioned(
+              right: 0,
+              top: 0,
+              child: MaterialButton(
+                onPressed: () => Navigator.pop(context),
+                minWidth: 0,
+                child: Icon(
+                  Icons.close,
+                  color: AppColor.black,
+                  size: 20,
+                ),
+              ),
+            ),
+          ],
+        ),
+        const Divider(height: 1)
+      ],
+    );
   }
 }

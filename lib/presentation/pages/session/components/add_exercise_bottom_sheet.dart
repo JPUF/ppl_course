@@ -50,46 +50,40 @@ class _AddExerciseBottomSheetState extends State<AddExerciseBottomSheet> {
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
-        height: 510,
-        child: ListView(
+    return SingleChildScrollView(
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 16),
+        child: Column(
           children: [
-            buildSheetHeader(),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16),
-              child: Column(
-                children: [
-                  buildNameWeightRow(),
-                  SetRepSlider(
-                      label: Strings.activitySetLabel,
-                      max: 8,
-                      onChanged: (newValue) {
-                        setState(() => _setCount = newValue);
-                      }),
-                  const SizedBox(height: 16),
-                  SetRepSlider(
-                      label: Strings.activityRepLabel,
-                      max: 20,
-                      onChanged: (newValue) {
-                        setState(() => _setCount = newValue);
-                      }),
-                  buildAmrapRow(),
-                  CustomTextField(hint: Strings.activityNotesHint,
-                      controller: _notesController,
-                      focusNode: _notesFocusNode,
-                      keyboardType: TextInputType.multiline,
-                      onChanged: (newValue) {}
-                  ),
-                  const SizedBox(height: 48),
-                  AccentButton(
-                      text: Strings.addActivityCTA,
-                      onTap: () => dismissBottomSheet())
-                ],
-              ),
-            ),
-          ]
-          ,
-        )
+            buildNameWeightRow(),
+            SetRepSlider(
+                label: Strings.activitySetLabel,
+                max: 8,
+                onChanged: (newValue) {
+                  setState(() => _setCount = newValue);
+                }),
+            const SizedBox(height: 16),
+            SetRepSlider(
+                label: Strings.activityRepLabel,
+                max: 20,
+                onChanged: (newValue) {
+                  setState(() => _setCount = newValue);
+                }),
+            buildAmrapRow(),
+            CustomTextField(
+                hint: Strings.activityNotesHint,
+                controller: _notesController,
+                focusNode: _notesFocusNode,
+                keyboardType: TextInputType.multiline,
+                onChanged: (newValue) {}),
+            const SizedBox(height: 32),
+            AccentButton(
+                text: Strings.addActivityCTA,
+                onTap: () => dismissBottomSheet()),
+            const SizedBox(height: 300),
+          ],
+        ),
+      ),
     );
   }
 
@@ -103,7 +97,7 @@ class _AddExerciseBottomSheetState extends State<AddExerciseBottomSheet> {
               contentPadding: const EdgeInsets.only(left: 4),
               title: Text(
                 Strings.activityAmrapLabel,
-                style: AppTextStyles.body12,
+                style: AppTextStyles.body12.apply(color: AppColor.black),
               ),
               controlAffinity: ListTileControlAffinity.trailing,
               value: _amrapFinal,
@@ -146,21 +140,6 @@ class _AddExerciseBottomSheetState extends State<AddExerciseBottomSheet> {
         ],
       ),
     );
-  }
-
-  Align buildSheetHeader() {
-    return Align(
-        alignment: Alignment.centerRight,
-        child: MaterialButton(
-          onPressed: () => dismissBottomSheet(),
-          minWidth: 0,
-          height: 0,
-          child: Icon(
-            Icons.close,
-            color: AppColor.black,
-            size: 20,
-          ),
-        ));
   }
 
   void dismissBottomSheet() => Navigator.pop(context);

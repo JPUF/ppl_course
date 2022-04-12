@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:ppl_course/res/color/colors.dart';
 import 'package:ppl_course/res/styles/app_text_styles.dart';
 import 'package:syncfusion_flutter_sliders/sliders.dart';
 
@@ -29,7 +30,7 @@ class _SetRepSliderState extends State<SetRepSlider> {
           alignment: Alignment.centerLeft,
           child: Text(
             widget.label,
-            style: AppTextStyles.body12,
+            style: AppTextStyles.body12.apply(color: AppColor.black),
             textAlign: TextAlign.start,
           ),
         ),
