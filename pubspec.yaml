@@ -30,6 +30,7 @@ dependencies:
   flutter_svg: ^1.0.3
   flutter_svg_provider: ^1.0.3
   syncfusion_flutter_sliders: ^20.1.47
+  scrollable_positioned_list: ^0.2.3
   cupertino_icons: ^1.0.2
   intl: ^0.17.0
   page_transition: ^2.0.5

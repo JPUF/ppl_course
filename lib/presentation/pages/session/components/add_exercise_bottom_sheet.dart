@@ -5,6 +5,7 @@ import 'package:ppl_course/presentation/pages/session/components/set_rep_slider.
 import 'package:ppl_course/res/color/colors.dart';
 import 'package:ppl_course/res/string/strings.dart';
 import 'package:ppl_course/res/styles/app_text_styles.dart';
+import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
 
 class AddExerciseBottomSheet extends StatefulWidget {
   const AddExerciseBottomSheet({Key? key}) : super(key: key);
@@ -14,15 +15,18 @@ class AddExerciseBottomSheet extends StatefulWidget {
 }
 
 class _AddExerciseBottomSheetState extends State<AddExerciseBottomSheet> {
-  late TextEditingController _nameController;
-  late TextEditingController _weightController;
-  late TextEditingController _notesController;
-  late FocusNode _nameFocusNode;
-  late FocusNode _weightFocusNode;
-  late FocusNode _notesFocusNode;
+  final ItemScrollController _scrollController = ItemScrollController();
+  final FocusNode _nameFocusNode = FocusNode();
+  final FocusNode _weightFocusNode = FocusNode();
+  final FocusNode _notesFocusNode = FocusNode();
   String _nameText = "";
   String _weightText = "";
   String _notesText = "";
+  late TextEditingController _nameController;
+  late TextEditingController _weightController;
+  late TextEditingController _notesController;
+
+  late List<Widget> _contentList;
 
   int _setCount = 1;
   int _repCount = 1;
@@ -35,9 +39,7 @@ class _AddExerciseBottomSheetState extends State<AddExerciseBottomSheet> {
     _nameController = TextEditingController(text: _nameText);
     _weightController = TextEditingController(text: _weightText);
     _notesController = TextEditingController(text: _notesText);
-    _nameFocusNode = FocusNode();
-    _weightFocusNode = FocusNode();
-    _notesFocusNode = FocusNode();
+    _contentList = buildContentWidgetList();
   }
 
   @override
@@ -50,41 +52,44 @@ class _AddExerciseBottomSheetState extends State<AddExerciseBottomSheet> {
 
   @override
   Widget build(BuildContext context) {
-    return SingleChildScrollView(
-      child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 16),
-        child: Column(
-          children: [
-            buildNameWeightRow(),
-            SetRepSlider(
-                label: Strings.activitySetLabel,
-                max: 8,
-                onChanged: (newValue) {
-                  setState(() => _setCount = newValue);
-                }),
-            const SizedBox(height: 16),
-            SetRepSlider(
-                label: Strings.activityRepLabel,
-                max: 20,
-                onChanged: (newValue) {
-                  setState(() => _setCount = newValue);
-                }),
-            buildAmrapRow(),
-            CustomTextField(
-                hint: Strings.activityNotesHint,
-                controller: _notesController,
-                focusNode: _notesFocusNode,
-                keyboardType: TextInputType.multiline,
-                onChanged: (newValue) {}),
-            const SizedBox(height: 32),
-            AccentButton(
-                text: Strings.addActivityCTA,
-                onTap: () => dismissBottomSheet()),
-            const SizedBox(height: 300),
-          ],
-        ),
-      ),
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 16),
+      child: ScrollablePositionedList.builder(
+          itemScrollController: _scrollController,
+          itemCount: _contentList.length,
+          itemBuilder: (_, index) => _contentList[index]),
     );
+  }
+
+  List<Widget> buildContentWidgetList() {
+    return [
+      buildNameWeightRow(),
+      SetRepSlider(
+          label: Strings.activitySetLabel,
+          max: 8,
+          onChanged: (newValue) {
+            setState(() => _setCount = newValue);
+          }),
+      const SizedBox(height: 16),
+      SetRepSlider(
+          label: Strings.activityRepLabel,
+          max: 20,
+          onChanged: (newValue) {
+            setState(() => _setCount = newValue);
+          }),
+      buildAmrapRow(),
+      CustomTextField(
+          hint: Strings.activityNotesHint,
+          controller: _notesController,
+          focusNode: _notesFocusNode,
+          keyboardType: TextInputType.multiline,
+          onTap: () => scrollToNotes(),
+          onChanged: (newValue) {}),
+      const SizedBox(height: 32),
+      AccentButton(
+          text: Strings.addActivityCTA, onTap: () => dismissBottomSheet()),
+      const SizedBox(height: 500),
+    ];
   }
 
   Row buildAmrapRow() {
@@ -140,6 +145,13 @@ class _AddExerciseBottomSheetState extends State<AddExerciseBottomSheet> {
         ],
       ),
     );
+  }
+
+  void scrollToNotes() {
+    _scrollController.scrollTo(
+        index: 5,
+        curve: Curves.fastOutSlowIn,
+        duration: const Duration(milliseconds: 750));
   }
 
   void dismissBottomSheet() => Navigator.pop(context);

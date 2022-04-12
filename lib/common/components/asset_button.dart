@@ -23,12 +23,11 @@ class AccentButton extends StatelessWidget {
           side: const BorderSide(color: Colors.black, width: 2),
           borderRadius: BorderRadius.circular(10),
         ),
-        margin: const EdgeInsets.only(bottom: 16, right: 20),
         child: Container(
           padding: const EdgeInsets.all(12.0),
           child: Row(
             mainAxisSize: MainAxisSize.min,
-            mainAxisAlignment: MainAxisAlignment.end,
+            mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Text(
                 text,
