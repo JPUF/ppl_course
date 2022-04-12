@@ -7,6 +7,8 @@ class Exercise {
   Weight? weight;
   String? notes;
 
-  Exercise.weighted(this.name, this.setsReps, this.weight, this.notes);
-  Exercise.noWeight(this.name, this.setsReps, this.notes);
+  Exercise.weighted(
+      {required this.name, required this.setsReps, this.weight, this.notes});
+
+  Exercise.noWeight({required this.name, required this.setsReps, this.notes});
 }

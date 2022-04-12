@@ -9,38 +9,74 @@ class CycleRepository {
   final List<Cycle> _cycles = [
     Cycle([
       Session(1, SessionType.pull, [
-        Exercise.weighted('Deadlifts', SetsReps.endSetOnly(5), Weight(70)),
         Exercise.weighted(
-            'Pulldowns/Pullups/Chinups', SetsReps.range(3, 8, 12), Weight(30)),
-        Exercise.weighted('Chest Supported Rows/Seated Cable Rows',
-            SetsReps.range(3, 8, 12), Weight(20)),
-        Exercise.weighted('Face Pulls', SetsReps.range(5, 15, 20), Weight(8)),
-        Exercise.weighted('Hammer Curls', SetsReps.range(4, 8, 12), Weight(10)),
-        Exercise.weighted('Bicep Curls', SetsReps.range(4, 8, 12), Weight(10))
+            name: 'Deadlifts',
+            setsReps: SetsReps.endSetOnly(5),
+            weight: Weight(70)),
+        Exercise.weighted(
+            name: 'Pulldowns/Pullups/Chinups',
+            setsReps: SetsReps.range(3, 8, 12),
+            weight: Weight(30)),
+        Exercise.weighted(
+            name: 'Chest Supported Rows/Seated Cable Rows',
+            setsReps: SetsReps.range(3, 8, 12),
+            weight: Weight(20)),
+        Exercise.weighted(
+            name: 'Face Pulls',
+            setsReps: SetsReps.range(5, 15, 20),
+            weight: Weight(8)),
+        Exercise.weighted(
+            name: 'Hammer Curls',
+            setsReps: SetsReps.range(4, 8, 12),
+            weight: Weight(10)),
+        Exercise.weighted(
+            name: 'Bicep Curls',
+            setsReps: SetsReps.range(4, 8, 12),
+            weight: Weight(10))
       ]),
       Session(2, SessionType.push, [
         Exercise.weighted(
-            'Bench Press', SetsReps.fixedEndSet(4, 5, 5), Weight(30)),
+            name: 'Bench Press',
+            setsReps: SetsReps.fixedEndSet(4, 5, 5),
+            weight: Weight(30)),
         Exercise.weighted(
-            'Overhead Press', SetsReps.range(3, 8, 12), Weight(15.5)),
+            name: 'Overhead Press',
+            setsReps: SetsReps.range(3, 8, 12),
+            weight: Weight(15.5)),
         Exercise.weighted(
-            'Incline Dumbbell Press', SetsReps.range(3, 8, 12), Weight(15.5)),
+            name: 'Incline Dumbbell Press',
+            setsReps: SetsReps.range(3, 8, 12),
+            weight: Weight(15.5)),
         Exercise.weighted(
-            'Triceps Pushdowns', SetsReps.range(3, 8, 12), Weight(12.5)),
+            name: 'Triceps Pushdowns',
+            setsReps: SetsReps.range(3, 8, 12),
+            weight: Weight(12.5)),
         Exercise.weighted(
-            'Overhead Tri Extends', SetsReps.range(3, 8, 12), Weight(12.5)),
+            name: 'Overhead Tri Extends',
+            setsReps: SetsReps.range(3, 8, 12),
+            weight: Weight(12.5)),
       ]),
       Session(3, SessionType.legs, [
         Exercise.weighted(
-            'Squat', SetsReps.fixedEndSet(2, 5, 5), Weight(80)),
+            name: 'Squat',
+            setsReps: SetsReps.fixedEndSet(2, 5, 5),
+            weight: Weight(80)),
         Exercise.weighted(
-            'Romanian Deadlift', SetsReps.range(3, 8, 12), Weight(50)),
+            name: 'Romanian Deadlift',
+            setsReps: SetsReps.range(3, 8, 12),
+            weight: Weight(50)),
         Exercise.weighted(
-            'Leg Press', SetsReps.range(3, 8, 12), Weight(80)),
+            name: 'Leg Press',
+            setsReps: SetsReps.range(3, 8, 12),
+            weight: Weight(80)),
         Exercise.weighted(
-            'Leg Curls', SetsReps.range(3, 8, 12), Weight(30)),
+            name: 'Leg Curls',
+            setsReps: SetsReps.range(3, 8, 12),
+            weight: Weight(30)),
         Exercise.weighted(
-            'Calf Raises', SetsReps.range(5, 8, 12), Weight(12.5)),
+            name: 'Calf Raises',
+            setsReps: SetsReps.range(5, 8, 12),
+            weight: Weight(12.5)),
       ]),
     ])
   ];
