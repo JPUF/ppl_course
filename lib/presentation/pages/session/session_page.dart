@@ -91,7 +91,7 @@ class _SessionPageState extends State<SessionPage> {
                 topLeft: Radius.circular(12), topRight: Radius.circular(12))),
         builder: (BuildContext context) {
           return FractionallySizedBox(
-              heightFactor: 0.8, child: Column(
+              heightFactor: 0.85, child: Column(
                 children: [
                   buildSheetHeader(),
                   const Expanded(child: AddExerciseBottomSheet()),
@@ -110,7 +110,7 @@ class _SessionPageState extends State<SessionPage> {
                 child: Container(
                   padding: const EdgeInsets.only(top: 10, bottom: 4),
                   child: Text(
-                    Strings.activityTitle,
+                    Strings.exerciseTitle,
                     style: AppTextStyles.headline3.apply(color: AppColor.black),
                     textAlign: TextAlign.center,
                   ),

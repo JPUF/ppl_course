@@ -52,34 +52,44 @@ class _AddExerciseBottomSheetState extends State<AddExerciseBottomSheet> {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 16),
-      child: ScrollablePositionedList.builder(
-          itemScrollController: _scrollController,
-          itemCount: _contentList.length,
-          itemBuilder: (_, index) => _contentList[index]),
+    return GestureDetector(
+      behavior: HitTestBehavior.translucent,
+      onTap: () => unfocusAll(),
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 16),
+        child: ScrollablePositionedList.builder(
+            itemScrollController: _scrollController,
+            itemCount: _contentList.length,
+            itemBuilder: (_, index) => _contentList[index]),
+      ),
     );
   }
+
+  void unfocusAll() => FocusManager.instance.primaryFocus?.unfocus();
 
   List<Widget> buildContentWidgetList() {
     return [
       buildNameWeightRow(),
       SetRepSlider(
-          label: Strings.activitySetLabel,
+          label: Strings.exerciseSetLabel,
           max: 8,
+          onTap: () => unfocusAll(),
+          onChanged: (newValue) {
+            setState(() => _setCount = newValue);
+          }),
+      const SizedBox(height: 32),
+      SetRepSlider(
+          label: Strings.exerciseRepLabel,
+          max: 20,
+          onTap: () => unfocusAll(),
           onChanged: (newValue) {
             setState(() => _setCount = newValue);
           }),
       const SizedBox(height: 16),
-      SetRepSlider(
-          label: Strings.activityRepLabel,
-          max: 20,
-          onChanged: (newValue) {
-            setState(() => _setCount = newValue);
-          }),
       buildAmrapRow(),
+      const SizedBox(height: 16),
       CustomTextField(
-          hint: Strings.activityNotesHint,
+          hint: Strings.exerciseNotesHint,
           controller: _notesController,
           focusNode: _notesFocusNode,
           keyboardType: TextInputType.multiline,
@@ -87,8 +97,8 @@ class _AddExerciseBottomSheetState extends State<AddExerciseBottomSheet> {
           onChanged: (newValue) {}),
       const SizedBox(height: 32),
       AccentButton(
-          text: Strings.addActivityCTA, onTap: () => dismissBottomSheet()),
-      const SizedBox(height: 500),
+          text: Strings.addExerciseCTA, onTap: () => dismissBottomSheet()),
+      const SizedBox(height: 400),
     ];
   }
 
@@ -101,7 +111,7 @@ class _AddExerciseBottomSheetState extends State<AddExerciseBottomSheet> {
           child: CheckboxListTile(
               contentPadding: const EdgeInsets.only(left: 4),
               title: Text(
-                Strings.activityAmrapLabel,
+                Strings.exerciseAmrapLabel,
                 style: AppTextStyles.body12.apply(color: AppColor.black),
               ),
               controlAffinity: ListTileControlAffinity.trailing,
@@ -126,7 +136,7 @@ class _AddExerciseBottomSheetState extends State<AddExerciseBottomSheet> {
         children: [
           Expanded(
             child: CustomTextField(
-                hint: Strings.activityNameHint,
+                hint: Strings.exerciseNameHint,
                 controller: _nameController,
                 focusNode: _nameFocusNode,
                 keyboardType: TextInputType.multiline,
@@ -136,7 +146,7 @@ class _AddExerciseBottomSheetState extends State<AddExerciseBottomSheet> {
           SizedBox(
             width: 80,
             child: CustomTextField(
-                hint: Strings.activityWeightHint,
+                hint: Strings.exerciseWeightHint,
                 controller: _weightController,
                 focusNode: _weightFocusNode,
                 keyboardType: TextInputType.number,
@@ -149,7 +159,7 @@ class _AddExerciseBottomSheetState extends State<AddExerciseBottomSheet> {
 
   void scrollToNotes() {
     _scrollController.scrollTo(
-        index: 5,
+        index: 6,
         curve: Curves.fastOutSlowIn,
         duration: const Duration(milliseconds: 750));
   }

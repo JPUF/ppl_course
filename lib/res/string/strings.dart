@@ -13,13 +13,13 @@ class Strings {
   // Plan Session
   static const String planSessionTitle = "PLAN A SESSION";
   static const String generalNotesHint = "General session notes";
-  static const String addActivityCTA = "ADD ACTIVITY";
-  static const String activityTitle = "Activity";
-  static const String activityNameHint = "Activity name";
-  static const String activityWeightHint = "kg";
-  static const String activityNotesHint = "Activity notes";
-  static const String activitySetLabel = "Number of sets";
-  static const String activityRepLabel = "Number of reps";
-  static const String activityAmrapLabel = "AMRAP final set?";
+  static const String addExerciseCTA = "ADD EXERCISE";
+  static const String exerciseTitle = "Add Exercise";
+  static const String exerciseNameHint = "Exercise name";
+  static const String exerciseWeightHint = "kg";
+  static const String exerciseNotesHint = "Exercise notes";
+  static const String exerciseSetLabel = "Number of sets";
+  static const String exerciseRepLabel = "Number of reps";
+  static const String exerciseAmrapLabel = "AMRAP final set?";
 
 }

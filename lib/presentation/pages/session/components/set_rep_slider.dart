@@ -8,11 +8,13 @@ class SetRepSlider extends StatefulWidget {
       {Key? key,
       required this.label,
       required this.max,
+        this.onTap,
       required this.onChanged})
       : super(key: key);
 
   final String label;
   final int max;
+  final VoidCallback? onTap;
   final ValueSetter<int> onChanged;
 
   @override
@@ -24,42 +26,45 @@ class _SetRepSliderState extends State<SetRepSlider> {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        Align(
-          alignment: Alignment.centerLeft,
-          child: Text(
-            widget.label,
-            style: AppTextStyles.body12.apply(color: AppColor.black),
-            textAlign: TextAlign.start,
+    return GestureDetector(
+      onTap: () => widget.onTap?.call(),
+      child: Column(
+        children: [
+          Align(
+            alignment: Alignment.centerLeft,
+            child: Text(
+              widget.label,
+              style: AppTextStyles.body12.apply(color: AppColor.black),
+              textAlign: TextAlign.start,
+            ),
           ),
-        ),
-        Row(
-          children: [
-            Expanded(
-                flex: 1,
-                child: Text("$_value",
-                    textAlign: TextAlign.center,
-                    style: AppTextStyles.headline3)),
-            Expanded(
-              flex: 8,
-              child: SfSlider(
-                min: 1,
-                max: widget.max,
-                value: _value,
-                interval: 1,
-                showTicks: true,
-                onChanged: (dynamic value) {
-                  setState(() {
-                    _value = value.toInt();
-                    widget.onChanged(value.toInt());
-                  });
-                },
-              ),
-            )
-          ],
-        ),
-      ],
+          Row(
+            children: [
+              Expanded(
+                  flex: 1,
+                  child: Text("$_value",
+                      textAlign: TextAlign.center,
+                      style: AppTextStyles.headline3)),
+              Expanded(
+                flex: 8,
+                child: SfSlider(
+                  min: 1,
+                  max: widget.max,
+                  value: _value,
+                  interval: 1,
+                  showTicks: true,
+                  onChanged: (dynamic value) {
+                    setState(() {
+                      _value = value.toInt();
+                      widget.onChanged(value.toInt());
+                    });
+                  },
+                ),
+              )
+            ],
+          ),
+        ],
+      ),
     );
   }
 }
