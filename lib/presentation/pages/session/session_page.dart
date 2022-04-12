@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:ppl_course/common/components/custom_text_field.dart';
+import 'package:ppl_course/data/models/exercise/exercise.dart';
 import 'package:ppl_course/res/color/colors.dart';
 import 'package:ppl_course/res/string/strings.dart';
 import 'package:ppl_course/res/styles/app_text_styles.dart';
@@ -21,6 +22,8 @@ class _SessionPageState extends State<SessionPage> {
   late TextEditingController _editNotesController;
   late FocusNode _notesFocusNode;
   String _notesText = "";
+
+  String _dummyExercise = "";
 
   @override
   void initState() {
@@ -68,7 +71,9 @@ class _SessionPageState extends State<SessionPage> {
                             hint: Strings.generalNotesHint,
                             controller: _editNotesController,
                             focusNode: _notesFocusNode,
-                            onChanged: (newValue) {})
+                            onChanged: (newValue) {}),
+                        const SizedBox(height: 32),
+                        Text(_dummyExercise, style: AppTextStyles.body15)
                       ],
                     ),
                   ),
@@ -91,13 +96,23 @@ class _SessionPageState extends State<SessionPage> {
                 topLeft: Radius.circular(12), topRight: Radius.circular(12))),
         builder: (BuildContext context) {
           return FractionallySizedBox(
-              heightFactor: 0.85, child: Column(
+              heightFactor: 0.85,
+              child: Column(
                 children: [
                   buildSheetHeader(),
-                  const Expanded(child: AddExerciseBottomSheet()),
+                  Expanded(
+                      child: AddExerciseBottomSheet(
+                          addExercise: (newExercise) =>
+                              onNewExercise(newExercise))),
                 ],
               ));
         });
+  }
+
+  void onNewExercise(Exercise exercise) {
+    setState(() {
+      _dummyExercise = "${exercise.name}|${exercise.setsReps}|${exercise.weight}";
+    });
   }
 
   Widget buildSheetHeader() {

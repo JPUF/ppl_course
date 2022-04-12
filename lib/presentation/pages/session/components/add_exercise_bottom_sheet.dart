@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:ppl_course/common/components/asset_button.dart';
 import 'package:ppl_course/common/components/custom_text_field.dart';
+import 'package:ppl_course/data/models/exercise/exercise.dart';
+import 'package:ppl_course/data/models/exercise/sets_reps.dart';
 import 'package:ppl_course/presentation/pages/session/components/set_rep_slider.dart';
 import 'package:ppl_course/res/color/colors.dart';
 import 'package:ppl_course/res/string/strings.dart';
@@ -8,7 +10,10 @@ import 'package:ppl_course/res/styles/app_text_styles.dart';
 import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
 
 class AddExerciseBottomSheet extends StatefulWidget {
-  const AddExerciseBottomSheet({Key? key}) : super(key: key);
+  const AddExerciseBottomSheet({Key? key, required this.addExercise})
+      : super(key: key);
+
+  final ValueSetter<Exercise> addExercise;
 
   @override
   State<AddExerciseBottomSheet> createState() => _AddExerciseBottomSheetState();
@@ -83,7 +88,7 @@ class _AddExerciseBottomSheetState extends State<AddExerciseBottomSheet> {
           max: 20,
           onTap: () => unfocusAll(),
           onChanged: (newValue) {
-            setState(() => _setCount = newValue);
+            setState(() => _repCount = newValue);
           }),
       const SizedBox(height: 16),
       buildAmrapRow(),
@@ -96,8 +101,7 @@ class _AddExerciseBottomSheetState extends State<AddExerciseBottomSheet> {
           onTap: () => scrollToNotes(),
           onChanged: (newValue) {}),
       const SizedBox(height: 32),
-      AccentButton(
-          text: Strings.addExerciseCTA, onTap: () => dismissBottomSheet()),
+      AccentButton(text: Strings.addExerciseCTA, onTap: () => addNewExercise()),
       const SizedBox(height: 400),
     ];
   }
@@ -131,7 +135,7 @@ class _AddExerciseBottomSheetState extends State<AddExerciseBottomSheet> {
 
   Widget buildNameWeightRow() {
     return Padding(
-      padding: const EdgeInsets.only(bottom: 24),
+      padding: const EdgeInsets.only(bottom: 24, top: 16),
       child: Row(
         children: [
           Expanded(
@@ -162,6 +166,14 @@ class _AddExerciseBottomSheetState extends State<AddExerciseBottomSheet> {
         index: 6,
         curve: Curves.fastOutSlowIn,
         duration: const Duration(milliseconds: 750));
+  }
+
+  void addNewExercise() {
+    final setReps = SetsReps.fixedEndSet(_setCount - 1, _repCount, _repCount);
+    final exercise = Exercise.weighted(
+        name: _nameText, setsReps: setReps, notes: _notesText);
+    widget.addExercise(exercise);
+    dismissBottomSheet();
   }
 
   void dismissBottomSheet() => Navigator.pop(context);
