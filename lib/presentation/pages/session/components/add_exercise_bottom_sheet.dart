@@ -16,10 +16,13 @@ class AddExerciseBottomSheet extends StatefulWidget {
 class _AddExerciseBottomSheetState extends State<AddExerciseBottomSheet> {
   late TextEditingController _nameController;
   late TextEditingController _weightController;
+  late TextEditingController _notesController;
   late FocusNode _nameFocusNode;
   late FocusNode _weightFocusNode;
+  late FocusNode _notesFocusNode;
   String _nameText = "";
   String _weightText = "";
+  String _notesText = "";
 
   int _setCount = 1;
   int _repCount = 1;
@@ -31,14 +34,17 @@ class _AddExerciseBottomSheetState extends State<AddExerciseBottomSheet> {
     super.initState();
     _nameController = TextEditingController(text: _nameText);
     _weightController = TextEditingController(text: _weightText);
+    _notesController = TextEditingController(text: _notesText);
     _nameFocusNode = FocusNode();
     _weightFocusNode = FocusNode();
+    _notesFocusNode = FocusNode();
   }
 
   @override
   void dispose() {
     _nameController.dispose();
     _nameFocusNode.dispose();
+    _notesFocusNode.dispose();
     super.dispose();
   }
 
@@ -46,7 +52,7 @@ class _AddExerciseBottomSheetState extends State<AddExerciseBottomSheet> {
   Widget build(BuildContext context) {
     return SizedBox(
         height: 510,
-        child: Column(
+        child: ListView(
           children: [
             buildSheetHeader(),
             Padding(
@@ -60,33 +66,19 @@ class _AddExerciseBottomSheetState extends State<AddExerciseBottomSheet> {
                       onChanged: (newValue) {
                         setState(() => _setCount = newValue);
                       }),
+                  const SizedBox(height: 16),
                   SetRepSlider(
                       label: Strings.activityRepLabel,
                       max: 20,
                       onChanged: (newValue) {
                         setState(() => _setCount = newValue);
                       }),
-                  Row(
-                    children: [
-                      Expanded(
-                        child: CheckboxListTile(
-                            contentPadding: const EdgeInsets.only(left: 4),
-                            title: Text(
-                              Strings.activityAmrapLabel,
-                              style: AppTextStyles.body12,
-                            ),
-                            controlAffinity: ListTileControlAffinity.trailing,
-                            value: _amrapFinal,
-                            activeColor: AppColor.dark,
-                            dense: true,
-                            onChanged: (newValue) {
-                              setState(() {
-                                _amrapFinal = newValue ?? false;
-                              });
-                            }),
-                      ),
-                      Expanded(child: Container())
-                    ],
+                  buildAmrapRow(),
+                  CustomTextField(hint: Strings.activityNotesHint,
+                      controller: _notesController,
+                      focusNode: _notesFocusNode,
+                      keyboardType: TextInputType.multiline,
+                      onChanged: (newValue) {}
                   ),
                   const SizedBox(height: 48),
                   AccentButton(
@@ -95,8 +87,37 @@ class _AddExerciseBottomSheetState extends State<AddExerciseBottomSheet> {
                 ],
               ),
             ),
-          ],
-        ));
+          ]
+          ,
+        )
+    );
+  }
+
+  Row buildAmrapRow() {
+    return Row(
+      children: [
+        Expanded(child: Container()),
+        Expanded(
+          flex: 3,
+          child: CheckboxListTile(
+              contentPadding: const EdgeInsets.only(left: 4),
+              title: Text(
+                Strings.activityAmrapLabel,
+                style: AppTextStyles.body12,
+              ),
+              controlAffinity: ListTileControlAffinity.trailing,
+              value: _amrapFinal,
+              activeColor: AppColor.dark,
+              dense: true,
+              onChanged: (newValue) {
+                setState(() {
+                  _amrapFinal = newValue ?? false;
+                });
+              }),
+        ),
+        Expanded(child: Container())
+      ],
+    );
   }
 
   Widget buildNameWeightRow() {

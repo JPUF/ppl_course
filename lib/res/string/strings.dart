@@ -16,8 +16,9 @@ class Strings {
   static const String addActivityCTA = "ADD ACTIVITY";
   static const String activityNameHint = "Activity name";
   static const String activityWeightHint = "kg";
+  static const String activityNotesHint = "Activity notes";
   static const String activitySetLabel = "Number of sets";
   static const String activityRepLabel = "Number of reps";
-  static const String activityAmrapLabel = "AMRAP final set";
+  static const String activityAmrapLabel = "AMRAP final set?";
 
 }

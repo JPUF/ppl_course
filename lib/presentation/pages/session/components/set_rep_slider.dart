@@ -58,7 +58,6 @@ class _SetRepSliderState extends State<SetRepSlider> {
             )
           ],
         ),
-        const SizedBox(height: 16)
       ],
     );
   }
