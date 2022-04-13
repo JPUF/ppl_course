@@ -25,9 +25,7 @@ class _PlanExerciseWidgetState extends State<PlanExerciseWidget> {
       clipBehavior: Clip.antiAlias,
       child: Container(
         decoration: BoxDecoration(
-            color: AppColor
-                .getPplColor(widget.sessionType)
-                .shade50,
+            color: AppColor.getPplColor(widget.sessionType).shade50,
             border: Border.all(
                 color: AppColor.getPplColor(widget.sessionType), width: 1),
             borderRadius: BorderRadius.circular(4)),
@@ -98,7 +96,9 @@ class _PlanExerciseWidgetState extends State<PlanExerciseWidget> {
       return Column(children: [
         const Divider(height: 8),
         const SizedBox(height: 12),
-        Text(notes, style: AppTextStyles.body12)
+        SizedBox(
+          width: double.infinity,
+            child: Text(notes, style: AppTextStyles.body12))
       ]);
     } else {
       return Container();

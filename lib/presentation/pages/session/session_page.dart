@@ -25,7 +25,7 @@ class _SessionPageState extends State<SessionPage> {
   late FocusNode _notesFocusNode;
   String _notesText = "";
 
-  Exercise? _dummyExercise;
+  List<Exercise> _exercises = [];
 
   @override
   void initState() {
@@ -117,18 +117,18 @@ class _SessionPageState extends State<SessionPage> {
 
   void onNewExercise(Exercise exercise) {
     setState(() {
-      _dummyExercise = exercise;
+      _exercises.add(exercise);
     });
   }
 
   Widget buildExerciseList() {
-    final exercise = _dummyExercise;
-    if (exercise != null) {
-      return PlanExerciseWidget(
-          exercise: exercise, sessionType: SessionType.push);
-    } else {
-      return Container();
-    }
+    return ListView.builder(
+        shrinkWrap: true,
+        itemCount: _exercises.length,
+        itemBuilder: (_, index) {
+          return PlanExerciseWidget(
+              exercise: _exercises[index], sessionType: SessionType.push);
+        });
   }
 
   Widget buildSheetHeader() {
