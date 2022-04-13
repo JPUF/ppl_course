@@ -1,34 +1,21 @@
 class SetsReps {
-  int? sets;
-  int? minReps;
-  int? maxReps;
-  int? endSetReps;
+  late int sets;
+  late int reps;
+  bool amrapFinalSet;
 
-  SetsReps.fixed(this.sets, this.minReps);
-
-  SetsReps.fixedEndSet(this.sets, this.minReps, this.endSetReps);
-
-  SetsReps.range(this.sets, this.minReps, this.maxReps);
-
-  SetsReps.rangeEndSet(this.sets, this.minReps, this.maxReps, this.endSetReps);
-
-  SetsReps.endSetOnly(this.endSetReps);
+  SetsReps(
+      {required this.sets, required this.reps, this.amrapFinalSet = false});
 
   @override
   String toString() {
-    var setString = '';
-    if (sets != null && minReps != null) {
-      var firstReps = '$minReps';
-      if (maxReps != null) {
-        firstReps += '–$maxReps';
-      }
-      setString += '${sets}x$firstReps';
-      if (endSetReps != null) {
-        setString += ', 1x$endSetReps+';
+    if (amrapFinalSet) {
+      if (sets > 1) {
+        return "${sets - 1}×$reps, 1×$reps+";
+      } else {
+        return "1×$reps+";
       }
     } else {
-      setString += '1x$endSetReps+';
+      return "$sets×$reps";
     }
-    return setString;
   }
 }

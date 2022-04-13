@@ -169,7 +169,8 @@ class _AddExerciseBottomSheetState extends State<AddExerciseBottomSheet> {
   }
 
   void addNewExercise() {
-    final setReps = SetsReps.fixedEndSet(_setCount - 1, _repCount, _repCount);
+    final setReps =
+        SetsReps(sets: _setCount, reps: _repCount, amrapFinalSet: _amrapFinal);
     final exercise = Exercise.weighted(
         name: _nameText, setsReps: setReps, notes: _notesText);
     widget.addExercise(exercise);
