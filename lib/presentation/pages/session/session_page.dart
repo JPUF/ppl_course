@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:ppl_course/common/components/custom_text_field.dart';
+import 'package:ppl_course/data/models/cycle/session.dart';
 import 'package:ppl_course/data/models/exercise/exercise.dart';
+import 'package:ppl_course/presentation/pages/home/components/exercise_widget.dart';
 import 'package:ppl_course/res/color/colors.dart';
 import 'package:ppl_course/res/string/strings.dart';
 import 'package:ppl_course/res/styles/app_text_styles.dart';
@@ -23,7 +25,7 @@ class _SessionPageState extends State<SessionPage> {
   late FocusNode _notesFocusNode;
   String _notesText = "";
 
-  String _dummyExercise = "";
+  Exercise? _dummyExercise;
 
   @override
   void initState() {
@@ -71,9 +73,13 @@ class _SessionPageState extends State<SessionPage> {
                             hint: Strings.generalNotesHint,
                             controller: _editNotesController,
                             focusNode: _notesFocusNode,
-                            onChanged: (newValue) {}),
+                            onChanged: (newValue) {
+                              setState(() {
+                                _notesText = newValue;
+                              });
+                            }),
                         const SizedBox(height: 32),
-                        Text(_dummyExercise, style: AppTextStyles.body15)
+                        buildExerciseList()
                       ],
                     ),
                   ),
@@ -111,8 +117,17 @@ class _SessionPageState extends State<SessionPage> {
 
   void onNewExercise(Exercise exercise) {
     setState(() {
-      _dummyExercise = "${exercise.name}\n${exercise.setsReps}|${exercise.weight}\n${exercise.notes}";
+      _dummyExercise = exercise;
     });
+  }
+
+  Widget buildExerciseList() {
+    final exercise = _dummyExercise;
+    if (exercise != null) {
+      return ExerciseWidget(exercise: exercise, sessionType: SessionType.push);
+    } else {
+      return Container();
+    }
   }
 
   Widget buildSheetHeader() {
