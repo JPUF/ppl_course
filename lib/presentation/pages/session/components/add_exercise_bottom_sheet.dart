@@ -3,6 +3,7 @@ import 'package:ppl_course/common/components/asset_button.dart';
 import 'package:ppl_course/common/components/custom_text_field.dart';
 import 'package:ppl_course/data/models/exercise/exercise.dart';
 import 'package:ppl_course/data/models/exercise/sets_reps.dart';
+import 'package:ppl_course/data/models/exercise/weight.dart';
 import 'package:ppl_course/presentation/pages/session/components/set_rep_slider.dart';
 import 'package:ppl_course/res/color/colors.dart';
 import 'package:ppl_course/res/string/strings.dart';
@@ -99,7 +100,11 @@ class _AddExerciseBottomSheetState extends State<AddExerciseBottomSheet> {
           focusNode: _notesFocusNode,
           keyboardType: TextInputType.multiline,
           onTap: () => scrollToNotes(),
-          onChanged: (newValue) {}),
+          onChanged: (newValue) {
+            setState(() {
+              _notesText = newValue;
+            });
+          }),
       const SizedBox(height: 32),
       AccentButton(text: Strings.addExerciseCTA, onTap: () => addNewExercise()),
       const SizedBox(height: 400),
@@ -144,7 +149,11 @@ class _AddExerciseBottomSheetState extends State<AddExerciseBottomSheet> {
                 controller: _nameController,
                 focusNode: _nameFocusNode,
                 keyboardType: TextInputType.multiline,
-                onChanged: (newValue) {}),
+                onChanged: (newValue) {
+                  setState(() {
+                    _nameText = newValue;
+                  });
+                }),
           ),
           const SizedBox(width: 8),
           SizedBox(
@@ -154,7 +163,11 @@ class _AddExerciseBottomSheetState extends State<AddExerciseBottomSheet> {
                 controller: _weightController,
                 focusNode: _weightFocusNode,
                 keyboardType: TextInputType.number,
-                onChanged: (newValue) {}),
+                onChanged: (newValue) {
+                  setState(() {
+                    _weightText = newValue;
+                  });
+                }),
           )
         ],
       ),
@@ -171,8 +184,9 @@ class _AddExerciseBottomSheetState extends State<AddExerciseBottomSheet> {
   void addNewExercise() {
     final setReps =
         SetsReps(sets: _setCount, reps: _repCount, amrapFinalSet: _amrapFinal);
+    final weight = Weight(double.parse(_weightText));
     final exercise = Exercise.weighted(
-        name: _nameText, setsReps: setReps, notes: _notesText);
+        name: _nameText, setsReps: setReps, weight: weight, notes: _notesText);
     widget.addExercise(exercise);
     dismissBottomSheet();
   }

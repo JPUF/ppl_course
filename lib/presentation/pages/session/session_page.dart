@@ -111,7 +111,7 @@ class _SessionPageState extends State<SessionPage> {
 
   void onNewExercise(Exercise exercise) {
     setState(() {
-      _dummyExercise = "${exercise.name}|${exercise.setsReps}|${exercise.weight}";
+      _dummyExercise = "${exercise.name}\n${exercise.setsReps}|${exercise.weight}\n${exercise.notes}";
     });
   }
 
