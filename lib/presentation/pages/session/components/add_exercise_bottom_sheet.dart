@@ -27,7 +27,7 @@ class _AddExerciseBottomSheetState extends State<AddExerciseBottomSheet> {
   final FocusNode _notesFocusNode = FocusNode();
   String _nameText = "";
   String _weightText = "";
-  String _notesText = "";
+  String? _notesText;
   late TextEditingController _nameController;
   late TextEditingController _weightController;
   late TextEditingController _notesController;
@@ -103,6 +103,9 @@ class _AddExerciseBottomSheetState extends State<AddExerciseBottomSheet> {
           onChanged: (newValue) {
             setState(() {
               _notesText = newValue;
+              if (newValue.isEmpty) {
+                _notesText = null;
+              }
             });
           }),
       const SizedBox(height: 32),

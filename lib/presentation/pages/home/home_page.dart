@@ -78,7 +78,7 @@ class _HomePageState extends State<HomePage> {
               text: Strings.planSessionCTA,
               onTap: () => Navigator.of(context).pushNamed(Destination.session),
               endIcon: SvgPicture.asset(
-                'assets/images/ic_weight.svg',
+                'assets/images/ic_dumbbell.svg',
                 width: 24,
                 height: 24,
               ),

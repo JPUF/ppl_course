@@ -19,16 +19,22 @@ class AppTextStyles {
       color: AppColor.dark,
       fontSize: 12.0,
       fontWeight: FontWeight.normal,
+      height: 1.2,
       fontFamily: AppFontFamilies.andala);
+
+  static TextStyle headline2 = TextStyle(
+      color: AppColor.dark,
+      fontSize: 32.0,
+      fontFamily: AppFontFamilies.mont);
 
   static TextStyle headline3 = TextStyle(
       color: AppColor.dark,
       fontSize: 24.0,
       fontFamily: AppFontFamilies.mont);
 
-  static TextStyle headline2 = TextStyle(
+  static TextStyle headline4 = TextStyle(
       color: AppColor.dark,
-      fontSize: 32.0,
+      fontSize: 20.0,
       fontFamily: AppFontFamilies.mont);
 }
 

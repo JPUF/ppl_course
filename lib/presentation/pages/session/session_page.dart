@@ -2,13 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:ppl_course/common/components/custom_text_field.dart';
 import 'package:ppl_course/data/models/cycle/session.dart';
 import 'package:ppl_course/data/models/exercise/exercise.dart';
-import 'package:ppl_course/presentation/pages/home/components/exercise_widget.dart';
 import 'package:ppl_course/res/color/colors.dart';
 import 'package:ppl_course/res/string/strings.dart';
 import 'package:ppl_course/res/styles/app_text_styles.dart';
 
 import 'components/add_exercise_bottom_sheet.dart';
 import 'components/add_exercise_button.dart';
+import 'components/plan_exercise_widget.dart';
 import 'components/ppl_selector_switch.dart';
 
 class SessionPage extends StatefulWidget {
@@ -124,7 +124,8 @@ class _SessionPageState extends State<SessionPage> {
   Widget buildExerciseList() {
     final exercise = _dummyExercise;
     if (exercise != null) {
-      return ExerciseWidget(exercise: exercise, sessionType: SessionType.push);
+      return PlanExerciseWidget(
+          exercise: exercise, sessionType: SessionType.push);
     } else {
       return Container();
     }
