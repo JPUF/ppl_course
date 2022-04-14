@@ -39,13 +39,14 @@ class _AddExerciseBottomSheetState extends State<AddExerciseBottomSheet> {
 
   bool _amrapFinal = false;
 
+  bool _isValidExercise = false;
+
   @override
   void initState() {
     super.initState();
     _nameController = TextEditingController(text: _nameText);
     _weightController = TextEditingController(text: _weightText);
     _notesController = TextEditingController(text: _notesText);
-    _contentList = buildContentWidgetList();
   }
 
   @override
@@ -58,6 +59,7 @@ class _AddExerciseBottomSheetState extends State<AddExerciseBottomSheet> {
 
   @override
   Widget build(BuildContext context) {
+    _contentList = buildContentWidgetList();
     return GestureDetector(
       behavior: HitTestBehavior.translucent,
       onTap: () => unfocusAll(),
@@ -109,9 +111,18 @@ class _AddExerciseBottomSheetState extends State<AddExerciseBottomSheet> {
             });
           }),
       const SizedBox(height: 32),
-      AccentButton(text: Strings.addExerciseCTA, onTap: () => addNewExercise()),
+      AccentButton(
+          text: Strings.addExerciseCTA,
+          isEnabled: _isValidExercise,
+          onTap: () => addNewExercise()),
       const SizedBox(height: 400),
     ];
+  }
+
+  void checkExerciseValidity() {
+    setState(() {
+      _isValidExercise = _nameText.isNotEmpty && _weightText.isNotEmpty;
+    });
   }
 
   Row buildAmrapRow() {
@@ -121,24 +132,23 @@ class _AddExerciseBottomSheetState extends State<AddExerciseBottomSheet> {
         Expanded(
           flex: 3,
           child: StatefulBuilder(
-            builder: (BuildContext context, StateSetter setState) {
-              return CheckboxListTile(
-                  contentPadding: const EdgeInsets.only(left: 4),
-                  title: Text(
-                    Strings.exerciseAmrapLabel,
-                    style: AppTextStyles.body12.apply(color: AppColor.black),
-                  ),
-                  controlAffinity: ListTileControlAffinity.trailing,
-                  value: _amrapFinal,
-                  activeColor: AppColor.dark,
-                  dense: true,
-                  onChanged: (newValue) {
-                    setState(() {
-                      _amrapFinal = newValue ?? false;
-                    });
+              builder: (BuildContext context, StateSetter setState) {
+            return CheckboxListTile(
+                contentPadding: const EdgeInsets.only(left: 4),
+                title: Text(
+                  Strings.exerciseAmrapLabel,
+                  style: AppTextStyles.body12.apply(color: AppColor.black),
+                ),
+                controlAffinity: ListTileControlAffinity.trailing,
+                value: _amrapFinal,
+                activeColor: AppColor.dark,
+                dense: true,
+                onChanged: (newValue) {
+                  setState(() {
+                    _amrapFinal = newValue ?? false;
                   });
-            }
-          ),
+                });
+          }),
         ),
         Expanded(child: Container())
       ],
@@ -159,6 +169,7 @@ class _AddExerciseBottomSheetState extends State<AddExerciseBottomSheet> {
                 onChanged: (newValue) {
                   setState(() {
                     _nameText = newValue;
+                    checkExerciseValidity();
                   });
                 }),
           ),
@@ -173,6 +184,7 @@ class _AddExerciseBottomSheetState extends State<AddExerciseBottomSheet> {
                 onChanged: (newValue) {
                   setState(() {
                     _weightText = newValue;
+                    checkExerciseValidity();
                   });
                 }),
           )

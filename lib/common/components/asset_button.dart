@@ -5,10 +5,15 @@ import 'package:ppl_course/res/styles/app_text_styles.dart';
 
 class AccentButton extends StatelessWidget {
   const AccentButton(
-      {Key? key, required this.text, required this.onTap, this.endIcon})
+      {Key? key,
+      required this.text,
+      this.isEnabled = true,
+      required this.onTap,
+      this.endIcon})
       : super(key: key);
 
   final String text;
+  final bool isEnabled;
   final VoidCallback onTap;
   final SvgPicture? endIcon;
 
@@ -17,10 +22,10 @@ class AccentButton extends StatelessWidget {
     return GestureDetector(
       onTap: () => onTap(),
       child: Card(
-        color: AppColor.accent,
+        color: isEnabled ? AppColor.accent : AppColor.grey90,
         elevation: 4,
         shape: RoundedRectangleBorder(
-          side: const BorderSide(color: Colors.black, width: 2),
+          side: BorderSide(color: isEnabled ? AppColor.black : AppColor.grey75 , width: 2),
           borderRadius: BorderRadius.circular(10),
         ),
         child: Container(
@@ -34,7 +39,9 @@ class AccentButton extends StatelessWidget {
                 child: Text(
                   text,
                   textAlign: TextAlign.center,
-                  style: AppTextStyles.button,
+                  style: AppTextStyles.button.apply(
+                    color: isEnabled ? AppColor.black : AppColor.grey75
+                  ),
                 ),
               ),
               _optionalEndIcon()
