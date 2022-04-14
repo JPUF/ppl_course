@@ -55,16 +55,18 @@ class _SessionPageState extends State<SessionPage> {
           centerTitle: true,
         ),
         body: SafeArea(
-          child: Stack(
-            alignment: AlignmentDirectional.bottomCenter,
-            children: [
-              SizedBox(
-                height: double.infinity,
-                width: double.infinity,
-                child: SingleChildScrollView(
+          child: Container(
+            height: MediaQuery.of(context).size.height,
+            width: MediaQuery.of(context).size.width,
+            padding: const EdgeInsets.symmetric(horizontal: 4),
+            child: Stack(
+              alignment: AlignmentDirectional.bottomCenter,
+              children: [
+                SingleChildScrollView(
                   child: Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: Column(
+                      mainAxisSize: MainAxisSize.max,
                       children: [
                         const SizedBox(height: 16),
                         const PplSelectorSwitch(),
@@ -78,15 +80,16 @@ class _SessionPageState extends State<SessionPage> {
                                 _notesText = newValue;
                               });
                             }),
-                        const SizedBox(height: 32),
-                        buildExerciseList()
+                        const SizedBox(height: 16),
+                        buildExerciseList(),
+                        const SizedBox(height: 100),
                       ],
                     ),
                   ),
                 ),
-              ),
-              AddExerciseButton(onTap: () => showBottomSheet())
-            ],
+                AddExerciseButton(onTap: () => showBottomSheet())
+              ],
+            ),
           ),
         ),
       ),
@@ -124,6 +127,7 @@ class _SessionPageState extends State<SessionPage> {
   Widget buildExerciseList() {
     return ListView.builder(
         shrinkWrap: true,
+        physics: const NeverScrollableScrollPhysics(),
         itemCount: _exercises.length,
         itemBuilder: (_, index) {
           return PlanExerciseWidget(
