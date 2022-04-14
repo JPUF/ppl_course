@@ -127,9 +127,7 @@ class _SessionPageState extends State<SessionPage> {
         .map((e) =>
             PlanExerciseWidget(exercise: e, sessionType: SessionType.push))
         .toList();
-    return Column(
-      children: [Column(children: exerciseWidgets)],
-    );
+    return Column(children: exerciseWidgets);
   }
 
   Widget buildSheetHeader() {

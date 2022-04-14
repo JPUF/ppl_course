@@ -29,10 +29,13 @@ class AccentButton extends StatelessWidget {
             mainAxisSize: MainAxisSize.min,
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Text(
-                text,
-                textAlign: TextAlign.center,
-                style: AppTextStyles.button,
+              Container(
+                padding: const EdgeInsets.symmetric(vertical: 4),
+                child: Text(
+                  text,
+                  textAlign: TextAlign.center,
+                  style: AppTextStyles.button,
+                ),
               ),
               _optionalEndIcon()
             ],

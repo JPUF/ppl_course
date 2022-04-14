@@ -10,7 +10,7 @@ class SetsReps {
   String toString() {
     if (amrapFinalSet) {
       if (sets > 1) {
-        return "${sets - 1}×$reps, 1×$reps+";
+        return "${sets - 1}×$reps\n1×$reps+";
       } else {
         return "1×$reps+";
       }

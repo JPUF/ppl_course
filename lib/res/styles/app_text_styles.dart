@@ -5,6 +5,7 @@ class AppTextStyles {
   static TextStyle button = TextStyle(
       color: AppColor.black,
       fontSize: 17.0,
+      height: 0.8,
       fontWeight: FontWeight.bold,
       fontFamily: AppFontFamilies.mont);
 

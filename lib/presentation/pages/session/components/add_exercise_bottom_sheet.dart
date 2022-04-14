@@ -120,21 +120,25 @@ class _AddExerciseBottomSheetState extends State<AddExerciseBottomSheet> {
         Expanded(child: Container()),
         Expanded(
           flex: 3,
-          child: CheckboxListTile(
-              contentPadding: const EdgeInsets.only(left: 4),
-              title: Text(
-                Strings.exerciseAmrapLabel,
-                style: AppTextStyles.body12.apply(color: AppColor.black),
-              ),
-              controlAffinity: ListTileControlAffinity.trailing,
-              value: _amrapFinal,
-              activeColor: AppColor.dark,
-              dense: true,
-              onChanged: (newValue) {
-                setState(() {
-                  _amrapFinal = newValue ?? false;
-                });
-              }),
+          child: StatefulBuilder(
+            builder: (BuildContext context, StateSetter setState) {
+              return CheckboxListTile(
+                  contentPadding: const EdgeInsets.only(left: 4),
+                  title: Text(
+                    Strings.exerciseAmrapLabel,
+                    style: AppTextStyles.body12.apply(color: AppColor.black),
+                  ),
+                  controlAffinity: ListTileControlAffinity.trailing,
+                  value: _amrapFinal,
+                  activeColor: AppColor.dark,
+                  dense: true,
+                  onChanged: (newValue) {
+                    setState(() {
+                      _amrapFinal = newValue ?? false;
+                    });
+                  });
+            }
+          ),
         ),
         Expanded(child: Container())
       ],
