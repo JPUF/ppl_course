@@ -28,7 +28,7 @@ class _CustomTextFieldState extends State<CustomTextField> {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.only(top: 8),
+      padding: const EdgeInsets.fromLTRB(4,8,4,0),
       child: Center(
         child: TextField(
           focusNode: widget.focusNode,

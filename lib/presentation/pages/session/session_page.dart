@@ -47,6 +47,7 @@ class _SessionPageState extends State<SessionPage> {
       behavior: HitTestBehavior.translucent,
       onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
       child: Scaffold(
+        resizeToAvoidBottomInset: false,
         appBar: AppBar(
           title: Text(
             Strings.planSessionTitle,
@@ -54,40 +55,26 @@ class _SessionPageState extends State<SessionPage> {
           ),
           centerTitle: true,
         ),
-        body: SafeArea(
+        body: SingleChildScrollView(
           child: Container(
-            height: MediaQuery.of(context).size.height,
-            width: MediaQuery.of(context).size.width,
-            padding: const EdgeInsets.symmetric(horizontal: 4),
-            child: Stack(
-              alignment: AlignmentDirectional.bottomCenter,
+            padding: const EdgeInsets.symmetric(horizontal: 8),
+            child: Column(
               children: [
-                SingleChildScrollView(
-                  child: Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Column(
-                      mainAxisSize: MainAxisSize.max,
-                      children: [
-                        const SizedBox(height: 16),
-                        const PplSelectorSwitch(),
-                        const SizedBox(height: 32),
-                        CustomTextField(
-                            hint: Strings.generalNotesHint,
-                            controller: _editNotesController,
-                            focusNode: _notesFocusNode,
-                            onChanged: (newValue) {
-                              setState(() {
-                                _notesText = newValue;
-                              });
-                            }),
-                        const SizedBox(height: 16),
-                        buildExerciseList(),
-                        const SizedBox(height: 100),
-                      ],
-                    ),
-                  ),
-                ),
-                AddExerciseButton(onTap: () => showBottomSheet())
+                const SizedBox(height: 16),
+                const PplSelectorSwitch(),
+                const SizedBox(height: 32),
+                CustomTextField(
+                    hint: Strings.generalNotesHint,
+                    controller: _editNotesController,
+                    focusNode: _notesFocusNode,
+                    onChanged: (newValue) {
+                      setState(() {
+                        _notesText = newValue;
+                      });
+                    }),
+                const SizedBox(height: 16),
+                buildExerciseList(),
+                const SizedBox(height: 16),
               ],
             ),
           ),
@@ -125,14 +112,17 @@ class _SessionPageState extends State<SessionPage> {
   }
 
   Widget buildExerciseList() {
-    return ListView.builder(
-        shrinkWrap: true,
-        physics: const NeverScrollableScrollPhysics(),
-        itemCount: _exercises.length,
-        itemBuilder: (_, index) {
-          return PlanExerciseWidget(
-              exercise: _exercises[index], sessionType: SessionType.push);
-        });
+    final List<Widget> exerciseWidgets = _exercises
+        .map((e) =>
+            PlanExerciseWidget(exercise: e, sessionType: SessionType.push))
+        .toList();
+    return Column(
+      children: [
+        Column(children: exerciseWidgets),
+        const SizedBox(height: 16),
+        AddExerciseButton(onTap: () => showBottomSheet())
+      ],
+    );
   }
 
   Widget buildSheetHeader() {
