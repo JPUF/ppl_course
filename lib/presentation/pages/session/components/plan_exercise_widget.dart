@@ -35,13 +35,13 @@ class _PlanExerciseWidgetState extends State<PlanExerciseWidget> {
             Row(
               children: [
                 Expanded(
-                    flex: 5,
+                    flex: 4,
                     child: Text(widget.exercise.name,
                         style: AppTextStyles.headline4.apply(
                             color: AppColor.getPplColor(widget.sessionType)))),
                 const SizedBox(width: 16),
                 Expanded(
-                  flex: 2,
+                  flex: 1,
                   child: Column(
                     children: [
                       buildWeight(),

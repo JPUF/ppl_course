@@ -25,7 +25,7 @@ class _SessionPageState extends State<SessionPage> {
   late FocusNode _notesFocusNode;
   String _notesText = "";
 
-  List<Exercise> _exercises = [];
+  final List<Exercise> _exercises = [];
 
   @override
   void initState() {
@@ -53,7 +53,12 @@ class _SessionPageState extends State<SessionPage> {
             Strings.planSessionTitle,
             style: AppTextStyles.button.apply(color: AppColor.white),
           ),
-          centerTitle: true,
+          actions: [Container(
+            padding: const EdgeInsets.only(right: 16),
+            alignment: Alignment.centerRight,
+              child: GestureDetector(
+                onTap: () => submitSession(),
+                  child: Text("Done", style: AppTextStyles.button.apply(color: AppColor.white),)))],
         ),
         body: Stack(
           alignment: Alignment.topCenter,
@@ -164,4 +169,10 @@ class _SessionPageState extends State<SessionPage> {
       ],
     );
   }
+
+  void submitSession() {
+    navigateBack();
+  }
+
+  void navigateBack() => Navigator.pop(context);
 }
