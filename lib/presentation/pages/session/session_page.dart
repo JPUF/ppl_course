@@ -55,29 +55,40 @@ class _SessionPageState extends State<SessionPage> {
           ),
           centerTitle: true,
         ),
-        body: SingleChildScrollView(
-          child: Container(
-            padding: const EdgeInsets.symmetric(horizontal: 8),
-            child: Column(
-              children: [
-                const SizedBox(height: 16),
-                const PplSelectorSwitch(),
-                const SizedBox(height: 32),
-                CustomTextField(
-                    hint: Strings.generalNotesHint,
-                    controller: _editNotesController,
-                    focusNode: _notesFocusNode,
-                    onChanged: (newValue) {
-                      setState(() {
-                        _notesText = newValue;
-                      });
-                    }),
-                const SizedBox(height: 16),
-                buildExerciseList(),
-                const SizedBox(height: 16),
-              ],
+        body: Stack(
+          alignment: Alignment.topCenter,
+          children: [
+            SingleChildScrollView(
+              child: Container(
+                padding: const EdgeInsets.symmetric(horizontal: 8),
+                child: Column(
+                  children: [
+                    const SizedBox(height: 16),
+                    const PplSelectorSwitch(),
+                    const SizedBox(height: 32),
+                    CustomTextField(
+                        hint: Strings.generalNotesHint,
+                        controller: _editNotesController,
+                        focusNode: _notesFocusNode,
+                        onChanged: (newValue) {
+                          setState(() {
+                            _notesText = newValue;
+                          });
+                        }),
+                    const SizedBox(height: 16),
+                    buildExerciseList(),
+                    const SizedBox(height: 100),
+                  ],
+                ),
+              ),
             ),
-          ),
+            SizedBox(
+                height: MediaQuery.of(context).size.height,
+                width: MediaQuery.of(context).size.width,
+                child: Align(
+                    alignment: Alignment.bottomCenter,
+                    child: AddExerciseButton(onTap: () => showBottomSheet())))
+          ],
         ),
       ),
     );
@@ -117,11 +128,7 @@ class _SessionPageState extends State<SessionPage> {
             PlanExerciseWidget(exercise: e, sessionType: SessionType.push))
         .toList();
     return Column(
-      children: [
-        Column(children: exerciseWidgets),
-        const SizedBox(height: 16),
-        AddExerciseButton(onTap: () => showBottomSheet())
-      ],
+      children: [Column(children: exerciseWidgets)],
     );
   }
 
