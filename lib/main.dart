@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:hydrated_bloc/hydrated_bloc.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:ppl_course/logic/sessions/sessions_bloc.dart';
 import 'package:ppl_course/presentation/navigation/app_router.dart';
 import 'package:ppl_course/res/color/colors.dart';
@@ -8,8 +10,13 @@ import 'package:ppl_course/res/string/strings.dart';
 import 'logic/basic/basic_bloc.dart';
 import 'presentation/pages/home/home_page.dart';
 
-void main() {
-  runApp(MyApp());
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+
+  final storage = await HydratedStorage.build(
+      storageDirectory: await getApplicationDocumentsDirectory());
+
+  HydratedBlocOverrides.runZoned(() => runApp(MyApp()), storage: storage);
 }
 
 class MyApp extends StatelessWidget {

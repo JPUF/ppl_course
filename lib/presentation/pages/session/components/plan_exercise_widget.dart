@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:ppl_course/data/models/cycle/session.dart';
 import 'package:ppl_course/data/models/exercise/exercise.dart';
+import 'package:ppl_course/data/models/session/session.dart';
 import 'package:ppl_course/res/color/colors.dart';
 import 'package:ppl_course/res/styles/app_text_styles.dart';
 

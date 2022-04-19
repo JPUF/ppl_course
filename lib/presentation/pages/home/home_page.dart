@@ -27,7 +27,7 @@ class _HomePageState extends State<HomePage> {
     final sessionBuilder = BlocBuilder<SessionsBloc, Response<SessionsState>>(
         builder: (context, state) {
       final data = state.data;
-      if (state.status == Status.completed && data is AllSessions) {
+      if (state.status == Status.completed && data != null) {
         return Column(
           children: data.sessions
               .map((session) => GestureDetector(

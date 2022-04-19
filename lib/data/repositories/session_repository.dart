@@ -1,8 +1,8 @@
-import 'package:ppl_course/data/models/cycle/cycle.dart';
-import 'package:ppl_course/data/models/cycle/session.dart';
 import 'package:ppl_course/data/models/exercise/exercise.dart';
 import 'package:ppl_course/data/models/exercise/sets_reps.dart';
 import 'package:ppl_course/data/models/exercise/weight.dart';
+import 'package:ppl_course/data/models/session/cycle.dart';
+import 'package:ppl_course/data/models/session/session.dart';
 
 class SessionRepository {
   final List<Cycle> _cycles = [

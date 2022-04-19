@@ -1,11 +1,11 @@
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:ppl_course/data/models/cycle/session.dart';
+import 'package:hydrated_bloc/hydrated_bloc.dart';
+import 'package:ppl_course/data/models/session/session.dart';
 import 'package:ppl_course/data/network/response.dart';
 import 'package:ppl_course/data/repositories/session_repository.dart';
 
-abstract class SessionsEvent {}
+part 'sessions_state.dart';
 
-abstract class SessionsState {}
+abstract class SessionsEvent {}
 
 class FetchAllSessions implements SessionsEvent {}
 
@@ -15,15 +15,8 @@ class WriteSession implements SessionsEvent {
   WriteSession(this.session);
 }
 
-class AllSessions extends SessionsState {
-  final List<Session> sessions;
-
-  AllSessions(this.sessions);
-}
-
-class WriteSessionSuccess extends SessionsState {}
-
-class SessionsBloc extends Bloc<SessionsEvent, Response<SessionsState>> {
+class SessionsBloc
+    extends Bloc<SessionsEvent, Response<SessionsState>> {
   final SessionRepository _sessionRepository = SessionRepository();
 
   SessionsBloc() : super(Response.loading(null)) {
@@ -34,7 +27,7 @@ class SessionsBloc extends Bloc<SessionsEvent, Response<SessionsState>> {
   void _fetchAllSessions(
       FetchAllSessions event, Emitter<Response<SessionsState>> emit) async {
     emit(Response.loading("Loading Sessions"));
-    var state = AllSessions(_sessionRepository.getAllSessions());
+    var state = SessionsState(_sessionRepository.getAllSessions());
     emit(Response.completed(state));
   }
 
@@ -43,8 +36,9 @@ class SessionsBloc extends Bloc<SessionsEvent, Response<SessionsState>> {
     emit(Response.loading("Writing Session"));
     final success = _sessionRepository.writeSession(event.session);
     if (success) {
-      emit(Response.completed(WriteSessionSuccess()));
-      emit(Response.completed(AllSessions(_sessionRepository.getAllSessions())));
+      // emit(Response.completed(WriteSessionSuccess()));
+      emit(Response.completed(
+          SessionsState(_sessionRepository.getAllSessions())));
     } else {
       emit(Response.error("Error writing session"));
     }

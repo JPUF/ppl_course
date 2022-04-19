@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:ppl_course/data/models/cycle/session.dart';
+import 'package:ppl_course/data/models/session/session.dart';
 
 class AppColor {
   static Map<int, Color> colorMap(Color color) {
