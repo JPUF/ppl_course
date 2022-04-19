@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:ppl_course/data/network/response.dart';
-import 'package:ppl_course/logic/cycles/cycles_bloc.dart';
-import 'package:ppl_course/presentation/navigation/args/session_args.dart';
-import 'package:ppl_course/presentation/navigation/destination.dart';
 import 'package:ppl_course/common/components/asset_button.dart';
+import 'package:ppl_course/data/network/response.dart';
+import 'package:ppl_course/logic/sessions/sessions_bloc.dart';
+import 'package:ppl_course/presentation/navigation/destination.dart';
 import 'package:ppl_course/presentation/pages/home/components/session_widget.dart';
 import 'package:ppl_course/res/string/strings.dart';
 
@@ -23,23 +22,17 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
-    BlocProvider.of<CyclesBloc>(context).add(FetchCycles());
+    BlocProvider.of<SessionsBloc>(context).add(FetchAllSessions());
 
-    const cycleNumber = 0;
-
-    final sessionBuilder = BlocBuilder<CyclesBloc, Response<CyclesState>>(
+    final sessionBuilder = BlocBuilder<SessionsBloc, Response<SessionsState>>(
         builder: (context, state) {
       final data = state.data;
-      if (state.status == Status.completed && data is AllCyclesState) {
+      if (state.status == Status.completed && data is FetchAllSessionsSuccess) {
         return Column(
-          children: data.cycles[cycleNumber].sessions
+          children: data.sessions
               .map((session) => GestureDetector(
                     child: SessionWidget(session: session),
-                    onTap: () {
-                      Navigator.of(context).pushNamed(Destination.exercise,
-                          arguments:
-                              SessionArgs(cycleNumber, session.sessionNumber));
-                    },
+                    onTap: () {},
                   ))
               .toList(),
         );
@@ -58,7 +51,7 @@ class _HomePageState extends State<HomePage> {
               width: double.infinity,
               child: SingleChildScrollView(
                 child: Align(
-                  alignment: Alignment.topLeft,
+                  alignment: Alignment.topCenter,
                   child: Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: Column(
@@ -74,13 +67,16 @@ class _HomePageState extends State<HomePage> {
                 ),
               ),
             ),
-            AccentButton(
-              text: Strings.planSessionCTA,
-              onTap: () => Navigator.of(context).pushNamed(Destination.session),
-              endIcon: SvgPicture.asset(
-                'assets/images/ic_dumbbell.svg',
-                width: 24,
-                height: 24,
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: AccentButton(
+                text: Strings.planSessionCTA,
+                onTap: () => Navigator.of(context).pushNamed(Destination.session),
+                endIcon: SvgPicture.asset(
+                  'assets/images/ic_dumbbell.svg',
+                  width: 24,
+                  height: 24,
+                ),
               ),
             )
           ],

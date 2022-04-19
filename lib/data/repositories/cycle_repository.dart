@@ -3,9 +3,8 @@ import 'package:ppl_course/data/models/cycle/session.dart';
 import 'package:ppl_course/data/models/exercise/exercise.dart';
 import 'package:ppl_course/data/models/exercise/sets_reps.dart';
 import 'package:ppl_course/data/models/exercise/weight.dart';
-import 'package:ppl_course/presentation/navigation/args/session_args.dart';
 
-class CycleRepository {
+class SessionRepository {
   final List<Cycle> _cycles = [
     Cycle([
       Session(1, SessionType.pull, [
@@ -81,18 +80,11 @@ class CycleRepository {
     ])
   ];
 
-  List<Cycle> getCycles() {
-    return _cycles;
+  final List<Session> _sessions = [];
+
+  List<Session> getAllSessions() {
+    return _sessions;
   }
 
-  Session? getSession(SessionArgs sessionArgs) {
-    final cn = sessionArgs.cycleNumber;
-    final sn = sessionArgs.sessionNumber;
-    if (cn < _cycles.length) {
-      if (sn < _cycles[cn].sessions.length) {
-        return _cycles[cn].sessions[sn];
-      }
-    }
-    return null;
-  }
+  bool writeSession(Session session) {return true;}
 }

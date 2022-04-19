@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:ppl_course/logic/cycles/cycles_bloc.dart';
+import 'package:ppl_course/logic/sessions/sessions_bloc.dart';
 import 'package:ppl_course/presentation/navigation/app_router.dart';
 import 'package:ppl_course/res/color/colors.dart';
 import 'package:ppl_course/res/string/strings.dart';
@@ -22,12 +22,15 @@ class MyApp extends StatelessWidget {
     return MultiBlocProvider(
       providers: [
         BlocProvider<BasicBloc>(create: (context) => BasicBloc()),
-        BlocProvider<CyclesBloc>(create: (context) => CyclesBloc())
+        BlocProvider<SessionsBloc>(create: (context) => SessionsBloc())
       ],
       child: MaterialApp(
           theme: ThemeData(
               primarySwatch: AppColor.dark,
-              appBarTheme: AppBarTheme(backgroundColor: AppColor.white, foregroundColor: AppColor.dark, elevation: 2),
+              appBarTheme: AppBarTheme(
+                  backgroundColor: AppColor.white,
+                  foregroundColor: AppColor.dark,
+                  elevation: 2),
               scaffoldBackgroundColor: AppColor.white),
           onGenerateRoute: _router.onGenerateRoute,
           home: const HomePage(title: Strings.appTitle)),
