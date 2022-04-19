@@ -15,10 +15,10 @@ class WriteSession implements SessionsEvent {
   WriteSession(this.session);
 }
 
-class FetchAllSessionsSuccess extends SessionsState {
+class AllSessions extends SessionsState {
   final List<Session> sessions;
 
-  FetchAllSessionsSuccess(this.sessions);
+  AllSessions(this.sessions);
 }
 
 class WriteSessionSuccess extends SessionsState {}
@@ -34,7 +34,7 @@ class SessionsBloc extends Bloc<SessionsEvent, Response<SessionsState>> {
   void _fetchAllSessions(
       FetchAllSessions event, Emitter<Response<SessionsState>> emit) async {
     emit(Response.loading("Loading Sessions"));
-    var state = FetchAllSessionsSuccess(_sessionRepository.getAllSessions());
+    var state = AllSessions(_sessionRepository.getAllSessions());
     emit(Response.completed(state));
   }
 
@@ -44,6 +44,7 @@ class SessionsBloc extends Bloc<SessionsEvent, Response<SessionsState>> {
     final success = _sessionRepository.writeSession(event.session);
     if (success) {
       emit(Response.completed(WriteSessionSuccess()));
+      emit(Response.completed(AllSessions(_sessionRepository.getAllSessions())));
     } else {
       emit(Response.error("Error writing session"));
     }

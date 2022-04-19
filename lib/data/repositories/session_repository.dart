@@ -87,6 +87,7 @@ class SessionRepository {
   }
 
   bool writeSession(Session session) {
+    _sessions.add(session);
     return true;
   }
 }
