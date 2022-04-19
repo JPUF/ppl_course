@@ -9,6 +9,12 @@ class AppTextStyles {
       fontWeight: FontWeight.bold,
       fontFamily: AppFontFamilies.mont);
 
+  static TextStyle barTitle = TextStyle(
+      color: AppColor.dark,
+      fontSize: 20.0,
+      fontWeight: FontWeight.bold,
+      fontFamily: AppFontFamilies.mont);
+
   static TextStyle body15 = TextStyle(
       color: AppColor.dark,
       fontSize: 15.0,

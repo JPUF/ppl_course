@@ -8,6 +8,7 @@ import 'package:ppl_course/res/styles/app_text_styles.dart';
 
 import 'components/add_exercise_bottom_sheet.dart';
 import 'components/add_exercise_button.dart';
+import 'components/bottom_sheet_header.dart';
 import 'components/plan_exercise_widget.dart';
 import 'components/ppl_selector_switch.dart';
 
@@ -51,14 +52,18 @@ class _SessionPageState extends State<SessionPage> {
         appBar: AppBar(
           title: Text(
             Strings.planSessionTitle,
-            style: AppTextStyles.button.apply(color: AppColor.white),
+            style: AppTextStyles.barTitle,
           ),
-          actions: [Container(
-            padding: const EdgeInsets.only(right: 16),
-            alignment: Alignment.centerRight,
-              child: GestureDetector(
-                onTap: () => submitSession(),
-                  child: Text("Done", style: AppTextStyles.button.apply(color: AppColor.white),)))],
+          actions: [
+            Container(
+                padding: const EdgeInsets.only(right: 16),
+                alignment: Alignment.centerRight,
+                child: GestureDetector(
+                    onTap: () => submitSession(),
+                    child: Text(Strings.genericDone,
+                        style:
+                            AppTextStyles.button.apply(color: AppColor.dark))))
+          ],
         ),
         body: Stack(
           alignment: Alignment.topCenter,
@@ -111,7 +116,7 @@ class _SessionPageState extends State<SessionPage> {
               heightFactor: 0.85,
               child: Column(
                 children: [
-                  buildSheetHeader(),
+                  BottomSheetHeader(context: context),
                   Expanded(
                       child: AddExerciseBottomSheet(
                           addExercise: (newExercise) =>
@@ -133,41 +138,6 @@ class _SessionPageState extends State<SessionPage> {
             PlanExerciseWidget(exercise: e, sessionType: SessionType.push))
         .toList();
     return Column(children: exerciseWidgets);
-  }
-
-  Widget buildSheetHeader() {
-    return Column(
-      children: [
-        Stack(
-          children: [
-            SizedBox(
-                width: double.infinity,
-                child: Container(
-                  padding: const EdgeInsets.only(top: 10, bottom: 4),
-                  child: Text(
-                    Strings.exerciseTitle,
-                    style: AppTextStyles.headline3.apply(color: AppColor.black),
-                    textAlign: TextAlign.center,
-                  ),
-                )),
-            Positioned(
-              right: 0,
-              top: 0,
-              child: MaterialButton(
-                onPressed: () => Navigator.pop(context),
-                minWidth: 0,
-                child: Icon(
-                  Icons.close,
-                  color: AppColor.black,
-                  size: 20,
-                ),
-              ),
-            ),
-          ],
-        ),
-        const Divider(height: 1)
-      ],
-    );
   }
 
   void submitSession() {

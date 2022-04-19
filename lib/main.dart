@@ -27,6 +27,7 @@ class MyApp extends StatelessWidget {
       child: MaterialApp(
           theme: ThemeData(
               primarySwatch: AppColor.dark,
+              appBarTheme: AppBarTheme(backgroundColor: AppColor.white, foregroundColor: AppColor.dark, elevation: 2),
               scaffoldBackgroundColor: AppColor.white),
           onGenerateRoute: _router.onGenerateRoute,
           home: const HomePage(title: Strings.appTitle)),

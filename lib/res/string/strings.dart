@@ -1,5 +1,8 @@
 class Strings {
 
+  // Generic
+  static const String genericDone = "DONE";
+
   // Global
   static const String appTitle = "PPL Planner";
   static const String push = "Push";
