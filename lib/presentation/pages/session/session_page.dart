@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ppl_course/common/components/custom_text_field.dart';
 import 'package:ppl_course/data/models/cycle/session.dart';
 import 'package:ppl_course/data/models/exercise/exercise.dart';
+import 'package:ppl_course/logic/sessions/sessions_bloc.dart';
 import 'package:ppl_course/res/color/colors.dart';
 import 'package:ppl_course/res/string/strings.dart';
 import 'package:ppl_course/res/styles/app_text_styles.dart';
@@ -141,6 +143,10 @@ class _SessionPageState extends State<SessionPage> {
   }
 
   void submitSession() {
+    const sessionType = SessionType.push;
+    const notes = "General session notes";
+    final session = Session(sessionType, notes, _exercises);
+    BlocProvider.of<SessionsBloc>(context).add(WriteSession(session));
     navigateBack();
   }
 

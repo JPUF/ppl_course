@@ -7,7 +7,7 @@ import 'package:ppl_course/data/models/exercise/weight.dart';
 class SessionRepository {
   final List<Cycle> _cycles = [
     Cycle([
-      Session(1, SessionType.pull, [
+      Session(SessionType.pull, "notes", [
         Exercise.weighted(
             name: 'Deadlifts',
             setsReps: SetsReps(sets: 1, reps: 5, amrapFinalSet: true),
@@ -33,7 +33,7 @@ class SessionRepository {
             setsReps: SetsReps(sets: 4, reps: 8),
             weight: Weight(10))
       ]),
-      Session(2, SessionType.push, [
+      Session(SessionType.push, "notes", [
         Exercise.weighted(
             name: 'Bench Press',
             setsReps: SetsReps(sets: 4, reps: 5, amrapFinalSet: true),
@@ -55,7 +55,7 @@ class SessionRepository {
             setsReps: SetsReps(sets: 3, reps: 8),
             weight: Weight(12.5)),
       ]),
-      Session(3, SessionType.legs, [
+      Session(SessionType.legs, "notes", [
         Exercise.weighted(
             name: 'Squat',
             setsReps: SetsReps(sets: 2, reps: 5, amrapFinalSet: true),
@@ -86,5 +86,7 @@ class SessionRepository {
     return _sessions;
   }
 
-  bool writeSession(Session session) {return true;}
+  bool writeSession(Session session) {
+    return true;
+  }
 }

@@ -1,7 +1,7 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ppl_course/data/models/cycle/session.dart';
 import 'package:ppl_course/data/network/response.dart';
-import 'package:ppl_course/data/repositories/cycle_repository.dart';
+import 'package:ppl_course/data/repositories/session_repository.dart';
 
 abstract class SessionsEvent {}
 
