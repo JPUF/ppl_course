@@ -66,6 +66,7 @@ class _PlanExerciseWidgetState extends State<PlanExerciseWidget> {
           'assets/images/ic_generic_weight.svg',
           width: 12,
           height: 12,
+          color: AppColor.getPplColor(widget.sessionType),
         ),
         const SizedBox(width: 6),
         Text(widget.exercise.weight?.toString() ?? 'N/A',
@@ -78,9 +79,10 @@ class _PlanExerciseWidgetState extends State<PlanExerciseWidget> {
   Widget buildSetReps() {
     return Row(
       children: [
-        const Icon(
+        Icon(
           Icons.repeat,
           size: 16,
+          color: AppColor.getPplColor(widget.sessionType),
         ),
         const SizedBox(width: 4),
         Text(widget.exercise.setsReps.toString(),
@@ -97,7 +99,7 @@ class _PlanExerciseWidgetState extends State<PlanExerciseWidget> {
         const Divider(height: 8),
         const SizedBox(height: 12),
         SizedBox(
-          width: double.infinity,
+            width: double.infinity,
             child: Text(notes, style: AppTextStyles.body12))
       ]);
     } else {

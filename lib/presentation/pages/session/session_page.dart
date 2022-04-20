@@ -88,6 +88,7 @@ class _SessionPageState extends State<SessionPage> {
                         hint: Strings.generalNotesHint,
                         controller: _editNotesController,
                         focusNode: _notesFocusNode,
+                        primaryColor: AppColor.getPplColor(_type),
                         onChanged: (newValue) {
                           setState(() {
                             _notesText = newValue;
@@ -143,7 +144,7 @@ class _SessionPageState extends State<SessionPage> {
   Widget buildExerciseList() {
     final List<Widget> exerciseWidgets = _exercises
         .map((e) =>
-            PlanExerciseWidget(exercise: e, sessionType: SessionType.push))
+            PlanExerciseWidget(exercise: e, sessionType: _type))
         .toList();
     return Column(children: exerciseWidgets);
   }
