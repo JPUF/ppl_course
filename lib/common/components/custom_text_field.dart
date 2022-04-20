@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:ppl_course/res/color/colors.dart';
 import 'package:ppl_course/res/styles/app_text_styles.dart';
 
@@ -10,6 +11,7 @@ class CustomTextField extends StatefulWidget {
       required this.focusNode,
       this.primaryColor,
       this.keyboardType,
+      this.maxLength,
       this.onTap,
       required this.onChanged})
       : super(key: key);
@@ -19,6 +21,7 @@ class CustomTextField extends StatefulWidget {
   final FocusNode focusNode;
   final MaterialColor? primaryColor;
   final TextInputType? keyboardType;
+  final int? maxLength;
   final VoidCallback? onTap;
   final ValueSetter<String> onChanged;
 
@@ -42,6 +45,7 @@ class _CustomTextFieldState extends State<CustomTextField> {
             widget.onTap?.call();
           },
           keyboardType: widget.keyboardType ?? TextInputType.text,
+          inputFormatters: getInputFormatter(),
           minLines: 1,
           maxLines: 4,
           style: AppTextStyles.body15.apply(
@@ -70,5 +74,15 @@ class _CustomTextFieldState extends State<CustomTextField> {
         ),
       ),
     );
+  }
+
+  List<TextInputFormatter> getInputFormatter() {
+    if (widget.keyboardType == TextInputType.number) {
+      return [
+        FilteringTextInputFormatter.digitsOnly,
+        LengthLimitingTextInputFormatter(widget.maxLength)
+      ];
+    }
+    return [];
   }
 }

@@ -181,6 +181,7 @@ class _AddExerciseBottomSheetState extends State<AddExerciseBottomSheet> {
                 controller: _weightController,
                 focusNode: _weightFocusNode,
                 keyboardType: TextInputType.number,
+                maxLength: 3,
                 onChanged: (newValue) {
                   setState(() {
                     _weightText = newValue;
