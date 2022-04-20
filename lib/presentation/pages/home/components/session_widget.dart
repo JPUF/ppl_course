@@ -81,7 +81,9 @@ class _SessionWidgetState extends State<SessionWidget> {
         Container(
             padding: const EdgeInsets.symmetric(horizontal: 8),
             alignment: Alignment.centerLeft,
-            child: Text(notes, style: AppTextStyles.body12))
+            child: Text(notes,
+                style: AppTextStyles.body12
+                    .apply(color: AppColor.getPplColor(widget.session.type))))
       ];
     }
     return Column(children: widgets);

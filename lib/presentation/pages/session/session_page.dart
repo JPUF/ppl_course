@@ -26,7 +26,9 @@ class SessionPage extends StatefulWidget {
 class _SessionPageState extends State<SessionPage> {
   late TextEditingController _editNotesController;
   late FocusNode _notesFocusNode;
-  String _notesText = "";
+
+  SessionType _type = SessionType.push;
+  String? _notesText;
 
   final List<Exercise> _exercises = [];
 
@@ -76,7 +78,11 @@ class _SessionPageState extends State<SessionPage> {
                 child: Column(
                   children: [
                     const SizedBox(height: 16),
-                    const PplSelectorSwitch(),
+                    PplSelectorSwitch(onChanged: (newType) {
+                      setState(() {
+                        _type = newType;
+                      });
+                    }),
                     const SizedBox(height: 32),
                     CustomTextField(
                         hint: Strings.generalNotesHint,
@@ -143,10 +149,14 @@ class _SessionPageState extends State<SessionPage> {
   }
 
   void submitSession() {
-    if(_exercises.isNotEmpty) {
-      const sessionType = SessionType.push;
-      final String? notes = _notesText.isNotEmpty ? _notesText : null;
-      final session = Session(sessionType, notes, _exercises);
+    String? notes = _notesText;
+    if (notes != null) {
+      if (notes.isEmpty) {
+        notes = null;
+      }
+    }
+    if (_exercises.isNotEmpty) {
+      final session = Session(_type, _notesText, _exercises);
       BlocProvider.of<SessionsBloc>(context).add(WriteSession(session));
     }
     navigateBack();

@@ -27,12 +27,17 @@ class _HomePageState extends State<HomePage> {
       final sessions = state.sessions;
       if (sessions != null) {
         return Column(
-          children: sessions
-              .map((session) => GestureDetector(
-                    child: SessionWidget(session: session),
-                    onTap: () {},
-                  ))
-              .toList(),
+          children: [
+            Column(
+              children: sessions
+                  .map((session) => GestureDetector(
+                        child: SessionWidget(session: session),
+                        onTap: () {},
+                      ))
+                  .toList(),
+            ),
+            const SizedBox(height: 64)
+          ],
         );
       } else {
         return const SizedBox(height: 16);

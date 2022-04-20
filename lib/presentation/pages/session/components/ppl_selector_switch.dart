@@ -1,13 +1,15 @@
 import 'package:animated_toggle_switch/animated_toggle_switch.dart';
 import 'package:flutter/material.dart';
+import 'package:ppl_course/data/models/session/session.dart';
 import 'package:ppl_course/res/color/colors.dart';
 import 'package:ppl_course/res/string/strings.dart';
 import 'package:ppl_course/res/styles/app_text_styles.dart';
 
 class PplSelectorSwitch extends StatefulWidget {
-  const PplSelectorSwitch({
-    Key? key,
-  }) : super(key: key);
+  const PplSelectorSwitch({Key? key, required this.onChanged})
+      : super(key: key);
+
+  final ValueSetter<SessionType> onChanged;
 
   @override
   State<PplSelectorSwitch> createState() => _PplSelectorSwitchState();
@@ -41,7 +43,12 @@ class _PplSelectorSwitchState extends State<PplSelectorSwitch> {
         indicatorBorderRadius: BorderRadius.zero,
         borderRadius: BorderRadius.circular(8),
         colorBuilder: (i) => pplColorFromIndex(value).shade50,
-        onChanged: (i) => setState(() => value = i),
+        onChanged: (i) {
+          setState(() {
+            value = i;
+            widget.onChanged(SessionType.values[i]);
+          });
+        },
       ),
     );
   }
