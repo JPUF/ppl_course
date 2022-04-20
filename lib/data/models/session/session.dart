@@ -1,12 +1,10 @@
 import 'dart:convert';
 
 import 'package:ppl_course/data/models/exercise/exercise.dart';
-import 'package:ppl_course/data/models/exercise/sets_reps.dart';
-import 'package:ppl_course/data/models/exercise/weight.dart';
 
 class Session {
   final SessionType type;
-  final String notes;
+  final String? notes;
   final List<Exercise> exercises;
 
   Session(this.type, this.notes, this.exercises);
@@ -22,8 +20,9 @@ class Session {
 
   factory Session.fromMap(Map<String, dynamic> map) {
     final type = SessionType.values[int.parse(map['type'])];
-    final notes = map['notes'] ?? '';
-    final exercises = (map['exercises'] as List).map((e) => Exercise.fromMap(e)).toList();
+    final notes = map['notes'];
+    final exercises =
+        (map['exercises'] as List).map((e) => Exercise.fromMap(e)).toList();
     return Session(
       type,
       notes,

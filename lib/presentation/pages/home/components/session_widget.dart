@@ -50,23 +50,12 @@ class _SessionWidgetState extends State<SessionWidget> {
             children: [
               Padding(
                 padding: const EdgeInsets.all(8.0),
-                child: Row(
-                  textBaseline: TextBaseline.alphabetic,
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.baseline,
-                  children: [
-                    Text(widget.session.type.toSessionString(),
-                        style: AppTextStyles.headline3.apply(
-                            color: AppColor.getPplColor(widget.session.type)))
-                  ],
-                ),
+                child: Text(widget.session.type.toSessionString(),
+                    style: AppTextStyles.headline3.apply(
+                        color: AppColor.getPplColor(widget.session.type))),
               ),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 8),
-                child: Divider(
-                    color: AppColor.getPplColor(widget.session.type),
-                    thickness: 2),
-              ),
+              buildNotes(),
+              thickDivider(),
               Column(children: widget.buildExerciseList()),
               const SizedBox(height: 16),
             ],
@@ -74,5 +63,27 @@ class _SessionWidgetState extends State<SessionWidget> {
         ),
       ),
     );
+  }
+
+  Widget thickDivider() {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 8),
+      child: Divider(
+          color: AppColor.getPplColor(widget.session.type), thickness: 2),
+    );
+  }
+
+  Widget buildNotes() {
+    List<Widget> widgets = [];
+    final notes = widget.session.notes;
+    if (notes != null) {
+      widgets = [
+        Container(
+            padding: const EdgeInsets.symmetric(horizontal: 8),
+            alignment: Alignment.centerLeft,
+            child: Text(notes, style: AppTextStyles.body12))
+      ];
+    }
+    return Column(children: widgets);
   }
 }

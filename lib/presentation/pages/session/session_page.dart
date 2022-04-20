@@ -143,10 +143,12 @@ class _SessionPageState extends State<SessionPage> {
   }
 
   void submitSession() {
-    const sessionType = SessionType.push;
-    const notes = "General session notes";
-    final session = Session(sessionType, notes, _exercises);
-    BlocProvider.of<SessionsBloc>(context).add(WriteSession(session));
+    if(_exercises.isNotEmpty) {
+      const sessionType = SessionType.push;
+      final String? notes = _notesText.isNotEmpty ? _notesText : null;
+      final session = Session(sessionType, notes, _exercises);
+      BlocProvider.of<SessionsBloc>(context).add(WriteSession(session));
+    }
     navigateBack();
   }
 
