@@ -11,4 +11,22 @@ class Exercise {
       {required this.name, required this.setsReps, this.weight, this.notes});
 
   Exercise.noWeight({required this.name, required this.setsReps, this.notes});
+
+  Map<String, dynamic> toMap() {
+    return {
+      'name': name,
+      'setsReps': setsReps.toMap(),
+      'weight': weight?.toMap(),
+      'notes': notes,
+    };
+  }
+
+  factory Exercise.fromMap(Map<String, dynamic> map) {
+    return Exercise.weighted(
+      name: map['name'] as String,
+      setsReps: SetsReps.fromMap(map['setsReps']),
+      weight: Weight.fromMap(map['weight']),
+      notes: map['notes'] as String?,
+    );
+  }
 }

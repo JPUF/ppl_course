@@ -1,6 +1,7 @@
+import 'dart:convert';
+
 import 'package:hydrated_bloc/hydrated_bloc.dart';
 import 'package:ppl_course/data/models/session/session.dart';
-import 'package:ppl_course/data/network/response.dart';
 import 'package:ppl_course/data/repositories/session_repository.dart';
 
 part 'sessions_state.dart';
@@ -15,32 +16,36 @@ class WriteSession implements SessionsEvent {
   WriteSession(this.session);
 }
 
-class SessionsBloc
-    extends Bloc<SessionsEvent, Response<SessionsState>> {
+class SessionsBloc extends Bloc<SessionsEvent, SessionsState>
+    with HydratedMixin {
   final SessionRepository _sessionRepository = SessionRepository();
 
-  SessionsBloc() : super(Response.loading(null)) {
+  SessionsBloc() : super(SessionsState(null)) {
     on<FetchAllSessions>(_fetchAllSessions);
     on<WriteSession>(_writeSession);
   }
 
   void _fetchAllSessions(
-      FetchAllSessions event, Emitter<Response<SessionsState>> emit) async {
-    emit(Response.loading("Loading Sessions"));
+      FetchAllSessions event, Emitter<SessionsState> emit) async {
     var state = SessionsState(_sessionRepository.getAllSessions());
-    emit(Response.completed(state));
+    emit(state);
   }
 
-  void _writeSession(
-      WriteSession event, Emitter<Response<SessionsState>> emit) async {
-    emit(Response.loading("Writing Session"));
+  void _writeSession(WriteSession event, Emitter<SessionsState> emit) async {
     final success = _sessionRepository.writeSession(event.session);
     if (success) {
-      // emit(Response.completed(WriteSessionSuccess()));
-      emit(Response.completed(
-          SessionsState(_sessionRepository.getAllSessions())));
-    } else {
-      emit(Response.error("Error writing session"));
+      emit(SessionsState(_sessionRepository.getAllSessions()));
     }
+  }
+
+  @override
+  SessionsState? fromJson(Map<String, dynamic> json) {
+    final sessions = (json['sessions'] as List).map((a) => Session.fromMap(a)).toList();
+    return SessionsState(sessions);
+  }
+
+  @override
+  Map<String, dynamic>? toJson(SessionsState state) {
+    return SessionsState(_sessionRepository.getAllSessions()).toMap();
   }
 }

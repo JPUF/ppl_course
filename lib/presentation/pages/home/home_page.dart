@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:ppl_course/common/components/asset_button.dart';
-import 'package:ppl_course/data/network/response.dart';
 import 'package:ppl_course/logic/sessions/sessions_bloc.dart';
 import 'package:ppl_course/presentation/navigation/destination.dart';
 import 'package:ppl_course/presentation/pages/home/components/session_widget.dart';
@@ -22,14 +21,13 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
-    BlocProvider.of<SessionsBloc>(context).add(FetchAllSessions());
 
-    final sessionBuilder = BlocBuilder<SessionsBloc, Response<SessionsState>>(
-        builder: (context, state) {
-      final data = state.data;
-      if (state.status == Status.completed && data != null) {
+    final sessionBuilder =
+        BlocBuilder<SessionsBloc, SessionsState>(builder: (context, state) {
+      final sessions = state.sessions;
+      if (sessions != null) {
         return Column(
-          children: data.sessions
+          children: sessions
               .map((session) => GestureDetector(
                     child: SessionWidget(session: session),
                     onTap: () {},
@@ -71,7 +69,8 @@ class _HomePageState extends State<HomePage> {
               padding: const EdgeInsets.all(8.0),
               child: AccentButton(
                 text: Strings.planSessionCTA,
-                onTap: () => Navigator.of(context).pushNamed(Destination.session),
+                onTap: () =>
+                    Navigator.of(context).pushNamed(Destination.session),
                 endIcon: SvgPicture.asset(
                   'assets/images/ic_dumbbell.svg',
                   width: 24,

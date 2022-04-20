@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 class SetsReps {
   late int sets;
   late int reps;
@@ -18,4 +20,28 @@ class SetsReps {
       return "$sets×$reps";
     }
   }
+
+  Map<String, dynamic> toMap() {
+    final result = <String, dynamic>{};
+  
+    result.addAll({'sets': sets});
+    result.addAll({'reps': reps});
+    result.addAll({'amrapFinalSet': amrapFinalSet});
+  
+    return result;
+  }
+
+  factory SetsReps.fromMap(Map<String, dynamic> map) {
+    final sets = map['sets'];
+    final reps = map['reps'];
+    return SetsReps(
+      sets: sets,
+      reps: reps,
+      amrapFinalSet: map['amrapFinalSet'] ?? false,
+    );
+  }
+
+  String toJson() => json.encode(toMap());
+
+  factory SetsReps.fromJson(String source) => SetsReps.fromMap(json.decode(source));
 }
