@@ -6,8 +6,7 @@ import 'package:ppl_course/logic/sessions/sessions_bloc.dart';
 import 'package:ppl_course/presentation/navigation/destination.dart';
 import 'package:ppl_course/presentation/pages/home/components/session_widget.dart';
 import 'package:ppl_course/res/string/strings.dart';
-
-import 'components/home_header.dart';
+import 'package:ppl_course/res/styles/app_text_styles.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key, required this.title}) : super(key: key);
@@ -21,7 +20,6 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
-
     final sessionBuilder =
         BlocBuilder<SessionsBloc, SessionsState>(builder: (context, state) {
       final sessions = state.sessions;
@@ -45,6 +43,10 @@ class _HomePageState extends State<HomePage> {
     });
 
     return Scaffold(
+      appBar: AppBar(
+        centerTitle: true,
+        title: Text(Strings.appTitle, style: AppTextStyles.barTitle),
+      ),
       body: SafeArea(
         child: Stack(
           alignment: AlignmentDirectional.bottomEnd,
@@ -60,8 +62,7 @@ class _HomePageState extends State<HomePage> {
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: <Widget>[
-                        const HomeHeader(),
-                        const SizedBox(height: 16),
+                        const SizedBox(height: 8),
                         sessionBuilder,
                         const SizedBox(height: 16),
                       ],
