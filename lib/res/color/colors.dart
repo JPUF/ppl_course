@@ -23,12 +23,12 @@ class AppColor {
   static MaterialColor primary = MaterialAppColor(0xff3D5A80);
   static MaterialAppColor secondary = MaterialAppColor(0xff98C1D9);
   static MaterialAppColor light = MaterialAppColor(0xffE0FBFC);
-  static MaterialColor dark = MaterialAppColor(0xff3D5A80);
+  static MaterialColor dark = MaterialAppColor(0xff2C2C54);
   static MaterialAppColor accent = MaterialAppColor(0xffEE6C4D);
 
-  static MaterialAppColor push = MaterialAppColor(0xff3D5A80);
-  static MaterialAppColor pull = MaterialAppColor(0xff803D5A);
-  static MaterialAppColor legs = MaterialAppColor(0xff5A803D);
+  static MaterialAppColor push = MaterialAppColor(0xff2C2C54);
+  static MaterialAppColor pull = MaterialAppColor(0xffA40E4C);
+  static MaterialAppColor legs = MaterialAppColor(0xff164F0C);
 
   static MaterialAppColor transparent = MaterialAppColor(0x00000000);
   static MaterialColor black = MaterialAppColor(0xff000000);
