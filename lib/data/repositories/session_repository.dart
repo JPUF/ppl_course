@@ -80,7 +80,7 @@ class SessionRepository {
     ])
   ];
 
-  final List<Session> _sessions = [];
+  List<Session> _sessions = [];
 
   List<Session> getAllSessions() {
     return _sessions;
@@ -88,6 +88,11 @@ class SessionRepository {
 
   bool writeSession(Session session) {
     _sessions.add(session);
+    return true;
+  }
+
+  bool setSessions(List<Session> sessions) {
+    _sessions = sessions;
     return true;
   }
 }

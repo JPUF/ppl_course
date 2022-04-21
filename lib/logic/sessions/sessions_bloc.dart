@@ -41,6 +41,7 @@ class SessionsBloc extends Bloc<SessionsEvent, SessionsState>
   @override
   SessionsState? fromJson(Map<String, dynamic> json) {
     final sessions = (json['sessions'] as List).map((a) => Session.fromMap(a)).toList();
+    _sessionRepository.setSessions(sessions);
     return SessionsState(sessions);
   }
 
