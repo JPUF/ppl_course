@@ -20,14 +20,13 @@ class PlanExerciseWidget extends StatefulWidget {
 class _PlanExerciseWidgetState extends State<PlanExerciseWidget> {
   @override
   Widget build(BuildContext context) {
+    final MaterialColor _pplColor = AppColor.getPplColor(widget.sessionType);
     return Card(
-      elevation: 2,
+      elevation: 4,
       clipBehavior: Clip.antiAlias,
       child: Container(
         decoration: BoxDecoration(
-            color: AppColor.getPplColor(widget.sessionType).shade50,
-            border: Border.all(
-                color: AppColor.getPplColor(widget.sessionType), width: 1),
+            color: _pplColor.shade50,
             borderRadius: BorderRadius.circular(4)),
         padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 16),
         child: Column(
@@ -35,64 +34,64 @@ class _PlanExerciseWidgetState extends State<PlanExerciseWidget> {
             Row(
               children: [
                 Expanded(
-                    flex: 4,
+                    flex: 8,
                     child: Text(widget.exercise.name,
                         style: AppTextStyles.headline4.apply(
-                            color: AppColor.getPplColor(widget.sessionType)))),
+                            color: _pplColor))),
                 const SizedBox(width: 16),
                 Expanded(
-                  flex: 1,
+                  flex: 3,
                   child: Column(
                     children: [
-                      buildWeight(),
+                      buildWeight(_pplColor),
                       const SizedBox(height: 8),
-                      buildSetReps()
+                      buildSetReps(_pplColor)
                     ],
                   ),
                 ),
               ],
             ),
-            buildExerciseNotes()
+            buildExerciseNotes(_pplColor)
           ],
         ),
       ),
     );
   }
 
-  Widget buildWeight() {
+  Widget buildWeight(MaterialColor pplColor) {
     return Row(
       children: [
         SvgPicture.asset(
           'assets/images/ic_generic_weight.svg',
           width: 12,
           height: 12,
-          color: AppColor.getPplColor(widget.sessionType),
+          color: pplColor,
         ),
         const SizedBox(width: 6),
         Text(widget.exercise.weight?.toString() ?? 'N/A',
             style: AppTextStyles.button
-                .apply(color: AppColor.getPplColor(widget.sessionType))),
+                .apply(color: pplColor)),
       ],
     );
   }
 
-  Widget buildSetReps() {
+  Widget buildSetReps(MaterialColor pplColor) {
     return Row(
       children: [
         Icon(
           Icons.repeat,
           size: 16,
-          color: AppColor.getPplColor(widget.sessionType),
+          color: pplColor,
         ),
         const SizedBox(width: 4),
         Text(widget.exercise.setsReps.toString(),
             style: AppTextStyles.button
-                .apply(color: AppColor.getPplColor(widget.sessionType))),
+                .apply(color: pplColor)),
       ],
     );
   }
 
-  Widget buildExerciseNotes() {
+  Widget buildExerciseNotes(MaterialColor pplColor) {
     final notes = widget.exercise.notes;
     if (notes != null) {
       return Column(children: [
@@ -100,7 +99,9 @@ class _PlanExerciseWidgetState extends State<PlanExerciseWidget> {
         const SizedBox(height: 12),
         SizedBox(
             width: double.infinity,
-            child: Text(notes, style: AppTextStyles.body12))
+            child: Text(notes, style: AppTextStyles.body12.apply(
+              color: pplColor
+            )))
       ]);
     } else {
       return Container();

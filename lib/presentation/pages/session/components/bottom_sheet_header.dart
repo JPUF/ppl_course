@@ -1,15 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:ppl_course/presentation/pages/session/components/exercise_bottom_sheet.dart';
 import 'package:ppl_course/res/color/colors.dart';
 import 'package:ppl_course/res/string/strings.dart';
 import 'package:ppl_course/res/styles/app_text_styles.dart';
 
 class BottomSheetHeader extends StatelessWidget {
-  const BottomSheetHeader({
-    Key? key,
-    required this.context,
-  }) : super(key: key);
+  const BottomSheetHeader(
+      {Key? key, required this.context, required this.addEditContext})
+      : super(key: key);
 
   final BuildContext context;
+  final AddEditContext addEditContext;
 
   @override
   Widget build(BuildContext context) {
@@ -22,7 +23,9 @@ class BottomSheetHeader extends StatelessWidget {
                 child: Container(
                   padding: const EdgeInsets.only(top: 10, bottom: 4),
                   child: Text(
-                    Strings.exerciseTitle,
+                    addEditContext == AddEditContext.add
+                        ? Strings.exerciseAddTitle
+                        : Strings.exerciseEditTitle,
                     style: AppTextStyles.headline3.apply(color: AppColor.black),
                     textAlign: TextAlign.center,
                   ),

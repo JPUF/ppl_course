@@ -9,17 +9,14 @@ class Weight {
 
   @override
   String toString() {
-    NumberFormat formatter = NumberFormat();
-    formatter.minimumExponentDigits = 0;
-    formatter.maximumFractionDigits = 2;
-    return '${formatter.format(kg)}kg';
+    return '${formattedKg()}kg';
   }
 
   Map<String, dynamic> toMap() {
     final result = <String, dynamic>{};
-  
+
     result.addAll({'kg': kg});
-  
+
     return result;
   }
 
@@ -32,4 +29,13 @@ class Weight {
   String toJson() => json.encode(toMap());
 
   factory Weight.fromJson(String source) => Weight.fromMap(json.decode(source));
+}
+
+extension DoubleFormat on Weight {
+  String formattedKg() {
+    NumberFormat formatter = NumberFormat();
+    formatter.minimumExponentDigits = 0;
+    formatter.maximumFractionDigits = 1;
+    return formatter.format(kg);
+  }
 }

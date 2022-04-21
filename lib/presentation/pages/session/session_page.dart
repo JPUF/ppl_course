@@ -8,9 +8,9 @@ import 'package:ppl_course/res/color/colors.dart';
 import 'package:ppl_course/res/string/strings.dart';
 import 'package:ppl_course/res/styles/app_text_styles.dart';
 
-import 'components/add_exercise_bottom_sheet.dart';
 import 'components/add_exercise_button.dart';
 import 'components/bottom_sheet_header.dart';
+import 'components/exercise_bottom_sheet.dart';
 import 'components/plan_exercise_widget.dart';
 import 'components/ppl_selector_switch.dart';
 
@@ -30,7 +30,8 @@ class _SessionPageState extends State<SessionPage> {
   SessionType _type = SessionType.push;
   String? _notesText;
 
-  final List<Exercise> _exercises = [];
+  final Map<int, Exercise> _exerciseMap = {};
+  int newExerciseCount = 0;
 
   @override
   void initState() {
@@ -106,14 +107,16 @@ class _SessionPageState extends State<SessionPage> {
                 width: MediaQuery.of(context).size.width,
                 child: Align(
                     alignment: Alignment.bottomCenter,
-                    child: AddExerciseButton(onTap: () => showBottomSheet())))
+                    child: AddExerciseButton(
+                        onTap: () => showBottomSheet(AddEditContext.add))))
           ],
         ),
       ),
     );
   }
 
-  void showBottomSheet() {
+  void showBottomSheet(AddEditContext addEditContext,
+      [Exercise? exerciseToEdit, int? keyToEdit]) {
     showModalBottomSheet<void>(
         isScrollControlled: true,
         context: context,
@@ -125,28 +128,70 @@ class _SessionPageState extends State<SessionPage> {
               heightFactor: 0.85,
               child: Column(
                 children: [
-                  BottomSheetHeader(context: context),
+                  BottomSheetHeader(
+                      context: context, addEditContext: addEditContext),
                   Expanded(
-                      child: AddExerciseBottomSheet(
-                          addExercise: (newExercise) =>
-                              onNewExercise(newExercise))),
+                      child: exerciseBottomSheet(
+                          addEditContext, exerciseToEdit, keyToEdit)),
                 ],
               ));
         });
   }
 
+  ExerciseBottomSheet exerciseBottomSheet(
+      AddEditContext addEditContext, Exercise? exerciseToEdit, int? keyToEdit) {
+    return ExerciseBottomSheet(
+        addEditContext: addEditContext,
+        sessionType: _type,
+        previousExercise: exerciseToEdit,
+        onDeleteExercise: () {
+          if (addEditContext == AddEditContext.edit) {
+            if (keyToEdit != null) {
+              onDeletedExercise(keyToEdit);
+            }
+          }
+        },
+        onSubmitExercise: (newExercise) {
+          if (addEditContext == AddEditContext.add) {
+            onNewExercise(newExercise);
+          } else {
+            if (keyToEdit != null) {
+              onUpdatedExercise(keyToEdit, newExercise);
+            }
+          }
+        });
+  }
+
   void onNewExercise(Exercise exercise) {
+    newExerciseCount++;
     setState(() {
-      _exercises.add(exercise);
+      _exerciseMap[newExerciseCount] = exercise;
+    });
+  }
+
+  void onUpdatedExercise(int keyToEdit, Exercise updatedExercise) {
+    setState(() {
+      _exerciseMap[keyToEdit] = updatedExercise;
+    });
+  }
+
+  void onDeletedExercise(int keyToDelete) {
+    setState(() {
+      _exerciseMap.remove(keyToDelete);
     });
   }
 
   Widget buildExerciseList() {
-    final List<Widget> exerciseWidgets = _exercises
-        .map((e) =>
-            PlanExerciseWidget(exercise: e, sessionType: _type))
+    final List<Widget> exerciseWidgets = _exerciseMap.entries
+        .map((e) => GestureDetector(
+            onTap: () => editExercise(e.value, e.key),
+            child: PlanExerciseWidget(exercise: e.value, sessionType: _type)))
         .toList();
     return Column(children: exerciseWidgets);
+  }
+
+  editExercise(Exercise exercise, int key) {
+    showBottomSheet(AddEditContext.edit, exercise, key);
   }
 
   void submitSession() {
@@ -156,8 +201,8 @@ class _SessionPageState extends State<SessionPage> {
         notes = null;
       }
     }
-    if (_exercises.isNotEmpty) {
-      final session = Session(_type, _notesText, _exercises);
+    if (_exerciseMap.isNotEmpty) {
+      final session = Session(_type, _notesText, _exerciseMap.values.toList());
       BlocProvider.of<SessionsBloc>(context).add(WriteSession(session));
     }
     navigateBack();

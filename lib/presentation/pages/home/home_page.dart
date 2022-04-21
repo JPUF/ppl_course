@@ -72,7 +72,7 @@ class _HomePageState extends State<HomePage> {
               ),
             ),
             Padding(
-              padding: const EdgeInsets.all(8.0),
+              padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 4),
               child: AccentButton(
                 text: Strings.planSessionCTA,
                 onTap: () =>

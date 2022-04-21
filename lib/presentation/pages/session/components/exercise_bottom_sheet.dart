@@ -4,23 +4,36 @@ import 'package:ppl_course/common/components/custom_text_field.dart';
 import 'package:ppl_course/data/models/exercise/exercise.dart';
 import 'package:ppl_course/data/models/exercise/sets_reps.dart';
 import 'package:ppl_course/data/models/exercise/weight.dart';
+import 'package:ppl_course/data/models/session/session.dart';
 import 'package:ppl_course/presentation/pages/session/components/set_rep_slider.dart';
 import 'package:ppl_course/res/color/colors.dart';
 import 'package:ppl_course/res/string/strings.dart';
 import 'package:ppl_course/res/styles/app_text_styles.dart';
 import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
 
-class AddExerciseBottomSheet extends StatefulWidget {
-  const AddExerciseBottomSheet({Key? key, required this.addExercise})
+enum AddEditContext { add, edit }
+
+class ExerciseBottomSheet extends StatefulWidget {
+  const ExerciseBottomSheet(
+      {Key? key,
+      required this.addEditContext,
+      required this.sessionType,
+      this.previousExercise,
+      required this.onSubmitExercise,
+      this.onDeleteExercise})
       : super(key: key);
 
-  final ValueSetter<Exercise> addExercise;
+  final AddEditContext addEditContext;
+  final SessionType sessionType;
+  final Exercise? previousExercise;
+  final ValueSetter<Exercise> onSubmitExercise;
+  final VoidCallback? onDeleteExercise;
 
   @override
-  State<AddExerciseBottomSheet> createState() => _AddExerciseBottomSheetState();
+  State<ExerciseBottomSheet> createState() => _ExerciseBottomSheetState();
 }
 
-class _AddExerciseBottomSheetState extends State<AddExerciseBottomSheet> {
+class _ExerciseBottomSheetState extends State<ExerciseBottomSheet> {
   final ItemScrollController _scrollController = ItemScrollController();
   final FocusNode _nameFocusNode = FocusNode();
   final FocusNode _weightFocusNode = FocusNode();
@@ -44,6 +57,7 @@ class _AddExerciseBottomSheetState extends State<AddExerciseBottomSheet> {
   @override
   void initState() {
     super.initState();
+    prepopulateFields();
     _nameController = TextEditingController(text: _nameText);
     _weightController = TextEditingController(text: _weightText);
     _notesController = TextEditingController(text: _notesText);
@@ -59,7 +73,8 @@ class _AddExerciseBottomSheetState extends State<AddExerciseBottomSheet> {
 
   @override
   Widget build(BuildContext context) {
-    _contentList = buildContentWidgetList();
+    final MaterialColor _pplColor = AppColor.getPplColor(widget.sessionType);
+    _contentList = buildContentWidgetList(_pplColor);
     return GestureDetector(
       behavior: HitTestBehavior.translucent,
       onTap: () => unfocusAll(),
@@ -75,12 +90,14 @@ class _AddExerciseBottomSheetState extends State<AddExerciseBottomSheet> {
 
   void unfocusAll() => FocusManager.instance.primaryFocus?.unfocus();
 
-  List<Widget> buildContentWidgetList() {
+  List<Widget> buildContentWidgetList(MaterialColor pplColor) {
     return [
-      buildNameWeightRow(),
+      buildNameWeightRow(pplColor),
       SetRepSlider(
           label: Strings.exerciseSetLabel,
           max: 8,
+          initialValue: widget.previousExercise?.setsReps.sets,
+          primaryColor: pplColor,
           onTap: () => unfocusAll(),
           onChanged: (newValue) {
             setState(() => _setCount = newValue);
@@ -89,18 +106,21 @@ class _AddExerciseBottomSheetState extends State<AddExerciseBottomSheet> {
       SetRepSlider(
           label: Strings.exerciseRepLabel,
           max: 20,
+          initialValue: widget.previousExercise?.setsReps.reps,
+          primaryColor: pplColor,
           onTap: () => unfocusAll(),
           onChanged: (newValue) {
             setState(() => _repCount = newValue);
           }),
       const SizedBox(height: 16),
-      buildAmrapRow(),
+      buildAmrapRow(pplColor),
       const SizedBox(height: 16),
       CustomTextField(
           hint: Strings.exerciseNotesHint,
           controller: _notesController,
           focusNode: _notesFocusNode,
           keyboardType: TextInputType.multiline,
+          primaryColor: pplColor,
           onTap: () => scrollToNotes(),
           onChanged: (newValue) {
             setState(() {
@@ -111,10 +131,17 @@ class _AddExerciseBottomSheetState extends State<AddExerciseBottomSheet> {
             });
           }),
       const SizedBox(height: 32),
-      AccentButton(
-          text: Strings.addExerciseCTA,
-          isEnabled: _isValidExercise,
-          onTap: () => addNewExercise()),
+      Row(children: [
+        Expanded(
+          child: AccentButton(
+              text: widget.addEditContext == AddEditContext.add
+                  ? Strings.addExerciseCTA
+                  : Strings.editExerciseCTA,
+              isEnabled: _isValidExercise,
+              onTap: () => submitExercise()),
+        ),
+        buildDeleteButton()
+      ]),
       const SizedBox(height: 400),
     ];
   }
@@ -125,7 +152,7 @@ class _AddExerciseBottomSheetState extends State<AddExerciseBottomSheet> {
     });
   }
 
-  Row buildAmrapRow() {
+  Row buildAmrapRow(MaterialColor pplColor) {
     return Row(
       children: [
         Expanded(child: Container()),
@@ -141,7 +168,7 @@ class _AddExerciseBottomSheetState extends State<AddExerciseBottomSheet> {
                 ),
                 controlAffinity: ListTileControlAffinity.trailing,
                 value: _amrapFinal,
-                activeColor: AppColor.dark,
+                activeColor: pplColor,
                 dense: true,
                 onChanged: (newValue) {
                   setState(() {
@@ -155,7 +182,7 @@ class _AddExerciseBottomSheetState extends State<AddExerciseBottomSheet> {
     );
   }
 
-  Widget buildNameWeightRow() {
+  Widget buildNameWeightRow(MaterialColor pplColor) {
     return Padding(
       padding: const EdgeInsets.only(bottom: 24, top: 16),
       child: Row(
@@ -166,6 +193,7 @@ class _AddExerciseBottomSheetState extends State<AddExerciseBottomSheet> {
                 controller: _nameController,
                 focusNode: _nameFocusNode,
                 keyboardType: TextInputType.multiline,
+                primaryColor: pplColor,
                 onChanged: (newValue) {
                   setState(() {
                     _nameText = newValue;
@@ -182,6 +210,7 @@ class _AddExerciseBottomSheetState extends State<AddExerciseBottomSheet> {
                 focusNode: _weightFocusNode,
                 keyboardType: TextInputType.number,
                 maxLength: 3,
+                primaryColor: pplColor,
                 onChanged: (newValue) {
                   setState(() {
                     _weightText = newValue;
@@ -194,6 +223,30 @@ class _AddExerciseBottomSheetState extends State<AddExerciseBottomSheet> {
     );
   }
 
+  Widget buildDeleteButton() {
+    if (widget.addEditContext == AddEditContext.edit) {
+      return GestureDetector(
+        onTap: () => deleteExercise(),
+        child: Card(
+          elevation: 4,
+          shape: RoundedRectangleBorder(
+            side: BorderSide(color: AppColor.accent, width: 2),
+            borderRadius: BorderRadius.circular(10),
+          ),
+          child: Container(
+            padding: const EdgeInsets.all(12),
+            child: Icon(
+              Icons.delete,
+              color: AppColor.accent,
+            ),
+          ),
+        ),
+      );
+    } else {
+      return Container();
+    }
+  }
+
   void scrollToNotes() {
     _scrollController.scrollTo(
         index: 6,
@@ -201,15 +254,30 @@ class _AddExerciseBottomSheetState extends State<AddExerciseBottomSheet> {
         duration: const Duration(milliseconds: 750));
   }
 
-  void addNewExercise() {
+  void submitExercise() {
     final setReps =
         SetsReps(sets: _setCount, reps: _repCount, amrapFinalSet: _amrapFinal);
     final weight = Weight(double.parse(_weightText));
     final exercise = Exercise.weighted(
         name: _nameText, setsReps: setReps, weight: weight, notes: _notesText);
-    widget.addExercise(exercise);
+    widget.onSubmitExercise(exercise);
+    dismissBottomSheet();
+  }
+
+  void deleteExercise() {
+    widget.onDeleteExercise?.call();
     dismissBottomSheet();
   }
 
   void dismissBottomSheet() => Navigator.pop(context);
+
+  void prepopulateFields() {
+    _nameText = widget.previousExercise?.name ?? "";
+    _weightText = widget.previousExercise?.weight?.formattedKg() ?? "";
+    _amrapFinal = widget.previousExercise?.setsReps.amrapFinalSet ?? false;
+    _notesText = widget.previousExercise?.notes;
+    _setCount = widget.previousExercise?.setsReps.sets ?? 1;
+    _repCount = widget.previousExercise?.setsReps.reps ?? 1;
+    checkExerciseValidity();
+  }
 }

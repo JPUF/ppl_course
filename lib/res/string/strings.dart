@@ -17,7 +17,9 @@ class Strings {
   static const String planSessionTitle = "PLAN A SESSION";
   static const String generalNotesHint = "General session notes";
   static const String addExerciseCTA = "ADD EXERCISE";
-  static const String exerciseTitle = "Add Exercise";
+  static const String editExerciseCTA = "UPDATE EXERCISE";
+  static const String exerciseAddTitle = "Add Exercise";
+  static const String exerciseEditTitle = "Edit Exercise";
   static const String exerciseNameHint = "Exercise name";
   static const String exerciseWeightHint = "kg";
   static const String exerciseNotesHint = "Exercise notes";
