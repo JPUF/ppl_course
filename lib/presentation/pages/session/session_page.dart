@@ -127,8 +127,9 @@ class _SessionPageState extends State<SessionPage> {
   Widget buildCopyPreviousSession() {
     BlocProvider.of<SessionsBloc>(context).add(FetchLastSessionOfType(_type));
     return BlocBuilder<SessionsBloc, SessionsState>(
+      buildWhen: (p, c) => c is LastSessionOfTypeState,
       builder: (context, state) {
-        if(state is LastSessionOfTypeState){
+        if (state is LastSessionOfTypeState) {
           final lastSession = state.lastSession;
           if (lastSession != null && !_lastSessionCopied) {
             return Column(

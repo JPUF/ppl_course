@@ -20,24 +20,25 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
-    final sessionBuilder =
-        BlocBuilder<SessionsBloc, SessionsState>(builder: (context, state) {
-      if (state is AllSessionsState) {
-        final sessions = state.allSessions;
-        return Container(
-            padding: const EdgeInsets.only(bottom: 64),
-            child: Column(
-              children: sessions
-                  .map((session) => GestureDetector(
-                        child: SessionWidget(session: session),
-                        onTap: () {},
-                      ))
-                  .toList(),
-            ));
-      } else {
-        return const SizedBox(height: 16);
-      }
-    });
+    final sessionBuilder = BlocBuilder<SessionsBloc, SessionsState>(
+        buildWhen: (p, c) => c is AllSessionsState,
+        builder: (context, state) {
+          if (state is AllSessionsState) {
+            final sessions = state.allSessions;
+            return Container(
+                padding: const EdgeInsets.only(bottom: 64),
+                child: Column(
+                  children: sessions
+                      .map((session) => GestureDetector(
+                            child: SessionWidget(session: session),
+                            onTap: () {},
+                          ))
+                      .toList(),
+                ));
+          } else {
+            return const SizedBox(height: 16);
+          }
+        });
 
     return Scaffold(
       appBar: AppBar(
