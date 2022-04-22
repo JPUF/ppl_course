@@ -95,4 +95,10 @@ class SessionRepository {
     _sessions = sessions;
     return true;
   }
+
+  Session? getLastSessionOfType(SessionType type) {
+    final Session? lastSessionOfType =
+        _sessions.lastWhere((session) => session.type == type);
+    return lastSessionOfType;
+  }
 }

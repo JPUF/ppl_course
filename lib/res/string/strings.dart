@@ -16,6 +16,7 @@ class Strings {
   // Plan Session
   static const String planSessionTitle = "PLAN A SESSION";
   static const String generalNotesHint = "General session notes";
+  static String copyLastSession(String type) => "Copy last $type session";
   static const String addExerciseCTA = "ADD EXERCISE";
   static const String editExerciseCTA = "UPDATE EXERCISE";
   static const String exerciseAddTitle = "Add Exercise";

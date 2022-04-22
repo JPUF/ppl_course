@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:ppl_course/common/components/asset_button.dart';
 import 'package:ppl_course/common/components/custom_text_field.dart';
 import 'package:ppl_course/data/models/exercise/exercise.dart';
 import 'package:ppl_course/data/models/session/session.dart';
@@ -30,7 +31,9 @@ class _SessionPageState extends State<SessionPage> {
   SessionType _type = SessionType.push;
   String? _notesText;
 
-  final Map<int, Exercise> _exerciseMap = {};
+  bool _lastSessionCopied = false;
+
+  Map<int, Exercise> _exerciseMap = {};
   int newExerciseCount = 0;
 
   @override
@@ -81,20 +84,13 @@ class _SessionPageState extends State<SessionPage> {
                     const SizedBox(height: 16),
                     PplSelectorSwitch(onChanged: (newType) {
                       setState(() {
+                        _lastSessionCopied = false;
                         _type = newType;
                       });
                     }),
                     const SizedBox(height: 32),
-                    CustomTextField(
-                        hint: Strings.generalNotesHint,
-                        controller: _editNotesController,
-                        focusNode: _notesFocusNode,
-                        primaryColor: AppColor.getPplColor(_type),
-                        onChanged: (newValue) {
-                          setState(() {
-                            _notesText = newValue;
-                          });
-                        }),
+                    buildNotesTextField(),
+                    buildCopyPreviousSession(),
                     const SizedBox(height: 16),
                     buildExerciseList(),
                     const SizedBox(height: 100),
@@ -113,6 +109,49 @@ class _SessionPageState extends State<SessionPage> {
         ),
       ),
     );
+  }
+
+  CustomTextField buildNotesTextField() {
+    return CustomTextField(
+        hint: Strings.generalNotesHint,
+        controller: _editNotesController,
+        focusNode: _notesFocusNode,
+        primaryColor: AppColor.getPplColor(_type),
+        onChanged: (newValue) {
+          setState(() {
+            _notesText = newValue;
+          });
+        });
+  }
+
+  Widget buildCopyPreviousSession() {
+    BlocProvider.of<SessionsBloc>(context).add(FetchLastSessionOfType(_type));
+    return BlocBuilder<SessionsBloc, SessionsState>(
+      builder: (context, state) {
+        final lastSession = state.sessions?.first;
+        if (lastSession != null && !_lastSessionCopied) {
+          return Column(
+            children: [
+              const SizedBox(height: 16),
+              AccentButton(
+                  text: Strings.copyLastSession(_type.toSessionString()),
+                  onTap: () => copyLastSession(lastSession)),
+            ],
+          );
+        } else {
+          return Container();
+        }
+      },
+    );
+  }
+
+  copyLastSession(Session lastSession) {
+    _lastSessionCopied = true;
+    newExerciseCount = 0;
+    _exerciseMap = {};
+    for (var exercise in lastSession.exercises) {
+      onNewExercise(exercise);
+    }
   }
 
   void showBottomSheet(AddEditContext addEditContext,

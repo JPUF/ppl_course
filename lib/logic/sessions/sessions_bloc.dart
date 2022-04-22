@@ -8,7 +8,11 @@ part 'sessions_state.dart';
 
 abstract class SessionsEvent {}
 
-class FetchAllSessions implements SessionsEvent {}
+class FetchLastSessionOfType implements SessionsEvent {
+  final SessionType type;
+
+  FetchLastSessionOfType(this.type);
+}
 
 class WriteSession implements SessionsEvent {
   final Session session;
@@ -21,14 +25,18 @@ class SessionsBloc extends Bloc<SessionsEvent, SessionsState>
   final SessionRepository _sessionRepository = SessionRepository();
 
   SessionsBloc() : super(SessionsState(null)) {
-    on<FetchAllSessions>(_fetchAllSessions);
+    on<FetchLastSessionOfType>(_fetchLastSessionOfType);
     on<WriteSession>(_writeSession);
   }
 
-  void _fetchAllSessions(
-      FetchAllSessions event, Emitter<SessionsState> emit) async {
-    var state = SessionsState(_sessionRepository.getAllSessions());
-    emit(state);
+  void _fetchLastSessionOfType(
+      FetchLastSessionOfType event, Emitter<SessionsState> emit) async {
+    final lastSession = _sessionRepository.getLastSessionOfType(event.type);
+    if (lastSession != null) {
+      emit(SessionsState([lastSession]));
+    } else {
+      emit(SessionsState([]));
+    }
   }
 
   void _writeSession(WriteSession event, Emitter<SessionsState> emit) async {
@@ -40,7 +48,8 @@ class SessionsBloc extends Bloc<SessionsEvent, SessionsState>
 
   @override
   SessionsState? fromJson(Map<String, dynamic> json) {
-    final sessions = (json['sessions'] as List).map((a) => Session.fromMap(a)).toList();
+    final sessions =
+        (json['sessions'] as List).map((a) => Session.fromMap(a)).toList();
     _sessionRepository.setSessions(sessions);
     return SessionsState(sessions);
   }
