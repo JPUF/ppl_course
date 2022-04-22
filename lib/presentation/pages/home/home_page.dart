@@ -22,21 +22,18 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     final sessionBuilder =
         BlocBuilder<SessionsBloc, SessionsState>(builder: (context, state) {
-      final sessions = state.sessions;
-      if (sessions != null) {
-        return Column(
-          children: [
-            Column(
+      if (state is AllSessionsState) {
+        final sessions = state.allSessions;
+        return Container(
+            padding: const EdgeInsets.only(bottom: 64),
+            child: Column(
               children: sessions
                   .map((session) => GestureDetector(
                         child: SessionWidget(session: session),
                         onTap: () {},
                       ))
                   .toList(),
-            ),
-            const SizedBox(height: 64)
-          ],
-        );
+            ));
       } else {
         return const SizedBox(height: 16);
       }

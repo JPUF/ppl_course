@@ -24,7 +24,7 @@ class SessionsBloc extends Bloc<SessionsEvent, SessionsState>
     with HydratedMixin {
   final SessionRepository _sessionRepository = SessionRepository();
 
-  SessionsBloc() : super(SessionsState(null)) {
+  SessionsBloc() : super(InitialState()) {
     on<FetchLastSessionOfType>(_fetchLastSessionOfType);
     on<WriteSession>(_writeSession);
   }
@@ -32,30 +32,42 @@ class SessionsBloc extends Bloc<SessionsEvent, SessionsState>
   void _fetchLastSessionOfType(
       FetchLastSessionOfType event, Emitter<SessionsState> emit) async {
     final lastSession = _sessionRepository.getLastSessionOfType(event.type);
-    if (lastSession != null) {
-      emit(SessionsState([lastSession]));
-    } else {
-      emit(SessionsState([]));
-    }
+    emit(LastSessionOfTypeState(lastSession));
   }
 
   void _writeSession(WriteSession event, Emitter<SessionsState> emit) async {
     final success = _sessionRepository.writeSession(event.session);
     if (success) {
-      emit(SessionsState(_sessionRepository.getAllSessions()));
+      emit(AllSessionsState(_sessionRepository.getAllSessions()));
     }
   }
 
   @override
   SessionsState? fromJson(Map<String, dynamic> json) {
-    final sessions =
-        (json['sessions'] as List).map((a) => Session.fromMap(a)).toList();
-    _sessionRepository.setSessions(sessions);
-    return SessionsState(sessions);
+    final stateType = json[SessionsState.stateType];
+    switch (stateType) {
+      case SessionsState.allSessions:
+        final sessions = (json[SessionsState.sessions] as List)
+            .map((a) => Session.fromMap(a))
+            .toList();
+        _sessionRepository.setSessions(sessions);
+        return AllSessionsState(sessions);
+      case SessionsState.lastSessionOfType:
+        final sessions = json[SessionsState.sessions] as List;
+        return LastSessionOfTypeState(sessions.first);
+      default:
+        return InitialState();
+    }
   }
 
   @override
   Map<String, dynamic>? toJson(SessionsState state) {
-    return SessionsState(_sessionRepository.getAllSessions()).toMap();
+    if (state is AllSessionsState) {
+      return AllSessionsState(state.allSessions).toMap();
+    } else if (state is LastSessionOfTypeState) {
+      return LastSessionOfTypeState(state.lastSession).toMap();
+    } else {
+      return InitialState().toMap();
+    }
   }
 }

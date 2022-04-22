@@ -1,29 +1,85 @@
 part of 'sessions_bloc.dart';
 
-class SessionsState {
-  final List<Session>? sessions;
+abstract class SessionsState {
+  static const initial = 'InitialState';
+  static const allSessions = 'AllSessionsState';
+  static const lastSessionOfType = 'LastSessionOfTypeState';
+  static const stateType = 'stateType';
+  static const sessions = 'sessions';
 
-  SessionsState(this.sessions);
+  Map<String, dynamic> toMap();
 
-  Map<String, dynamic> toMap() {
-    final result = <String, dynamic>{};
-
-    result.addAll({'sessions': sessions?.map((x) => x.toMap()).toList()});
-
-    return result;
-  }
+  String toJson();
 
   factory SessionsState.fromMap(Map<String, dynamic> map) {
-    final state = SessionsState(
-      List<Session>.from(map['sessions']?.map((y) {
+    switch (map[stateType]) {
+      case lastSessionOfType:
+        final sessionsList = map[sessions] as List;
+        return LastSessionOfTypeState(Session.fromMap(sessionsList.first));
+      case allSessions:
+        return AllSessionsState(
+          List<Session>.from(map[sessions]?.map((y) {
             Session.fromMap(y);
-      })),
-    );
-    return state;
+          })),
+        );
+      default:
+        return InitialState();
+    }
   }
-
-  String toJson() => json.encode(toMap());
 
   factory SessionsState.fromJson(String source) =>
       SessionsState.fromMap(json.decode(source));
+}
+
+class InitialState implements SessionsState {
+  @override
+  String toJson() => json.encode(toMap());
+
+  @override
+  Map<String, dynamic> toMap() {
+    final result = <String, dynamic>{};
+    result.addAll({
+      SessionsState.stateType: SessionsState.initial,
+      SessionsState.sessions: null
+    });
+    return result;
+  }
+}
+
+class AllSessionsState implements SessionsState {
+  final List<Session> allSessions;
+
+  AllSessionsState(this.allSessions);
+
+  @override
+  String toJson() => json.encode(toMap());
+
+  @override
+  Map<String, dynamic> toMap() {
+    final result = <String, dynamic>{};
+    result.addAll({
+      SessionsState.stateType: SessionsState.allSessions,
+      SessionsState.sessions: allSessions.map((x) => x.toMap()).toList()
+    });
+    return result;
+  }
+}
+
+class LastSessionOfTypeState implements SessionsState {
+  final Session? lastSession;
+
+  LastSessionOfTypeState(this.lastSession);
+
+  @override
+  String toJson() => json.encode(toMap());
+
+  @override
+  Map<String, dynamic> toMap() {
+    final result = <String, dynamic>{};
+    result.addAll({
+      SessionsState.stateType: SessionsState.allSessions,
+      SessionsState.sessions: [lastSession]
+    });
+    return result;
+  }
 }

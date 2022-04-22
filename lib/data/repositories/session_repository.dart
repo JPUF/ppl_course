@@ -1,3 +1,4 @@
+import 'package:collection/collection.dart';
 import 'package:ppl_course/data/models/exercise/exercise.dart';
 import 'package:ppl_course/data/models/exercise/sets_reps.dart';
 import 'package:ppl_course/data/models/exercise/weight.dart';
@@ -98,7 +99,7 @@ class SessionRepository {
 
   Session? getLastSessionOfType(SessionType type) {
     final Session? lastSessionOfType =
-        _sessions.lastWhere((session) => session.type == type);
+        _sessions.lastWhereOrNull((session) => session.type == type);
     return lastSessionOfType;
   }
 }

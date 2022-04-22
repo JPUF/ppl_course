@@ -128,16 +128,20 @@ class _SessionPageState extends State<SessionPage> {
     BlocProvider.of<SessionsBloc>(context).add(FetchLastSessionOfType(_type));
     return BlocBuilder<SessionsBloc, SessionsState>(
       builder: (context, state) {
-        final lastSession = state.sessions?.first;
-        if (lastSession != null && !_lastSessionCopied) {
-          return Column(
-            children: [
-              const SizedBox(height: 16),
-              AccentButton(
-                  text: Strings.copyLastSession(_type.toSessionString()),
-                  onTap: () => copyLastSession(lastSession)),
-            ],
-          );
+        if(state is LastSessionOfTypeState){
+          final lastSession = state.lastSession;
+          if (lastSession != null && !_lastSessionCopied) {
+            return Column(
+              children: [
+                const SizedBox(height: 16),
+                AccentButton(
+                    text: Strings.copyLastSession(_type.toSessionString()),
+                    onTap: () => copyLastSession(lastSession)),
+              ],
+            );
+          } else {
+            return Container();
+          }
         } else {
           return Container();
         }
