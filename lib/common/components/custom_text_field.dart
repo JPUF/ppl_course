@@ -48,17 +48,17 @@ class _CustomTextFieldState extends State<CustomTextField> {
           inputFormatters: getInputFormatter(),
           minLines: 1,
           maxLines: 4,
-          style: AppTextStyles.body15.apply(
+          style: AppTextStyles.body17.apply(
               color:
                   widget.focusNode.hasFocus ? AppColor.black : AppColor.grey50),
           cursorColor: _primaryColor,
           decoration: InputDecoration(
               labelText: widget.hint,
-              floatingLabelStyle: AppTextStyles.body12.apply(
+              floatingLabelStyle: AppTextStyles.body14.apply(
                   color: widget.focusNode.hasFocus
                       ? _primaryColor
                       : AppColor.grey75),
-              labelStyle: AppTextStyles.body12.apply(color: AppColor.grey75),
+              labelStyle: AppTextStyles.body14.apply(color: AppColor.grey75),
               enabledBorder: OutlineInputBorder(
                 borderSide: BorderSide(width: 2, color: AppColor.grey75),
                 borderRadius: BorderRadius.circular(8),

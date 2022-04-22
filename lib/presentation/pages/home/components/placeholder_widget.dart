@@ -30,7 +30,7 @@ class _PlaceholderWidgetState extends State<PlaceholderWidget> {
               padding: const EdgeInsets.all(16.0),
               child: Text(
                 widget.text,
-                style: AppTextStyles.body15,
+                style: AppTextStyles.body17,
                 textAlign: TextAlign.center,
               ),
             ),

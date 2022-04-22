@@ -164,7 +164,7 @@ class _ExerciseBottomSheetState extends State<ExerciseBottomSheet> {
                 contentPadding: const EdgeInsets.only(left: 4),
                 title: Text(
                   Strings.exerciseAmrapLabel,
-                  style: AppTextStyles.body12.apply(color: AppColor.black),
+                  style: AppTextStyles.body14.apply(color: AppColor.black),
                 ),
                 controlAffinity: ListTileControlAffinity.trailing,
                 value: _amrapFinal,

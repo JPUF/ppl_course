@@ -26,18 +26,18 @@ class _ExerciseWidgetState extends State<ExerciseWidget> {
           Expanded(
               flex: 8,
               child: Text(widget.exercise.name,
-                  style: AppTextStyles.body15
+                  style: AppTextStyles.body17
                       .apply(color: AppColor.getPplColor(widget.sessionType)))),
           const SizedBox(width: 16),
           Expanded(
-              flex: 3,
+              flex: 2,
               child: Text(widget.exercise.setsReps.toString(),
-                  style: AppTextStyles.body12
+                  style: AppTextStyles.body14
                       .apply(color: AppColor.getPplColor(widget.sessionType)))),
           Expanded(
               flex: 2,
               child: Text(widget.exercise.weight?.toString() ?? 'N/A',
-                  style: AppTextStyles.body12.apply(color: AppColor.getPplColor(widget.sessionType))))
+                  style: AppTextStyles.body14.apply(color: AppColor.getPplColor(widget.sessionType))))
         ],
       ),
     );

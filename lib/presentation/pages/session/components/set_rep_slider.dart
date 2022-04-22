@@ -44,7 +44,7 @@ class _SetRepSliderState extends State<SetRepSlider> {
             alignment: Alignment.centerLeft,
             child: Text(
               widget.label,
-              style: AppTextStyles.body12.apply(color: AppColor.black),
+              style: AppTextStyles.body14.apply(color: AppColor.black),
               textAlign: TextAlign.start,
             ),
           ),
