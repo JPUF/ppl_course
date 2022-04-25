@@ -6,9 +6,11 @@ import 'package:ppl_course/res/string/strings.dart';
 import 'package:ppl_course/res/styles/app_text_styles.dart';
 
 class PplSelectorSwitch extends StatefulWidget {
-  const PplSelectorSwitch({Key? key, required this.onChanged})
+  const PplSelectorSwitch(
+      {Key? key, required this.initialType, required this.onChanged})
       : super(key: key);
 
+  final SessionType initialType;
   final ValueSetter<SessionType> onChanged;
 
   @override
@@ -17,9 +19,13 @@ class PplSelectorSwitch extends StatefulWidget {
 
 class _PplSelectorSwitchState extends State<PplSelectorSwitch> {
   int value = 0;
+  bool initialTypeSet = false;
 
   @override
   Widget build(BuildContext context) {
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+      setInitialType();
+    });
     return PhysicalModel(
       elevation: 4,
       color: AppColor.transparent,
@@ -72,6 +78,14 @@ class _PplSelectorSwitchState extends State<PplSelectorSwitch> {
       pplString,
       style: AppTextStyles.headline3.apply(color: pplColor),
     );
+  }
+
+  void setInitialType() {
+    if (!initialTypeSet) {
+      value = widget.initialType.index;
+      widget.onChanged(SessionType.values[widget.initialType.index]);
+    }
+    initialTypeSet = true;
   }
 
   MaterialAppColor pplColorFromIndex(int index) {

@@ -10,11 +10,11 @@ class AppRouter {
     switch (routeSettings.name) {
       case Destination.root:
         return PageTransition(
-            child: const HomePage(title: "Home"),
+            child: const HomePage(),
             type: PageTransitionType.fade);
       case Destination.session:
         return PageTransition(
-            child: const SessionPage(title: "Workout Session"),
+            child: const SessionPage(),
             settings: routeSettings,
             type: PageTransitionType.rightToLeftWithFade);
       default:

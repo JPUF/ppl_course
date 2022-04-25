@@ -6,13 +6,12 @@ import 'package:ppl_course/data/models/session/session.dart';
 import 'package:ppl_course/logic/sessions/sessions_bloc.dart';
 import 'package:ppl_course/presentation/navigation/destination.dart';
 import 'package:ppl_course/presentation/pages/home/components/session_widget.dart';
+import 'package:ppl_course/presentation/pages/session/session_args.dart';
 import 'package:ppl_course/res/string/strings.dart';
 import 'package:ppl_course/res/styles/app_text_styles.dart';
 
 class HomePage extends StatefulWidget {
-  const HomePage({Key? key, required this.title}) : super(key: key);
-
-  final String title;
+  const HomePage({Key? key}) : super(key: key);
 
   @override
   State<HomePage> createState() => _HomePageState();
@@ -31,8 +30,12 @@ class _HomePageState extends State<HomePage> {
                 child: Column(
                   children: sessions
                       .map((session) => GestureDetector(
-                            child: SessionWidget(session: session),
-                            onTap: () => onEditSession(session),
+                            child: SessionWidget(
+                                session: session,
+                                onTappedEdit: () {
+                                  onTapEditSession(session);
+                                }),
+                            onTap: () {},
                           ))
                       .toList(),
                 ));
@@ -74,8 +77,9 @@ class _HomePageState extends State<HomePage> {
               padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 4),
               child: AccentButton(
                 text: Strings.planSessionCTA,
-                onTap: () =>
-                    Navigator.of(context).pushNamed(Destination.session),
+                onTap: () => Navigator.of(context).pushNamed(
+                    Destination.session,
+                    arguments: SessionArgs(null)),
                 endIcon: SvgPicture.asset(
                   'assets/images/ic_dumbbell.svg',
                   width: 24,
@@ -89,7 +93,8 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  onEditSession(Session sessionToEdit) {
-
+  onTapEditSession(Session sessionToEdit) {
+    Navigator.of(context)
+        .pushNamed(Destination.session, arguments: SessionArgs(sessionToEdit));
   }
 }

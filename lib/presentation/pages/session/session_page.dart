@@ -5,6 +5,7 @@ import 'package:ppl_course/common/components/custom_text_field.dart';
 import 'package:ppl_course/data/models/exercise/exercise.dart';
 import 'package:ppl_course/data/models/session/session.dart';
 import 'package:ppl_course/logic/sessions/sessions_bloc.dart';
+import 'package:ppl_course/presentation/pages/session/session_args.dart';
 import 'package:ppl_course/res/color/colors.dart';
 import 'package:ppl_course/res/string/strings.dart';
 import 'package:ppl_course/res/styles/app_text_styles.dart';
@@ -16,9 +17,7 @@ import 'components/plan_exercise_widget.dart';
 import 'components/ppl_selector_switch.dart';
 
 class SessionPage extends StatefulWidget {
-  const SessionPage({Key? key, required this.title}) : super(key: key);
-
-  final String title;
+  const SessionPage({Key? key}) : super(key: key);
 
   @override
   _SessionPageState createState() => _SessionPageState();
@@ -34,7 +33,9 @@ class _SessionPageState extends State<SessionPage> {
   bool _lastSessionCopied = false;
 
   Map<int, Exercise> _exerciseMap = {};
-  int newExerciseCount = 0;
+  int _newExerciseCount = 0;
+
+  late SessionArgs _editArgs;
 
   @override
   void initState() {
@@ -52,6 +53,11 @@ class _SessionPageState extends State<SessionPage> {
 
   @override
   Widget build(BuildContext context) {
+    _editArgs = ModalRoute.of(context)?.settings.arguments as SessionArgs;
+    final sessionToEdit = _editArgs.session;
+    if (sessionToEdit != null) {
+      populateWithSessionToEdit(sessionToEdit);
+    }
     return GestureDetector(
       behavior: HitTestBehavior.translucent,
       onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
@@ -82,12 +88,14 @@ class _SessionPageState extends State<SessionPage> {
                 child: Column(
                   children: [
                     const SizedBox(height: 16),
-                    PplSelectorSwitch(onChanged: (newType) {
-                      setState(() {
-                        _lastSessionCopied = false;
-                        _type = newType;
-                      });
-                    }),
+                    PplSelectorSwitch(
+                        initialType: _type,
+                        onChanged: (newType) {
+                          setState(() {
+                            _lastSessionCopied = false;
+                            _type = newType;
+                          });
+                        }),
                     const SizedBox(height: 32),
                     buildNotesTextField(),
                     buildCopyPreviousSession(),
@@ -131,7 +139,9 @@ class _SessionPageState extends State<SessionPage> {
       builder: (context, state) {
         if (state is LastSessionOfTypeState) {
           final lastSession = state.lastSession;
-          if (lastSession != null && !_lastSessionCopied) {
+          if (lastSession != null &&
+              !_lastSessionCopied &&
+              _editArgs.session == null) {
             return Column(
               children: [
                 const SizedBox(height: 16),
@@ -152,7 +162,7 @@ class _SessionPageState extends State<SessionPage> {
 
   copyLastSession(Session lastSession) {
     _lastSessionCopied = true;
-    newExerciseCount = 0;
+    _newExerciseCount = 0;
     _exerciseMap = {};
     for (var exercise in lastSession.exercises) {
       onNewExercise(exercise);
@@ -182,8 +192,8 @@ class _SessionPageState extends State<SessionPage> {
         });
   }
 
-  ExerciseBottomSheet exerciseBottomSheet(
-      ExerciseContext addEditContext, Exercise? exerciseToEdit, int? keyToEdit) {
+  ExerciseBottomSheet exerciseBottomSheet(ExerciseContext addEditContext,
+      Exercise? exerciseToEdit, int? keyToEdit) {
     return ExerciseBottomSheet(
         addEditContext: addEditContext,
         sessionType: _type,
@@ -207,9 +217,9 @@ class _SessionPageState extends State<SessionPage> {
   }
 
   void onNewExercise(Exercise exercise) {
-    newExerciseCount++;
+    _newExerciseCount++;
     setState(() {
-      _exerciseMap[newExerciseCount] = exercise;
+      _exerciseMap[_newExerciseCount] = exercise;
     });
   }
 
@@ -236,6 +246,15 @@ class _SessionPageState extends State<SessionPage> {
 
   editExercise(Exercise exercise, int key) {
     showBottomSheet(ExerciseContext.edit, exercise, key);
+  }
+
+  void populateWithSessionToEdit(Session session) {
+    _notesText = session.notes;
+    _type = session.type;
+    _newExerciseCount = 0;
+    for (var ex in session.exercises) {
+      onNewExercise(ex);
+    }
   }
 
   void submitSession() {

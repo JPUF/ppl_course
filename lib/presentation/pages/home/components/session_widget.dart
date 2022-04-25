@@ -5,9 +5,10 @@ import 'package:ppl_course/res/color/colors.dart';
 import 'package:ppl_course/res/styles/app_text_styles.dart';
 
 class SessionWidget extends StatefulWidget {
-  const SessionWidget({Key? key, required this.session}) : super(key: key);
+  const SessionWidget({Key? key, required this.session, required this.onTappedEdit}) : super(key: key);
 
   final Session session;
+  final VoidCallback onTappedEdit;
 
   List<Widget> buildExerciseList() {
     var exerciseWidgets = <Widget>[];
@@ -72,7 +73,9 @@ class _SessionWidgetState extends State<SessionWidget> {
           ),
           IconButton(
               color: AppColor.getPplColor(widget.session.type),
-              onPressed: () {},
+              onPressed: () {
+                widget.onTappedEdit();
+              },
               icon: const Icon(Icons.edit))
         ],
       ),

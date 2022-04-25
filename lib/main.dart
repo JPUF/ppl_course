@@ -5,7 +5,6 @@ import 'package:path_provider/path_provider.dart';
 import 'package:ppl_course/logic/sessions/sessions_bloc.dart';
 import 'package:ppl_course/presentation/navigation/app_router.dart';
 import 'package:ppl_course/res/color/colors.dart';
-import 'package:ppl_course/res/string/strings.dart';
 
 import 'logic/basic/basic_bloc.dart';
 import 'presentation/pages/home/home_page.dart';
@@ -40,7 +39,7 @@ class MyApp extends StatelessWidget {
                   elevation: 2),
               scaffoldBackgroundColor: AppColor.white),
           onGenerateRoute: _router.onGenerateRoute,
-          home: const HomePage(title: Strings.appTitle)),
+          home: const HomePage()),
     );
   }
 }
