@@ -30,22 +30,25 @@ class AccentButton extends StatelessWidget {
         ),
         child: Container(
           padding: const EdgeInsets.all(12.0),
-          child: Row(
-            mainAxisSize: MainAxisSize.min,
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Container(
-                padding: const EdgeInsets.symmetric(vertical: 4),
-                child: Text(
-                  text,
-                  textAlign: TextAlign.center,
-                  style: AppTextStyles.button.apply(
-                    color: isEnabled ? AppColor.black : AppColor.grey75
+          child: IntrinsicHeight(
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Container(
+                  padding: const EdgeInsets.symmetric(vertical: 4),
+                  child: Text(
+                    text,
+                    textAlign: TextAlign.center,
+                    style: AppTextStyles.button.apply(
+                      color: isEnabled ? AppColor.black : AppColor.grey75
+                    ),
                   ),
                 ),
-              ),
-              _optionalEndIcon()
-            ],
+                _optionalEndIcon()
+              ],
+            ),
           ),
         ),
       ),

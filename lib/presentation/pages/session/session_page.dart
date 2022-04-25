@@ -104,7 +104,7 @@ class _SessionPageState extends State<SessionPage> {
                 child: Align(
                     alignment: Alignment.bottomCenter,
                     child: AddExerciseButton(
-                        onTap: () => showBottomSheet(AddEditContext.add))))
+                        onTap: () => showBottomSheet(ExerciseContext.add))))
           ],
         ),
       ),
@@ -159,7 +159,7 @@ class _SessionPageState extends State<SessionPage> {
     }
   }
 
-  void showBottomSheet(AddEditContext addEditContext,
+  void showBottomSheet(ExerciseContext addEditContext,
       [Exercise? exerciseToEdit, int? keyToEdit]) {
     showModalBottomSheet<void>(
         isScrollControlled: true,
@@ -183,20 +183,20 @@ class _SessionPageState extends State<SessionPage> {
   }
 
   ExerciseBottomSheet exerciseBottomSheet(
-      AddEditContext addEditContext, Exercise? exerciseToEdit, int? keyToEdit) {
+      ExerciseContext addEditContext, Exercise? exerciseToEdit, int? keyToEdit) {
     return ExerciseBottomSheet(
         addEditContext: addEditContext,
         sessionType: _type,
         previousExercise: exerciseToEdit,
         onDeleteExercise: () {
-          if (addEditContext == AddEditContext.edit) {
+          if (addEditContext == ExerciseContext.edit) {
             if (keyToEdit != null) {
               onDeletedExercise(keyToEdit);
             }
           }
         },
         onSubmitExercise: (newExercise) {
-          if (addEditContext == AddEditContext.add) {
+          if (addEditContext == ExerciseContext.add) {
             onNewExercise(newExercise);
           } else {
             if (keyToEdit != null) {
@@ -235,7 +235,7 @@ class _SessionPageState extends State<SessionPage> {
   }
 
   editExercise(Exercise exercise, int key) {
-    showBottomSheet(AddEditContext.edit, exercise, key);
+    showBottomSheet(ExerciseContext.edit, exercise, key);
   }
 
   void submitSession() {

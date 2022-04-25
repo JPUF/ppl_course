@@ -10,7 +10,7 @@ class BottomSheetHeader extends StatelessWidget {
       : super(key: key);
 
   final BuildContext context;
-  final AddEditContext addEditContext;
+  final ExerciseContext addEditContext;
 
   @override
   Widget build(BuildContext context) {
@@ -23,7 +23,7 @@ class BottomSheetHeader extends StatelessWidget {
                 child: Container(
                   padding: const EdgeInsets.only(top: 10, bottom: 4),
                   child: Text(
-                    addEditContext == AddEditContext.add
+                    addEditContext == ExerciseContext.add
                         ? Strings.exerciseAddTitle
                         : Strings.exerciseEditTitle,
                     style: AppTextStyles.headline3.apply(color: AppColor.black),

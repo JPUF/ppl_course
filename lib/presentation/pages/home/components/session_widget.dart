@@ -48,12 +48,7 @@ class _SessionWidgetState extends State<SessionWidget> {
               borderRadius: BorderRadius.circular(4)),
           child: Column(
             children: [
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Text(widget.session.type.toSessionString(),
-                    style: AppTextStyles.headline3.apply(
-                        color: AppColor.getPplColor(widget.session.type))),
-              ),
+              sessionHeader(),
               buildNotes(),
               thickDivider(),
               Column(children: widget.buildExerciseList()),
@@ -61,6 +56,25 @@ class _SessionWidgetState extends State<SessionWidget> {
             ],
           ),
         ),
+      ),
+    );
+  }
+
+  Widget sessionHeader() {
+    return Container(
+      padding: const EdgeInsets.all(8.0),
+      child: Row(
+        children: [
+          Expanded(
+            child: Text(widget.session.type.toSessionString(),
+                style: AppTextStyles.headline3
+                    .apply(color: AppColor.getPplColor(widget.session.type))),
+          ),
+          IconButton(
+              color: AppColor.getPplColor(widget.session.type),
+              onPressed: () {},
+              icon: const Icon(Icons.edit))
+        ],
       ),
     );
   }

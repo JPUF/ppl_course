@@ -11,7 +11,7 @@ import 'package:ppl_course/res/string/strings.dart';
 import 'package:ppl_course/res/styles/app_text_styles.dart';
 import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
 
-enum AddEditContext { add, edit }
+enum ExerciseContext { add, edit }
 
 class ExerciseBottomSheet extends StatefulWidget {
   const ExerciseBottomSheet(
@@ -23,7 +23,7 @@ class ExerciseBottomSheet extends StatefulWidget {
       this.onDeleteExercise})
       : super(key: key);
 
-  final AddEditContext addEditContext;
+  final ExerciseContext addEditContext;
   final SessionType sessionType;
   final Exercise? previousExercise;
   final ValueSetter<Exercise> onSubmitExercise;
@@ -134,7 +134,7 @@ class _ExerciseBottomSheetState extends State<ExerciseBottomSheet> {
       Row(children: [
         Expanded(
           child: AccentButton(
-              text: widget.addEditContext == AddEditContext.add
+              text: widget.addEditContext == ExerciseContext.add
                   ? Strings.addExerciseCTA
                   : Strings.editExerciseCTA,
               isEnabled: _isValidExercise,
@@ -224,7 +224,7 @@ class _ExerciseBottomSheetState extends State<ExerciseBottomSheet> {
   }
 
   Widget buildDeleteButton() {
-    if (widget.addEditContext == AddEditContext.edit) {
+    if (widget.addEditContext == ExerciseContext.edit) {
       return GestureDetector(
         onTap: () => deleteExercise(),
         child: Card(
