@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:ppl_course/common/components/asset_button.dart';
+import 'package:ppl_course/data/models/session/session.dart';
 import 'package:ppl_course/logic/sessions/sessions_bloc.dart';
 import 'package:ppl_course/presentation/navigation/destination.dart';
 import 'package:ppl_course/presentation/pages/home/components/session_widget.dart';
@@ -31,7 +32,7 @@ class _HomePageState extends State<HomePage> {
                   children: sessions
                       .map((session) => GestureDetector(
                             child: SessionWidget(session: session),
-                            onTap: () {},
+                            onTap: () => onEditSession(session),
                           ))
                       .toList(),
                 ));
@@ -86,5 +87,9 @@ class _HomePageState extends State<HomePage> {
         ),
       ),
     );
+  }
+
+  onEditSession(Session sessionToEdit) {
+
   }
 }
