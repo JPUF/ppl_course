@@ -87,19 +87,25 @@ class SessionRepository {
     return _sessions;
   }
 
-  bool writeSession(Session session) {
+  void writeSession(Session session) {
     _sessions.add(session);
-    return true;
   }
 
-  bool setSessions(List<Session> sessions) {
+  void editSession(Session editedSession) {
+    final indexOfOldSession = _sessions.indexWhere((s) =>
+    s.uuid == editedSession.uuid);
+    if (indexOfOldSession >= 0 && indexOfOldSession < _sessions.length ) {
+      _sessions[indexOfOldSession] = editedSession;
+    }
+  }
+
+  void setSessions(List<Session> sessions) {
     _sessions = sessions;
-    return true;
   }
 
   Session? getLastSessionOfType(SessionType type) {
     final Session? lastSessionOfType =
-        _sessions.lastWhereOrNull((session) => session.type == type);
+    _sessions.lastWhereOrNull((session) => session.type == type);
     return lastSessionOfType;
   }
 }

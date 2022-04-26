@@ -20,6 +20,12 @@ class WriteSession implements SessionsEvent {
   WriteSession(this.session);
 }
 
+class EditSession implements SessionsEvent {
+  final Session editedSession;
+
+  EditSession(this.editedSession);
+}
+
 class SessionsBloc extends Bloc<SessionsEvent, SessionsState>
     with HydratedMixin {
   final SessionRepository _sessionRepository = SessionRepository();
@@ -27,6 +33,7 @@ class SessionsBloc extends Bloc<SessionsEvent, SessionsState>
   SessionsBloc() : super(InitialState()) {
     on<FetchLastSessionOfType>(_fetchLastSessionOfType);
     on<WriteSession>(_writeSession);
+    on<EditSession>(_editSession);
   }
 
   void _fetchLastSessionOfType(
@@ -36,10 +43,13 @@ class SessionsBloc extends Bloc<SessionsEvent, SessionsState>
   }
 
   void _writeSession(WriteSession event, Emitter<SessionsState> emit) async {
-    final success = _sessionRepository.writeSession(event.session);
-    if (success) {
-      emit(AllSessionsState(_sessionRepository.getAllSessions()));
-    }
+    _sessionRepository.writeSession(event.session);
+    emit(AllSessionsState(_sessionRepository.getAllSessions()));
+  }
+
+  void _editSession(EditSession event, Emitter<SessionsState> emit) async {
+    _sessionRepository.editSession(event.editedSession);
+    emit(AllSessionsState(_sessionRepository.getAllSessions()));
   }
 
   @override

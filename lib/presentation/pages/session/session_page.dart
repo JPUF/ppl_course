@@ -37,6 +37,8 @@ class _SessionPageState extends State<SessionPage> {
 
   late SessionArgs _editArgs;
 
+  bool _editSessionPopulated = false;
+
   @override
   void initState() {
     super.initState();
@@ -250,12 +252,15 @@ class _SessionPageState extends State<SessionPage> {
   }
 
   void populateWithSessionToEdit(Session session) {
-    _notesText = session.notes;
-    _type = session.type;
-    _newExerciseCount = 0;
-    for (var ex in session.exercises) {
-      onNewExercise(ex);
+    if(!_editSessionPopulated) {
+      _notesText = session.notes;
+      _type = session.type;
+      _newExerciseCount = 0;
+      for (var ex in session.exercises) {
+        onNewExercise(ex);
+      }
     }
+    _editSessionPopulated = true;
   }
 
   void submitSession() {
@@ -265,9 +270,17 @@ class _SessionPageState extends State<SessionPage> {
         notes = null;
       }
     }
+    final editSession = _editArgs.session;
     if (_exerciseMap.isNotEmpty) {
-      final session = Session(_type, _notesText, _exerciseMap.values.toList());
-      BlocProvider.of<SessionsBloc>(context).add(WriteSession(session));
+      if (editSession == null) {
+        final session =
+            Session(_type, _notesText, _exerciseMap.values.toList());
+        BlocProvider.of<SessionsBloc>(context).add(WriteSession(session));
+      } else {
+        final session = Session.withUuid(
+            editSession.uuid, _type, _notesText, _exerciseMap.values.toList());
+        BlocProvider.of<SessionsBloc>(context).add(EditSession(session));
+      }
     }
     navigateBack();
   }
