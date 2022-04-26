@@ -17,14 +17,14 @@ import 'components/exercise_bottom_sheet.dart';
 import 'components/plan_exercise_widget.dart';
 import 'components/ppl_selector_switch.dart';
 
-class SessionPage extends StatefulWidget {
-  const SessionPage({Key? key}) : super(key: key);
+class PlanSessionPage extends StatefulWidget {
+  const PlanSessionPage({Key? key}) : super(key: key);
 
   @override
-  _SessionPageState createState() => _SessionPageState();
+  _PlanSessionPageState createState() => _PlanSessionPageState();
 }
 
-class _SessionPageState extends State<SessionPage> {
+class _PlanSessionPageState extends State<PlanSessionPage> {
   late TextEditingController _editNotesController;
   late FocusNode _notesFocusNode;
 

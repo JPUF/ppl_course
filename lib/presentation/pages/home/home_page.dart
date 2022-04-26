@@ -78,7 +78,7 @@ class _HomePageState extends State<HomePage> {
               child: AccentButton(
                 text: Strings.planSessionCTA,
                 onTap: () => Navigator.of(context).pushNamed(
-                    Destination.session,
+                    Destination.planSession,
                     arguments: SessionArgs(null)),
                 endIcon: SvgPicture.asset(
                   'assets/images/ic_dumbbell.svg',
@@ -95,6 +95,6 @@ class _HomePageState extends State<HomePage> {
 
   onTapEditSession(Session sessionToEdit) {
     Navigator.of(context)
-        .pushNamed(Destination.session, arguments: SessionArgs(sessionToEdit));
+        .pushNamed(Destination.planSession, arguments: SessionArgs(sessionToEdit));
   }
 }

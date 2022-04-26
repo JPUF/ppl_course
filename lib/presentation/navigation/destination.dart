@@ -1,4 +1,4 @@
 class Destination {
   static const root = '/';
-  static const session = root + 'session';
+  static const planSession = root + 'planSession';
 }
