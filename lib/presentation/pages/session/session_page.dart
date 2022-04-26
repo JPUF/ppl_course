@@ -122,6 +122,7 @@ class _SessionPageState extends State<SessionPage> {
   CustomTextField buildNotesTextField() {
     return CustomTextField(
         hint: Strings.generalNotesHint,
+        initialText: _notesText,
         controller: _editNotesController,
         focusNode: _notesFocusNode,
         primaryColor: AppColor.getPplColor(_type),

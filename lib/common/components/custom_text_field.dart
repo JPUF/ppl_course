@@ -7,6 +7,7 @@ class CustomTextField extends StatefulWidget {
   const CustomTextField(
       {Key? key,
       required this.hint,
+      this.initialText,
       required this.controller,
       required this.focusNode,
       this.primaryColor,
@@ -17,6 +18,7 @@ class CustomTextField extends StatefulWidget {
       : super(key: key);
 
   final String hint;
+  final String? initialText;
   final TextEditingController controller;
   final FocusNode focusNode;
   final MaterialColor? primaryColor;
@@ -30,6 +32,15 @@ class CustomTextField extends StatefulWidget {
 }
 
 class _CustomTextFieldState extends State<CustomTextField> {
+  @override
+  void initState() {
+    super.initState();
+    final initialText = widget.initialText;
+    if (initialText != null) {
+      widget.controller.text = initialText;
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final MaterialColor _primaryColor = widget.primaryColor ?? AppColor.dark;
