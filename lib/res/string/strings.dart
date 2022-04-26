@@ -21,6 +21,7 @@ class Strings {
   static const String editExerciseCTA = "UPDATE EXERCISE";
   static const String exerciseAddTitle = "Add Exercise";
   static const String exerciseEditTitle = "Edit Exercise";
+  static const String exerciseAddNameCTA = "ADD TO EXERCISE LIST";
   static const String exerciseNameHint = "Exercise name";
   static const String exerciseWeightHint = "kg";
   static const String exerciseNotesHint = "Exercise notes";

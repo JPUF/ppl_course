@@ -1,3 +1,4 @@
+import 'package:dropdown_search/dropdown_search.dart';
 import 'package:flutter/material.dart';
 import 'package:ppl_course/common/components/asset_button.dart';
 import 'package:ppl_course/common/components/custom_text_field.dart';
@@ -189,18 +190,45 @@ class _ExerciseBottomSheetState extends State<ExerciseBottomSheet> {
       child: Row(
         children: [
           Expanded(
-            child: CustomTextField(
-                hint: Strings.exerciseNameHint,
-                controller: _nameController,
-                focusNode: _nameFocusNode,
-                keyboardType: TextInputType.multiline,
-                primaryColor: pplColor,
-                onChanged: (newValue) {
-                  setState(() {
+            child: DropdownSearch<String>(
+              showSearchBox: true,
+              mode: Mode.BOTTOM_SHEET,
+              showSelectedItems: true,
+              items: const [
+                "Dumbbell Curls",
+                "Hammer Curls",
+                "Face Pulls",
+                "Deadlifts",
+                "Chest Support Rows"
+              ],
+              searchFieldProps: TextFieldProps(textCapitalization: TextCapitalization.words, controller: _nameController),
+              focusNode: _nameFocusNode,
+              dropdownSearchDecoration:
+                  const InputDecoration(labelText: Strings.exerciseNameHint),
+              onChanged: (newValue) {
+                setState(() {
+                  if (newValue != null) {
                     _nameText = newValue;
-                    checkExerciseValidity();
-                  });
-                }),
+                  }
+                  checkExerciseValidity();
+                });
+              },
+              emptyBuilder: (context, _) => Center(
+                child: emptyNameSearchResult(context),
+              ),
+            ),
+            // child: CustomTextField(
+            //     hint: Strings.exerciseNameHint,
+            //     controller: _nameController,
+            //     focusNode: _nameFocusNode,
+            //     keyboardType: TextInputType.multiline,
+            //     primaryColor: pplColor,
+            //     onChanged: (newValue) {
+            //       setState(() {
+            //         _nameText = newValue;
+            //         checkExerciseValidity();
+            //       });
+            //     }),
           ),
           const SizedBox(width: 8),
           SizedBox(
@@ -224,12 +252,26 @@ class _ExerciseBottomSheetState extends State<ExerciseBottomSheet> {
     );
   }
 
+  Widget emptyNameSearchResult(BuildContext context) {
+    if (_nameController.text.isNotEmpty) {
+      return AccentButton(
+          text: Strings.exerciseAddNameCTA,
+          onTap: () => addNewExerciseName(context, _nameController.text));
+    } else {
+      return Container();
+    }
+  }
+
   Widget buildDeleteButton() {
     if (widget.addEditContext == ExerciseContext.edit) {
       return DeleteButton(onTap: () => deleteExercise());
     } else {
       return Container();
     }
+  }
+
+  void addNewExerciseName(BuildContext context, String name) {
+    Navigator.pop(context);
   }
 
   void scrollToNotes() {
