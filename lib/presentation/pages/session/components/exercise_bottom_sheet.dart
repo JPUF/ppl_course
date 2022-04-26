@@ -5,6 +5,7 @@ import 'package:ppl_course/data/models/exercise/exercise.dart';
 import 'package:ppl_course/data/models/exercise/sets_reps.dart';
 import 'package:ppl_course/data/models/exercise/weight.dart';
 import 'package:ppl_course/data/models/session/session.dart';
+import 'package:ppl_course/presentation/pages/session/components/delete_button.dart';
 import 'package:ppl_course/presentation/pages/session/components/set_rep_slider.dart';
 import 'package:ppl_course/res/color/colors.dart';
 import 'package:ppl_course/res/string/strings.dart';
@@ -225,23 +226,7 @@ class _ExerciseBottomSheetState extends State<ExerciseBottomSheet> {
 
   Widget buildDeleteButton() {
     if (widget.addEditContext == ExerciseContext.edit) {
-      return GestureDetector(
-        onTap: () => deleteExercise(),
-        child: Card(
-          elevation: 4,
-          shape: RoundedRectangleBorder(
-            side: BorderSide(color: AppColor.accent, width: 2),
-            borderRadius: BorderRadius.circular(10),
-          ),
-          child: Container(
-            padding: const EdgeInsets.all(12),
-            child: Icon(
-              Icons.delete,
-              color: AppColor.accent,
-            ),
-          ),
-        ),
-      );
+      return DeleteButton(onTap: () => deleteExercise());
     } else {
       return Container();
     }

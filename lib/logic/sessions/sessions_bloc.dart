@@ -26,6 +26,12 @@ class EditSession implements SessionsEvent {
   EditSession(this.editedSession);
 }
 
+class DeleteSession implements SessionsEvent {
+  final Session sessionToDelete;
+
+  DeleteSession(this.sessionToDelete);
+}
+
 class SessionsBloc extends Bloc<SessionsEvent, SessionsState>
     with HydratedMixin {
   final SessionRepository _sessionRepository = SessionRepository();
@@ -34,6 +40,7 @@ class SessionsBloc extends Bloc<SessionsEvent, SessionsState>
     on<FetchLastSessionOfType>(_fetchLastSessionOfType);
     on<WriteSession>(_writeSession);
     on<EditSession>(_editSession);
+    on<DeleteSession>(_deleteSession);
   }
 
   void _fetchLastSessionOfType(
@@ -49,6 +56,11 @@ class SessionsBloc extends Bloc<SessionsEvent, SessionsState>
 
   void _editSession(EditSession event, Emitter<SessionsState> emit) async {
     _sessionRepository.editSession(event.editedSession);
+    emit(AllSessionsState(_sessionRepository.getAllSessions()));
+  }
+
+  void _deleteSession(DeleteSession event, Emitter<SessionsState> emit) async {
+    _sessionRepository.deleteSession(event.sessionToDelete);
     emit(AllSessionsState(_sessionRepository.getAllSessions()));
   }
 

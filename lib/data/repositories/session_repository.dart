@@ -92,11 +92,15 @@ class SessionRepository {
   }
 
   void editSession(Session editedSession) {
-    final indexOfOldSession = _sessions.indexWhere((s) =>
-    s.uuid == editedSession.uuid);
-    if (indexOfOldSession >= 0 && indexOfOldSession < _sessions.length ) {
+    final indexOfOldSession =
+        _sessions.indexWhere((s) => s.uuid == editedSession.uuid);
+    if (indexOfOldSession >= 0 && indexOfOldSession < _sessions.length) {
       _sessions[indexOfOldSession] = editedSession;
     }
+  }
+
+  void deleteSession(Session sessionToDelete) {
+    _sessions.removeWhere((s) => s.uuid == sessionToDelete.uuid);
   }
 
   void setSessions(List<Session> sessions) {
@@ -105,7 +109,7 @@ class SessionRepository {
 
   Session? getLastSessionOfType(SessionType type) {
     final Session? lastSessionOfType =
-    _sessions.lastWhereOrNull((session) => session.type == type);
+        _sessions.lastWhereOrNull((session) => session.type == type);
     return lastSessionOfType;
   }
 }

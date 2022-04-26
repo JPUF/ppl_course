@@ -12,6 +12,7 @@ import 'package:ppl_course/res/styles/app_text_styles.dart';
 
 import 'components/add_exercise_button.dart';
 import 'components/bottom_sheet_header.dart';
+import 'components/delete_button.dart';
 import 'components/exercise_bottom_sheet.dart';
 import 'components/plan_exercise_widget.dart';
 import 'components/ppl_selector_switch.dart';
@@ -114,11 +115,25 @@ class _SessionPageState extends State<SessionPage> {
                 child: Align(
                     alignment: Alignment.bottomCenter,
                     child: AddExerciseButton(
-                        onTap: () => showBottomSheet(ExerciseContext.add))))
+                        onTap: () => showBottomSheet(ExerciseContext.add)))),
+            buildDeleteButton()
           ],
         ),
       ),
     );
+  }
+
+  Widget buildDeleteButton() {
+    if (_editArgs.session != null) {
+      return Container(
+          padding: const EdgeInsets.fromLTRB(0, 0, 12, 12),
+          height: MediaQuery.of(context).size.height,
+          width: MediaQuery.of(context).size.width,
+          child: Align(
+              alignment: Alignment.bottomRight,
+              child: DeleteButton(onTap: () => deleteSession())));
+    }
+    return Container();
   }
 
   CustomTextField buildNotesTextField() {
@@ -252,7 +267,7 @@ class _SessionPageState extends State<SessionPage> {
   }
 
   void populateWithSessionToEdit(Session session) {
-    if(!_editSessionPopulated) {
+    if (!_editSessionPopulated) {
       _notesText = session.notes;
       _type = session.type;
       _newExerciseCount = 0;
@@ -281,6 +296,15 @@ class _SessionPageState extends State<SessionPage> {
             editSession.uuid, _type, _notesText, _exerciseMap.values.toList());
         BlocProvider.of<SessionsBloc>(context).add(EditSession(session));
       }
+    }
+    navigateBack();
+  }
+
+  deleteSession() {
+    final editSession = _editArgs.session;
+    if (editSession != null) {
+      BlocProvider.of<SessionsBloc>(context).add(DeleteSession(Session.withUuid(
+          editSession.uuid, _type, _notesText, _exerciseMap.values.toList())));
     }
     navigateBack();
   }
