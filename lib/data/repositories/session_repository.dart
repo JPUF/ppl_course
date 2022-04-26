@@ -88,7 +88,7 @@ class SessionRepository {
   }
 
   void writeSession(Session session) {
-    _sessions.add(session);
+    _sessions.insert(0, session);
   }
 
   void editSession(Session editedSession) {
