@@ -1,11 +1,13 @@
 import 'package:dropdown_search/dropdown_search.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ppl_course/common/components/asset_button.dart';
 import 'package:ppl_course/common/components/custom_text_field.dart';
 import 'package:ppl_course/data/models/exercise/exercise.dart';
 import 'package:ppl_course/data/models/exercise/sets_reps.dart';
 import 'package:ppl_course/data/models/exercise/weight.dart';
 import 'package:ppl_course/data/models/session/session.dart';
+import 'package:ppl_course/logic/exercises/exercises_bloc.dart';
 import 'package:ppl_course/presentation/pages/session/components/delete_button.dart';
 import 'package:ppl_course/presentation/pages/session/components/set_rep_slider.dart';
 import 'package:ppl_course/res/color/colors.dart';
@@ -185,50 +187,14 @@ class _ExerciseBottomSheetState extends State<ExerciseBottomSheet> {
   }
 
   Widget buildNameWeightRow(MaterialColor pplColor) {
+    BlocProvider.of<ExercisesBloc>(context)
+        .add(FetchExerciseNamesOfType(widget.sessionType));
     return Padding(
       padding: const EdgeInsets.only(bottom: 24, top: 16),
       child: Row(
         children: [
           Expanded(
-            child: DropdownSearch<String>(
-              showSearchBox: true,
-              mode: Mode.BOTTOM_SHEET,
-              showSelectedItems: true,
-              items: const [
-                "Dumbbell Curls",
-                "Hammer Curls",
-                "Face Pulls",
-                "Deadlifts",
-                "Chest Support Rows"
-              ],
-              searchFieldProps: TextFieldProps(textCapitalization: TextCapitalization.words, controller: _nameController),
-              focusNode: _nameFocusNode,
-              dropdownSearchDecoration:
-                  const InputDecoration(labelText: Strings.exerciseNameHint),
-              onChanged: (newValue) {
-                setState(() {
-                  if (newValue != null) {
-                    _nameText = newValue;
-                  }
-                  checkExerciseValidity();
-                });
-              },
-              emptyBuilder: (context, _) => Center(
-                child: emptyNameSearchResult(context),
-              ),
-            ),
-            // child: CustomTextField(
-            //     hint: Strings.exerciseNameHint,
-            //     controller: _nameController,
-            //     focusNode: _nameFocusNode,
-            //     keyboardType: TextInputType.multiline,
-            //     primaryColor: pplColor,
-            //     onChanged: (newValue) {
-            //       setState(() {
-            //         _nameText = newValue;
-            //         checkExerciseValidity();
-            //       });
-            //     }),
+            child: exerciseNameDropdown(),
           ),
           const SizedBox(width: 8),
           SizedBox(
@@ -252,11 +218,60 @@ class _ExerciseBottomSheetState extends State<ExerciseBottomSheet> {
     );
   }
 
+  Widget exerciseNameDropdown() {
+    //old stuff
+
+    // child: CustomTextField(
+    //     hint: Strings.exerciseNameHint,
+    //     controller: _nameController,
+    //     focusNode: _nameFocusNode,
+    //     keyboardType: TextInputType.multiline,
+    //     primaryColor: pplColor,
+    //     onChanged: (newValue) {
+    //       setState(() {
+    //         _nameText = newValue;
+    //         checkExerciseValidity();
+    //       });
+    //     }),
+    return BlocBuilder<ExercisesBloc, ExercisesState>(
+      buildWhen: (_, c) => c is ExerciseNamesOfTypeState,
+      builder: (context, state) {
+        List<String> exerciseItems = [];
+        if (state is ExerciseNamesOfTypeState) {
+          exerciseItems = state.exerciseNamesOfType;
+        }
+        return DropdownSearch<String>(
+          showSearchBox: true,
+          mode: Mode.BOTTOM_SHEET,
+          showSelectedItems: true,
+          items: exerciseItems,
+          searchFieldProps: TextFieldProps(
+              textCapitalization: TextCapitalization.words,
+              controller: _nameController),
+          focusNode: _nameFocusNode,
+          dropdownSearchDecoration:
+              const InputDecoration(labelText: Strings.exerciseNameHint),
+          onChanged: (newValue) {
+            setState(() {
+              if (newValue != null) {
+                _nameText = newValue;
+              }
+              checkExerciseValidity();
+            });
+          },
+          emptyBuilder: (context, _) => Center(
+            child: emptyNameSearchResult(context),
+          ),
+        );
+      },
+    );
+  }
+
   Widget emptyNameSearchResult(BuildContext context) {
     if (_nameController.text.isNotEmpty) {
       return AccentButton(
           text: Strings.exerciseAddNameCTA,
-          onTap: () => addNewExerciseName(context, _nameController.text));
+          onTap: () => addNewExerciseName(_nameController.text));
     } else {
       return Container();
     }
@@ -270,7 +285,9 @@ class _ExerciseBottomSheetState extends State<ExerciseBottomSheet> {
     }
   }
 
-  void addNewExerciseName(BuildContext context, String name) {
+  void addNewExerciseName(String name) {
+    BlocProvider.of<ExercisesBloc>(context)
+        .add(WriteExerciseName(name, widget.sessionType));
     Navigator.pop(context);
   }
 

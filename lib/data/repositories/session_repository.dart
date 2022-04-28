@@ -1,12 +1,7 @@
 import 'package:collection/collection.dart';
-import 'package:ppl_course/data/models/exercise/exercise.dart';
-import 'package:ppl_course/data/models/exercise/sets_reps.dart';
-import 'package:ppl_course/data/models/exercise/weight.dart';
-import 'package:ppl_course/data/models/session/cycle.dart';
 import 'package:ppl_course/data/models/session/session.dart';
 
 class SessionRepository {
-
   List<Session> _sessions = [];
 
   List<Session> getAllSessions() {

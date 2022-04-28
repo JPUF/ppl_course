@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hydrated_bloc/hydrated_bloc.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:ppl_course/logic/exercises/exercises_bloc.dart';
 import 'package:ppl_course/logic/sessions/sessions_bloc.dart';
 import 'package:ppl_course/presentation/navigation/app_router.dart';
 import 'package:ppl_course/res/color/colors.dart';
@@ -28,7 +29,8 @@ class MyApp extends StatelessWidget {
     return MultiBlocProvider(
       providers: [
         BlocProvider<BasicBloc>(create: (context) => BasicBloc()),
-        BlocProvider<SessionsBloc>(create: (context) => SessionsBloc())
+        BlocProvider<SessionsBloc>(create: (context) => SessionsBloc()),
+        BlocProvider<ExercisesBloc>(create: (context) => ExercisesBloc())
       ],
       child: MaterialApp(
           theme: ThemeData(
