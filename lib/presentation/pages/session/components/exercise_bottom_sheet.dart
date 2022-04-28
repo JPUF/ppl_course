@@ -245,6 +245,7 @@ class _ExerciseBottomSheetState extends State<ExerciseBottomSheet> {
           mode: Mode.BOTTOM_SHEET,
           showSelectedItems: true,
           items: exerciseItems,
+          selectedItem: _nameText,
           searchFieldProps: TextFieldProps(
               textCapitalization: TextCapitalization.words,
               controller: _nameController),
@@ -286,6 +287,10 @@ class _ExerciseBottomSheetState extends State<ExerciseBottomSheet> {
   }
 
   void addNewExerciseName(String name) {
+    setState(() {
+      _nameText = name;
+      checkExerciseValidity();
+    });
     BlocProvider.of<ExercisesBloc>(context)
         .add(WriteExerciseName(name, widget.sessionType));
     Navigator.pop(context);
