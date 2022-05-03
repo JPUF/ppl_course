@@ -5,7 +5,7 @@ import 'package:ppl_course/common/components/custom_text_field.dart';
 import 'package:ppl_course/data/models/exercise/exercise.dart';
 import 'package:ppl_course/data/models/session/session.dart';
 import 'package:ppl_course/logic/sessions/sessions_bloc.dart';
-import 'package:ppl_course/presentation/pages/session/session_args.dart';
+import 'package:ppl_course/presentation/pages/plan_session/session_args.dart';
 import 'package:ppl_course/res/color/colors.dart';
 import 'package:ppl_course/res/string/strings.dart';
 import 'package:ppl_course/res/styles/app_text_styles.dart';

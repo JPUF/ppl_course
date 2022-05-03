@@ -20,12 +20,17 @@ class ExerciseRepository {
   final List<String> _pullDefaults = [
     "Deadlifts",
     "Chinups",
+    "Pullups",
     "Face Pulls",
+    "Hammer Curls",
+    "Dumbbell Curls",
   ];
   final List<String> _legsDefaults = [
     "Squats",
     "Romanian Deadlifts",
     "Leg Curls",
+    "Leg Press",
+    "Calf Raises",
   ];
 
   List<String> getExerciseNamesOfType(SessionType type) {

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:ppl_course/presentation/pages/session/components/exercise_bottom_sheet.dart';
+import 'package:ppl_course/presentation/pages/plan_session/components/exercise_bottom_sheet.dart';
 import 'package:ppl_course/res/color/colors.dart';
 import 'package:ppl_course/res/string/strings.dart';
 import 'package:ppl_course/res/styles/app_text_styles.dart';

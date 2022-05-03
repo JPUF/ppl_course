@@ -6,9 +6,10 @@ import 'package:ppl_course/data/models/session/session.dart';
 import 'package:ppl_course/logic/sessions/sessions_bloc.dart';
 import 'package:ppl_course/presentation/navigation/destination.dart';
 import 'package:ppl_course/presentation/pages/home/components/session_widget.dart';
-import 'package:ppl_course/presentation/pages/session/session_args.dart';
 import 'package:ppl_course/res/string/strings.dart';
 import 'package:ppl_course/res/styles/app_text_styles.dart';
+
+import '../plan_session/session_args.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -94,7 +95,7 @@ class _HomePageState extends State<HomePage> {
   }
 
   onTapEditSession(Session sessionToEdit) {
-    Navigator.of(context)
-        .pushNamed(Destination.planSession, arguments: SessionArgs(sessionToEdit));
+    Navigator.of(context).pushNamed(Destination.planSession,
+        arguments: SessionArgs(sessionToEdit));
   }
 }

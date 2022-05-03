@@ -8,8 +8,8 @@ import 'package:ppl_course/data/models/exercise/sets_reps.dart';
 import 'package:ppl_course/data/models/exercise/weight.dart';
 import 'package:ppl_course/data/models/session/session.dart';
 import 'package:ppl_course/logic/exercises/exercises_bloc.dart';
-import 'package:ppl_course/presentation/pages/session/components/delete_button.dart';
-import 'package:ppl_course/presentation/pages/session/components/set_rep_slider.dart';
+import 'package:ppl_course/presentation/pages/plan_session/components/delete_button.dart';
+import 'package:ppl_course/presentation/pages/plan_session/components/set_rep_slider.dart';
 import 'package:ppl_course/res/color/colors.dart';
 import 'package:ppl_course/res/string/strings.dart';
 import 'package:ppl_course/res/styles/app_text_styles.dart';
@@ -219,20 +219,6 @@ class _ExerciseBottomSheetState extends State<ExerciseBottomSheet> {
   }
 
   Widget exerciseNameDropdown() {
-    //old stuff
-
-    // child: CustomTextField(
-    //     hint: Strings.exerciseNameHint,
-    //     controller: _nameController,
-    //     focusNode: _nameFocusNode,
-    //     keyboardType: TextInputType.multiline,
-    //     primaryColor: pplColor,
-    //     onChanged: (newValue) {
-    //       setState(() {
-    //         _nameText = newValue;
-    //         checkExerciseValidity();
-    //       });
-    //     }),
     return BlocBuilder<ExercisesBloc, ExercisesState>(
       buildWhen: (_, c) => c is ExerciseNamesOfTypeState,
       builder: (context, state) {
