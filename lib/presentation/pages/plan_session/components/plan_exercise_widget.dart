@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:ppl_course/data/models/exercise/exercise.dart';
 import 'package:ppl_course/data/models/session/session.dart';
+import 'package:ppl_course/presentation/pages/plan_session/components/exercise_card_header.dart';
 import 'package:ppl_course/res/color/colors.dart';
 import 'package:ppl_course/res/styles/app_text_styles.dart';
 
@@ -26,68 +26,15 @@ class _PlanExerciseWidgetState extends State<PlanExerciseWidget> {
       clipBehavior: Clip.antiAlias,
       child: Container(
         decoration: BoxDecoration(
-            color: _pplColor.shade50,
-            borderRadius: BorderRadius.circular(4)),
+            color: _pplColor.shade50, borderRadius: BorderRadius.circular(4)),
         padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 16),
         child: Column(
           children: [
-            Row(
-              children: [
-                Expanded(
-                    flex: 8,
-                    child: Text(widget.exercise.name,
-                        style: AppTextStyles.headline4.apply(
-                            color: _pplColor))),
-                const SizedBox(width: 16),
-                Expanded(
-                  flex: 3,
-                  child: Column(
-                    children: [
-                      buildWeight(_pplColor),
-                      const SizedBox(height: 8),
-                      buildSetReps(_pplColor)
-                    ],
-                  ),
-                ),
-              ],
-            ),
+            ExerciseCardHeader(exercise: widget.exercise, pplColor: _pplColor),
             buildExerciseNotes(_pplColor)
           ],
         ),
       ),
-    );
-  }
-
-  Widget buildWeight(MaterialColor pplColor) {
-    return Row(
-      children: [
-        SvgPicture.asset(
-          'assets/images/ic_generic_weight.svg',
-          width: 12,
-          height: 12,
-          color: pplColor,
-        ),
-        const SizedBox(width: 6),
-        Text(widget.exercise.weight?.toString() ?? 'N/A',
-            style: AppTextStyles.button
-                .apply(color: pplColor)),
-      ],
-    );
-  }
-
-  Widget buildSetReps(MaterialColor pplColor) {
-    return Row(
-      children: [
-        Icon(
-          Icons.repeat,
-          size: 16,
-          color: pplColor,
-        ),
-        const SizedBox(width: 4),
-        Text(widget.exercise.setsReps.toString(),
-            style: AppTextStyles.button
-                .apply(color: pplColor)),
-      ],
     );
   }
 
@@ -99,9 +46,8 @@ class _PlanExerciseWidgetState extends State<PlanExerciseWidget> {
         const SizedBox(height: 12),
         SizedBox(
             width: double.infinity,
-            child: Text(notes, style: AppTextStyles.body14.apply(
-              color: pplColor
-            )))
+            child:
+                Text(notes, style: AppTextStyles.body14.apply(color: pplColor)))
       ]);
     } else {
       return Container();

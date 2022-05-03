@@ -31,5 +31,7 @@ class Strings {
 
   // Log Session
   static String logSessionType(String type) => "Log $type Session";
+  static const String logSetNumber = "Set";
+  static const String logCompletedReps = "Completed Reps";
 
 }

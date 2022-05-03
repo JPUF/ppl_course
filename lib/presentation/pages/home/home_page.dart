@@ -33,12 +33,9 @@ class _HomePageState extends State<HomePage> {
                       .map((session) => GestureDetector(
                             child: SessionWidget(
                                 session: session,
-                                onTappedEdit: () {
-                                  onTapEditSession(session);
-                                }),
-                            onTap: () => Navigator.of(context).pushNamed(
-                                Destination.logSession,
-                                arguments: SessionArgs(session)),
+                                onTappedLog: () => onTapLogSession(session),
+                                onTappedEdit: () => onTapEditSession(session)),
+                            onTap: () => onTapLogSession(session),
                           ))
                       .toList(),
                 ));
@@ -94,6 +91,11 @@ class _HomePageState extends State<HomePage> {
         ),
       ),
     );
+  }
+
+  onTapLogSession(Session sessionToLog) {
+    Navigator.of(context).pushNamed(Destination.logSession,
+        arguments: SessionArgs(sessionToLog));
   }
 
   onTapEditSession(Session sessionToEdit) {
