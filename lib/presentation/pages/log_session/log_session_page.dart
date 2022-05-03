@@ -4,26 +4,34 @@ import 'package:ppl_course/presentation/pages/log_session/components/log_exercis
 import 'package:ppl_course/res/string/strings.dart';
 import 'package:ppl_course/res/styles/app_text_styles.dart';
 
-import '../plan_session/session_args.dart';
+import '../../../data/models/exercise/exercise.dart';
 
 class LogSessionPage extends StatefulWidget {
-  const LogSessionPage({Key? key}) : super(key: key);
+  const LogSessionPage({Key? key, required this.session}) : super(key: key);
+
+  final Session session;
 
   @override
   State<LogSessionPage> createState() => _LogSessionPageState();
 }
 
 class _LogSessionPageState extends State<LogSessionPage> {
-  late Session _session;
+  final Map<Exercise, bool> expandedExerciseMap = {};
+
+  @override
+  void initState() {
+    super.initState();
+    for (var exercise in widget.session.exercises) {
+      expandedExerciseMap[exercise] = false;
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
-    final args = ModalRoute.of(context)?.settings.arguments as SessionArgs;
-    _session = args.session!;
     return Scaffold(
         appBar: AppBar(
           title: Text(
-            Strings.logSessionType(_session.type.toSessionString()),
+            Strings.logSessionType(widget.session.type.toSessionString()),
             style: AppTextStyles.barTitle,
           ),
         ),
@@ -31,12 +39,23 @@ class _LogSessionPageState extends State<LogSessionPage> {
           child: Container(
             padding: const EdgeInsets.all(8),
             child: Column(
-              children: _session.exercises
+              children: expandedExerciseMap.keys
                   .map((e) => LogExerciseWidget(
-                      exercise: e, sessionType: _session.type))
+                      exercise: e,
+                      type: widget.session.type,
+                      isExpanded: expandedExerciseMap[e] ?? false,
+                      onToggleExpanded: (isExpanded) {
+                        foldAllExercises();
+                        setState(() => expandedExerciseMap[e] = isExpanded);
+                      }))
                   .toList(),
             ),
           ),
         ));
+  }
+
+  void foldAllExercises() {
+    expandedExerciseMap
+        .updateAll((key, value) => expandedExerciseMap[key] = false);
   }
 }

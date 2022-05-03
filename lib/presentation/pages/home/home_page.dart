@@ -31,11 +31,11 @@ class _HomePageState extends State<HomePage> {
                 child: Column(
                   children: sessions
                       .map((session) => GestureDetector(
+                            onTap: () => onTapLogSession(session),
                             child: SessionWidget(
                                 session: session,
                                 onTappedLog: () => onTapLogSession(session),
                                 onTappedEdit: () => onTapEditSession(session)),
-                            onTap: () => onTapLogSession(session),
                           ))
                       .toList(),
                 ));
@@ -95,7 +95,7 @@ class _HomePageState extends State<HomePage> {
 
   onTapLogSession(Session sessionToLog) {
     Navigator.of(context).pushNamed(Destination.logSession,
-        arguments: SessionArgs(sessionToLog));
+        arguments: sessionToLog);
   }
 
   onTapEditSession(Session sessionToEdit) {

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:page_transition/page_transition.dart';
+import 'package:ppl_course/data/models/session/session.dart';
 import 'package:ppl_course/presentation/pages/home/home_page.dart';
 import 'package:ppl_course/presentation/pages/log_session/log_session_page.dart';
 import 'package:ppl_course/presentation/pages/plan_session/plan_session_page.dart';
@@ -18,11 +19,17 @@ class AppRouter {
             settings: routeSettings,
             type: PageTransitionType.rightToLeftWithFade);
       case Destination.logSession:
-        return PageTransition(
-          child: const LogSessionPage(),
-          settings: routeSettings,
-          type: PageTransitionType.rightToLeftWithFade,
-        );
+        final Session? session = routeSettings.arguments as Session?;
+        if (session != null) {
+          return PageTransition(
+            child: LogSessionPage(session: session),
+            settings: routeSettings,
+            type: PageTransitionType.rightToLeftWithFade,
+          );
+        } else {
+          return null;
+        }
+
       default:
         return null;
     }

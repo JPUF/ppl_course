@@ -7,16 +7,18 @@ import 'package:ppl_course/res/string/strings.dart';
 import 'package:ppl_course/res/styles/app_text_styles.dart';
 
 class LogExerciseWidget extends StatefulWidget {
-  const LogExerciseWidget({
-    Key? key,
-    required Exercise exercise,
-    required SessionType sessionType,
-  })  : _exercise = exercise,
-        _type = sessionType,
-        super(key: key);
+  const LogExerciseWidget(
+      {Key? key,
+      required this.exercise,
+      required this.type,
+      required this.isExpanded,
+      required this.onToggleExpanded})
+      : super(key: key);
 
-  final Exercise _exercise;
-  final SessionType _type;
+  final Exercise exercise;
+  final SessionType type;
+  final bool isExpanded;
+  final ValueSetter<bool> onToggleExpanded;
 
   @override
   State<LogExerciseWidget> createState() => _LogExerciseWidgetState();
@@ -26,8 +28,6 @@ class _LogExerciseWidgetState extends State<LogExerciseWidget>
     with SingleTickerProviderStateMixin {
   final Map<int, int> _completedRepMap = {};
 
-  bool _isExpanded = false;
-
   late int reps;
 
   late AnimationController animController;
@@ -35,18 +35,18 @@ class _LogExerciseWidgetState extends State<LogExerciseWidget>
   @override
   void initState() {
     super.initState();
-    reps = widget._exercise.setsReps.reps;
+    reps = widget.exercise.setsReps.reps;
     animController = AnimationController(
         vsync: this, duration: const Duration(milliseconds: 400));
 
-    for (int s = 1; s <= widget._exercise.setsReps.sets; s++) {
+    for (int s = 1; s <= widget.exercise.setsReps.sets; s++) {
       _completedRepMap[s] = reps;
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    final MaterialColor _pplColor = AppColor.getPplColor(widget._type);
+    final MaterialColor _pplColor = AppColor.getPplColor(widget.type);
 
     final List<Widget> _completedSetRows = [];
     _completedRepMap.forEach((set, completedReps) {
@@ -55,54 +55,67 @@ class _LogExerciseWidgetState extends State<LogExerciseWidget>
 
     return Container(
       padding: const EdgeInsets.only(bottom: 16),
-      child: GestureDetector(
-        onTap: () {
-          setState(() => _isExpanded = !_isExpanded);
-        },
-        child: Card(
-          elevation: 4,
-          clipBehavior: Clip.antiAlias,
-          child: Container(
-            decoration: BoxDecoration(
-                color: _pplColor.shade50,
-                borderRadius: BorderRadius.circular(4)),
-            padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 16),
-            child: Column(children: <Widget>[
-              ExerciseCardHeader(
-                  exercise: widget._exercise, pplColor: _pplColor),
-              AnimatedSize(
-                  duration: const Duration(milliseconds: 400),
-                  curve: Curves.fastOutSlowIn,
-                  child: buildLogContent(
-                      _isExpanded, _pplColor, _completedSetRows))
-            ]),
-          ),
+      child: Card(
+        elevation: 4,
+        clipBehavior: Clip.antiAlias,
+        child: Container(
+          decoration: BoxDecoration(
+              color: _pplColor.shade50, borderRadius: BorderRadius.circular(4)),
+          child: Column(children: <Widget>[
+            InkWell(
+              onTap: () {
+                widget.onToggleExpanded(!widget.isExpanded);
+              },
+              child: Padding(
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 8, vertical: 16),
+                child: ExerciseCardHeader(
+                    exercise: widget.exercise, pplColor: _pplColor),
+              ),
+            ),
+            AnimatedSize(
+                duration: const Duration(milliseconds: 400),
+                curve: Curves.fastOutSlowIn,
+                child: buildLogContent(_pplColor, _completedSetRows))
+          ]),
         ),
       ),
     );
   }
 
-  Widget buildLogContent(bool isExpanded, MaterialColor _pplColor,
-      List<Widget> _completedSetRows) {
+  Widget buildLogContent(
+      MaterialColor _pplColor, List<Widget> _completedSetRows) {
     return SizedBox(
-      height: _isExpanded ? null : 0,
+      height: widget.isExpanded ? null : 0,
       child: Column(
         children: [
-          Divider(color: _pplColor, thickness: 1),
+          const SizedBox(height: 16),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 8),
             child: Column(
               children: <Widget>[
                     Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceAround,
                       children: [
-                        Text(Strings.logSetNumber, style: AppTextStyles.body14),
-                        Text(Strings.logCompletedReps,
-                            style: AppTextStyles.body14)
+                        Expanded(
+                            flex: 1,
+                            child: Align(
+                              alignment: Alignment.center,
+                              child: Text(Strings.logSetNumber,
+                                  style: AppTextStyles.body14),
+                            )),
+                        Expanded(
+                          flex: 2,
+                          child: Align(
+                            alignment: Alignment.center,
+                            child: Text(Strings.logCompletedReps,
+                                style: AppTextStyles.body14),
+                          ),
+                        )
                       ],
                     ),
                   ] +
-                  _completedSetRows,
+                  _completedSetRows +
+                  [const SizedBox(height: 8)],
             ),
           )
         ],
@@ -114,18 +127,24 @@ class _LogExerciseWidgetState extends State<LogExerciseWidget>
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 4),
       child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: [
-          Text("$setNumber", style: AppTextStyles.headline3),
-          Row(children: [
-            IconButton(
-                onPressed: () => decrementRepCount(setNumber),
-                icon: const Icon(Icons.remove)),
-            Text("$repCount", style: AppTextStyles.headline3),
-            IconButton(
-                onPressed: () => incrementRepCount(setNumber),
-                icon: const Icon(Icons.add)),
-          ])
+          Expanded(
+              flex: 1,
+              child: Align(
+                  alignment: Alignment.center,
+                  child: Text("$setNumber", style: AppTextStyles.headline3))),
+          Expanded(
+            flex: 2,
+            child: Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+              IconButton(
+                  onPressed: () => decrementRepCount(setNumber),
+                  icon: const Icon(Icons.remove)),
+              Text("$repCount", style: AppTextStyles.headline3),
+              IconButton(
+                  onPressed: () => incrementRepCount(setNumber),
+                  icon: const Icon(Icons.add)),
+            ]),
+          )
         ],
       ),
     );
