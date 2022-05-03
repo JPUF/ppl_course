@@ -36,7 +36,9 @@ class _HomePageState extends State<HomePage> {
                                 onTappedEdit: () {
                                   onTapEditSession(session);
                                 }),
-                            onTap: () {},
+                            onTap: () => Navigator.of(context).pushNamed(
+                                Destination.logSession,
+                                arguments: SessionArgs(session)),
                           ))
                       .toList(),
                 ));

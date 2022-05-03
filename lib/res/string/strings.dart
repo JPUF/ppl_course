@@ -29,4 +29,7 @@ class Strings {
   static const String exerciseRepLabel = "Number of reps";
   static const String exerciseAmrapLabel = "AMRAP final set?";
 
+  // Log Session
+  static String logSessionType(String type) => "Log $type Session";
+
 }
