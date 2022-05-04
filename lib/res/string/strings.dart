@@ -33,5 +33,8 @@ class Strings {
   static String logSessionType(String type) => "Log $type Session";
   static const String logSetNumber = "Set";
   static const String logCompletedReps = "Completed Reps";
+  static const String logVolume = "Volume";
+  static const String logTotal = "Total:";
+  static const String logFinish = "FINISH SESSION";
 
 }

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:ppl_course/data/models/exercise/exercise.dart';
+import 'package:ppl_course/data/models/exercise/exercise_log.dart';
 import 'package:ppl_course/data/models/session/session.dart';
 import 'package:ppl_course/presentation/pages/plan_session/components/exercise_card_header.dart';
 import 'package:ppl_course/res/color/colors.dart';
@@ -12,13 +13,15 @@ class LogExerciseWidget extends StatefulWidget {
       required this.exercise,
       required this.type,
       required this.isExpanded,
-      required this.onToggleExpanded})
+      required this.onToggleExpanded,
+      required this.onExerciseLogUpdated})
       : super(key: key);
 
   final Exercise exercise;
   final SessionType type;
   final bool isExpanded;
   final ValueSetter<bool> onToggleExpanded;
+  final ValueSetter<ExerciseLog> onExerciseLogUpdated;
 
   @override
   State<LogExerciseWidget> createState() => _LogExerciseWidgetState();
@@ -93,34 +96,53 @@ class _LogExerciseWidgetState extends State<LogExerciseWidget>
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 8),
             child: Column(
-              children: <Widget>[
-                    Row(
-                      children: [
-                        Expanded(
-                            flex: 1,
-                            child: Align(
-                              alignment: Alignment.center,
-                              child: Text(Strings.logSetNumber,
-                                  style: AppTextStyles.body14),
-                            )),
-                        Expanded(
-                          flex: 2,
-                          child: Align(
-                            alignment: Alignment.center,
-                            child: Text(Strings.logCompletedReps,
-                                style: AppTextStyles.body14),
-                          ),
-                        )
-                      ],
-                    ),
-                  ] +
+              children: buildCompletedSetHeader() +
                   _completedSetRows +
-                  [const SizedBox(height: 8)],
+                  buildVolumeFooter(),
             ),
           )
         ],
       ),
     );
+  }
+
+  List<Widget> buildVolumeFooter() {
+    return [
+      Center(
+          child: Column(
+        children: [
+          Text(Strings.logVolume, style: AppTextStyles.body14),
+          Text(
+            createExerciseLog().volume.toString(),
+            style: AppTextStyles.headline3,
+          )
+        ],
+      )),
+      const SizedBox(height: 8),
+    ];
+  }
+
+  List<Widget> buildCompletedSetHeader() {
+    return [
+      Row(
+        children: [
+          Expanded(
+              flex: 1,
+              child: Align(
+                alignment: Alignment.center,
+                child: Text(Strings.logSetNumber, style: AppTextStyles.body14),
+              )),
+          Expanded(
+            flex: 2,
+            child: Align(
+              alignment: Alignment.center,
+              child:
+                  Text(Strings.logCompletedReps, style: AppTextStyles.body14),
+            ),
+          )
+        ],
+      )
+    ];
   }
 
   Widget buildCompletedSetRow(int setNumber, int repCount) {
@@ -156,6 +178,7 @@ class _LogExerciseWidgetState extends State<LogExerciseWidget>
       setState(() {
         _completedRepMap[setNumber] = current + 1;
       });
+      notifyExerciseLogUpdated();
     }
   }
 
@@ -165,6 +188,15 @@ class _LogExerciseWidgetState extends State<LogExerciseWidget>
       setState(() {
         _completedRepMap[setNumber] = current - 1;
       });
+      notifyExerciseLogUpdated();
     }
+  }
+
+  ExerciseLog createExerciseLog() {
+    return ExerciseLog(widget.exercise, _completedRepMap.values.toList());
+  }
+
+  void notifyExerciseLogUpdated() {
+    widget.onExerciseLogUpdated(createExerciseLog());
   }
 }
