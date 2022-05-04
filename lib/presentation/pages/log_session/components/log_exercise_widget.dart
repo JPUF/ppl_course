@@ -29,11 +29,11 @@ class LogExerciseWidget extends StatefulWidget {
 
 class _LogExerciseWidgetState extends State<LogExerciseWidget>
     with SingleTickerProviderStateMixin {
+
   final Map<int, int> _completedRepMap = {};
-
   late int reps;
-
   late AnimationController animController;
+  late final MaterialColor _pplColor;
 
   @override
   void initState() {
@@ -45,11 +45,12 @@ class _LogExerciseWidgetState extends State<LogExerciseWidget>
     for (int s = 1; s <= widget.exercise.setsReps.sets; s++) {
       _completedRepMap[s] = reps;
     }
+
+    _pplColor = AppColor.getPplColor(widget.type);
   }
 
   @override
   Widget build(BuildContext context) {
-    final MaterialColor _pplColor = AppColor.getPplColor(widget.type);
 
     final List<Widget> _completedSetRows = [];
     _completedRepMap.forEach((set, completedReps) {
@@ -79,15 +80,14 @@ class _LogExerciseWidgetState extends State<LogExerciseWidget>
             AnimatedSize(
                 duration: const Duration(milliseconds: 400),
                 curve: Curves.fastOutSlowIn,
-                child: buildLogContent(_pplColor, _completedSetRows))
+                child: buildLogContent(_completedSetRows))
           ]),
         ),
       ),
     );
   }
 
-  Widget buildLogContent(
-      MaterialColor _pplColor, List<Widget> _completedSetRows) {
+  Widget buildLogContent(List<Widget> _completedSetRows) {
     return SizedBox(
       height: widget.isExpanded ? null : 0,
       child: Column(
@@ -106,22 +106,6 @@ class _LogExerciseWidgetState extends State<LogExerciseWidget>
     );
   }
 
-  List<Widget> buildVolumeFooter() {
-    return [
-      Center(
-          child: Column(
-        children: [
-          Text(Strings.logVolume, style: AppTextStyles.body14),
-          Text(
-            createExerciseLog().volume.toString(),
-            style: AppTextStyles.headline3,
-          )
-        ],
-      )),
-      const SizedBox(height: 8),
-    ];
-  }
-
   List<Widget> buildCompletedSetHeader() {
     return [
       Row(
@@ -130,14 +114,18 @@ class _LogExerciseWidgetState extends State<LogExerciseWidget>
               flex: 1,
               child: Align(
                 alignment: Alignment.center,
-                child: Text(Strings.logSetNumber, style: AppTextStyles.body14),
+                child: Text(Strings.logSetNumber, style: AppTextStyles.body14.apply(
+                  color: _pplColor
+                )),
               )),
           Expanded(
             flex: 2,
             child: Align(
               alignment: Alignment.center,
               child:
-                  Text(Strings.logCompletedReps, style: AppTextStyles.body14),
+                  Text(Strings.logCompletedReps, style: AppTextStyles.body14.apply(
+                    color: _pplColor
+                  )),
             ),
           )
         ],
@@ -154,22 +142,46 @@ class _LogExerciseWidgetState extends State<LogExerciseWidget>
               flex: 1,
               child: Align(
                   alignment: Alignment.center,
-                  child: Text("$setNumber", style: AppTextStyles.headline3))),
+                  child: Text("$setNumber", style: AppTextStyles.headline3.apply(
+                    color: _pplColor
+                  )))),
           Expanded(
             flex: 2,
             child: Row(mainAxisAlignment: MainAxisAlignment.center, children: [
               IconButton(
                   onPressed: () => decrementRepCount(setNumber),
-                  icon: const Icon(Icons.remove)),
-              Text("$repCount", style: AppTextStyles.headline3),
+                  icon: Icon(Icons.remove, color: _pplColor)),
+              Text("$repCount", style: AppTextStyles.headline3.apply(
+                color: _pplColor
+              )),
               IconButton(
                   onPressed: () => incrementRepCount(setNumber),
-                  icon: const Icon(Icons.add)),
+                  icon: Icon(Icons.add, color: _pplColor)),
             ]),
           )
         ],
       ),
     );
+  }
+
+  List<Widget> buildVolumeFooter() {
+    return [
+      Center(
+          child: Column(
+            children: [
+              Text(Strings.logVolume, style: AppTextStyles.body14.apply(
+                color: _pplColor
+              )),
+              Text(
+                createExerciseLog().volume.toString(),
+                style: AppTextStyles.headline3.apply(
+                  color: _pplColor
+                ),
+              )
+            ],
+          )),
+      const SizedBox(height: 8),
+    ];
   }
 
   void incrementRepCount(int setNumber) {

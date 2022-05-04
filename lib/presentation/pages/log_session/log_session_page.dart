@@ -4,6 +4,7 @@ import 'package:ppl_course/data/models/exercise/exercise_log.dart';
 import 'package:ppl_course/data/models/exercise/weight.dart';
 import 'package:ppl_course/data/models/session/session.dart';
 import 'package:ppl_course/presentation/pages/log_session/components/log_exercise_widget.dart';
+import 'package:ppl_course/res/color/colors.dart';
 import 'package:ppl_course/res/string/strings.dart';
 import 'package:ppl_course/res/styles/app_text_styles.dart';
 
@@ -21,6 +22,7 @@ class LogSessionPage extends StatefulWidget {
 class _LogSessionPageState extends State<LogSessionPage> {
   final Map<Exercise, bool> expandedExerciseMap = {};
   final Map<Exercise, ExerciseLog> exerciseLogMap = {};
+  late final MaterialColor _pplColor;
 
   @override
   void initState() {
@@ -29,6 +31,8 @@ class _LogSessionPageState extends State<LogSessionPage> {
       expandedExerciseMap[ex] = ex == widget.session.exercises.first;
       exerciseLogMap[ex] = ExerciseLog.defaultReps(ex);
     }
+
+    _pplColor = AppColor.getPplColor(widget.session.type);
   }
 
   @override
@@ -63,9 +67,13 @@ class _LogSessionPageState extends State<LogSessionPage> {
         children: [
           Row(
             children: [
-              Text(Strings.logTotal, style: AppTextStyles.body17),
+              Text(Strings.logTotal, style: AppTextStyles.body17.apply(
+                color: _pplColor
+              )),
               const SizedBox(width: 8),
-              Text(_getTotalVolume().toString(), style: AppTextStyles.headline3)
+              Text(_getTotalVolume().toString(), style: AppTextStyles.headline3.apply(
+                color: _pplColor
+              ))
             ],
           ),
           AccentButton(text: Strings.logFinish, onTap: () {})
