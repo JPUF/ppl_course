@@ -51,17 +51,23 @@ class SessionsBloc extends Bloc<SessionsEvent, SessionsState>
 
   void _writeSession(WriteSession event, Emitter<SessionsState> emit) async {
     _sessionRepository.writeSession(event.session);
-    emit(AllSessionsState(_sessionRepository.getAllSessions()));
+    emit(AllSessionsState(
+        pendingSessions: _sessionRepository.getAllPendingSessions(),
+        completedSessions: _sessionRepository.getAllCompletedSessions()));
   }
 
   void _editSession(EditSession event, Emitter<SessionsState> emit) async {
     _sessionRepository.editSession(event.editedSession);
-    emit(AllSessionsState(_sessionRepository.getAllSessions()));
+    emit(AllSessionsState(
+        pendingSessions: _sessionRepository.getAllPendingSessions(),
+        completedSessions: _sessionRepository.getAllCompletedSessions()));
   }
 
   void _deleteSession(DeleteSession event, Emitter<SessionsState> emit) async {
     _sessionRepository.deleteSession(event.sessionToDelete);
-    emit(AllSessionsState(_sessionRepository.getAllSessions()));
+    emit(AllSessionsState(
+        pendingSessions: _sessionRepository.getAllPendingSessions(),
+        completedSessions: _sessionRepository.getAllCompletedSessions()));
   }
 
   @override
@@ -69,14 +75,24 @@ class SessionsBloc extends Bloc<SessionsEvent, SessionsState>
     final stateType = json[SessionsState.stateType];
     switch (stateType) {
       case SessionsState.allSessions:
-        final sessions = (json[SessionsState.sessions] as List)
+        final pendingSessions = (json[SessionsState.pendingSessions] as List)
             .map((a) => Session.fromMap(a))
             .toList();
-        _sessionRepository.setSessions(sessions);
-        return AllSessionsState(sessions);
+        final completedSessions =
+            (json[SessionsState.completedSessions] as List)
+                .map((a) => Session.fromMap(a))
+                .toList();
+
+        _sessionRepository.setSessions(pendingSessions + completedSessions);
+        return AllSessionsState(
+          pendingSessions: pendingSessions,
+          completedSessions: completedSessions,
+        );
       case SessionsState.lastSessionOfType:
-        final sessions = json[SessionsState.sessions] as List;
-        return LastSessionOfTypeState(sessions.first);
+        final pendingSessions = json[SessionsState.pendingSessions] as List;
+        final completedSessions = json[SessionsState.completedSessions] as List;
+        final combined = pendingSessions + completedSessions;
+        return LastSessionOfTypeState(combined.first);
       default:
         return InitialState();
     }
@@ -85,7 +101,10 @@ class SessionsBloc extends Bloc<SessionsEvent, SessionsState>
   @override
   Map<String, dynamic>? toJson(SessionsState state) {
     if (state is AllSessionsState) {
-      return AllSessionsState(state.allSessions).toMap();
+      return AllSessionsState(
+        pendingSessions: state.pendingSessions,
+        completedSessions: state.completedSessions,
+      ).toMap();
     } else if (state is LastSessionOfTypeState) {
       return LastSessionOfTypeState(state.lastSession).toMap();
     } else {

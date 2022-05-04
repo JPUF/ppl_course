@@ -8,6 +8,14 @@ class SessionRepository {
     return _sessions;
   }
 
+  List<Session> getAllPendingSessions() {
+    return _sessions.where((s) => !s.completed).toList();
+  }
+
+  List<Session> getAllCompletedSessions() {
+    return _sessions.where((s) => s.completed).toList();
+  }
+
   void writeSession(Session session) {
     _sessions.insert(0, session);
   }

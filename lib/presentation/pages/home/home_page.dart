@@ -28,24 +28,50 @@ class _HomePageState extends State<HomePage> {
         buildWhen: (p, c) => c is AllSessionsState,
         builder: (context, state) {
           if (state is AllSessionsState) {
-            final sessions = state.allSessions;
+            final pendingSessions = state.pendingSessions;
+            final completedSessions = state.completedSessions;
             return Container(
                 padding: const EdgeInsets.only(bottom: 64),
                 child: Column(
-                  children: sessions
-                      .map((session) => GestureDetector(
-                            onTap: () => onTapLogSession(session),
-                            child: SessionWidget(
-                                session: session,
-                                onTappedLog: () => onTapLogSession(session),
-                                onTappedEdit: () => onTapEditSession(session)),
-                          ))
-                      .toList(),
+                    children:
+                    sessionsOrEmpty(Strings.upcomingSessions, pendingSessions) +
+                        [const SizedBox(height: 16)] +
+                        sessionsOrEmpty(
+                            Strings.completedSessions, completedSessions)
                 ));
           } else {
             return const SizedBox(height: 16);
           }
         });
+  }
+
+  List<Widget> sessionsOrEmpty(String header, List<Session> sessions) {
+    if (sessions.isNotEmpty) {
+      return [
+        Align(
+            alignment: Alignment.centerLeft,
+            child: Text(header, style: AppTextStyles.headline4)),
+        const SizedBox(height: 8),
+        buildSessionColumn(sessions)
+      ];
+    } else {
+      return [];
+    }
+  }
+
+  Column buildSessionColumn(List<Session> sessions) {
+    return Column(
+      children: sessions
+          .map((session) =>
+          GestureDetector(
+            onTap: () => onTapLogSession(session),
+            child: SessionWidget(
+                session: session,
+                onTappedLog: () => onTapLogSession(session),
+                onTappedEdit: () => onTapEditSession(session)),
+          ))
+          .toList(),
+    );
   }
 
   @override
@@ -92,8 +118,10 @@ class _HomePageState extends State<HomePage> {
       padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 4),
       child: AccentButton(
         text: Strings.planSessionCTA,
-        onTap: () => Navigator.of(context)
-            .pushNamed(Destination.planSession, arguments: SessionArgs(null)),
+        onTap: () =>
+            Navigator.of(context)
+                .pushNamed(
+                Destination.planSession, arguments: SessionArgs(null)),
         endIcon: SvgPicture.asset(
           'assets/images/ic_dumbbell.svg',
           width: 24,

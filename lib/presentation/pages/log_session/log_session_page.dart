@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ppl_course/common/components/asset_button.dart';
 import 'package:ppl_course/data/models/exercise/exercise_log.dart';
 import 'package:ppl_course/data/models/exercise/weight.dart';
 import 'package:ppl_course/data/models/session/session.dart';
+import 'package:ppl_course/logic/sessions/sessions_bloc.dart';
 import 'package:ppl_course/presentation/pages/log_session/components/log_exercise_widget.dart';
 import 'package:ppl_course/res/color/colors.dart';
 import 'package:ppl_course/res/string/strings.dart';
@@ -113,6 +115,7 @@ class _LogSessionPageState extends State<LogSessionPage> {
 
   void completeSession() {
     widget.session.completeSession();
+    BlocProvider.of<SessionsBloc>(context).add(EditSession(widget.session));
     navigateBack();
   }
 

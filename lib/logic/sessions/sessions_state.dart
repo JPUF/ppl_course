@@ -5,7 +5,8 @@ abstract class SessionsState {
   static const allSessions = 'AllSessionsState';
   static const lastSessionOfType = 'LastSessionOfTypeState';
   static const stateType = 'stateType';
-  static const sessions = 'sessions';
+  static const pendingSessions = 'pendingSessions';
+  static const completedSessions = 'completedSessions';
 
   Map<String, dynamic> toMap();
 
@@ -14,11 +15,17 @@ abstract class SessionsState {
   factory SessionsState.fromMap(Map<String, dynamic> map) {
     switch (map[stateType]) {
       case lastSessionOfType:
-        final sessionsList = map[sessions] as List;
-        return LastSessionOfTypeState(Session.fromMap(sessionsList.first));
+        final pendingSessionsList = map[pendingSessions] as List;
+        final completedSessionsList = map[completedSessions] as List;
+        final combinedList = pendingSessionsList + completedSessionsList;
+        return LastSessionOfTypeState(Session.fromMap(combinedList.first));
       case allSessions:
         return AllSessionsState(
-          List<Session>.from(map[sessions]?.map((y) {
+          pendingSessions: List<Session>.from(map[pendingSessions]?.map((y) {
+            Session.fromMap(y);
+          })),
+          completedSessions:
+              List<Session>.from(map[completedSessions]?.map((y) {
             Session.fromMap(y);
           })),
         );
@@ -40,16 +47,19 @@ class InitialState implements SessionsState {
     final result = <String, dynamic>{};
     result.addAll({
       SessionsState.stateType: SessionsState.initial,
-      SessionsState.sessions: null
+      SessionsState.pendingSessions: null,
+      SessionsState.completedSessions: null
     });
     return result;
   }
 }
 
 class AllSessionsState implements SessionsState {
-  final List<Session> allSessions;
+  final List<Session> pendingSessions;
+  final List<Session> completedSessions;
 
-  AllSessionsState(this.allSessions);
+  AllSessionsState(
+      {required this.pendingSessions, required this.completedSessions});
 
   @override
   String toJson() => json.encode(toMap());
@@ -59,7 +69,10 @@ class AllSessionsState implements SessionsState {
     final result = <String, dynamic>{};
     result.addAll({
       SessionsState.stateType: SessionsState.allSessions,
-      SessionsState.sessions: allSessions.map((x) => x.toMap()).toList()
+      SessionsState.pendingSessions:
+          pendingSessions.map((x) => x.toMap()).toList(),
+      SessionsState.completedSessions:
+          completedSessions.map((x) => x.toMap()).toList()
     });
     return result;
   }
@@ -75,10 +88,12 @@ class LastSessionOfTypeState implements SessionsState {
 
   @override
   Map<String, dynamic> toMap() {
+    final isCompleted = lastSession?.completed ?? false;
     final result = <String, dynamic>{};
     result.addAll({
       SessionsState.stateType: SessionsState.allSessions,
-      SessionsState.sessions: [lastSession]
+      SessionsState.pendingSessions: isCompleted ? null : [lastSession],
+      SessionsState.completedSessions: isCompleted ? [lastSession] : null
     });
     return result;
   }

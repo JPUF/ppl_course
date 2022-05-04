@@ -12,6 +12,9 @@ class Strings {
 
   // Home
   static const String planSessionCTA = "PLAN SESSION";
+  static const String sessionPlaceholder = "Planned sessions will appear here";
+  static const String upcomingSessions = "Upcoming Sessions";
+  static const String completedSessions = "Completed Sessions";
 
   // Plan Session
   static const String planSessionTitle = "PLAN A SESSION";
@@ -35,6 +38,6 @@ class Strings {
   static const String logCompletedReps = "Completed Reps";
   static const String logVolume = "Volume";
   static const String logTotal = "Total:";
-  static const String logFinish = "FINISH";
+  static const String logFinish = "COMPLETE";
 
 }
