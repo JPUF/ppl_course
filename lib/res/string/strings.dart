@@ -39,5 +39,6 @@ class Strings {
   static const String logVolume = "Volume";
   static const String logTotal = "Total:";
   static const String logFinish = "COMPLETE";
+  static const String logSessionNotes = "Session notes:";
 
 }

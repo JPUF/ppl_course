@@ -52,7 +52,7 @@ class _LogSessionPageState extends State<LogSessionPage> {
             child: Column(
               children: [
                 Column(
-                  children: buildLogWidgetList(),
+                  children: buildNotesSection() + buildLogWidgetList(),
                 ),
                 buildFooter()
               ],
@@ -61,34 +61,24 @@ class _LogSessionPageState extends State<LogSessionPage> {
         ));
   }
 
-  Widget buildFooter() {
-    return Padding(
-      padding: const EdgeInsets.fromLTRB(8, 8, 0, 32),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Row(
-            children: [
-              Text(Strings.logTotal, style: AppTextStyles.body17.apply(
-                color: _pplColor
-              )),
-              const SizedBox(width: 8),
-              Text(_getTotalVolume().toString(), style: AppTextStyles.headline3.apply(
-                color: _pplColor
-              ))
-            ],
-          ),
-          AccentButton(text: Strings.logFinish, onTap: () => completeSession())
-        ],
-      ),
-    );
-  }
-  Weight _getTotalVolume() {
-    double totalKg = 0;
-    for (var log in exerciseLogMap.values) {
-      totalKg += log.volume.kg;
+  List<Widget> buildNotesSection() {
+    final notes = widget.session.notes;
+    if (notes != null) {
+      return <Widget>[
+        Align(
+          alignment: Alignment.centerLeft,
+          child: Text(Strings.logSessionNotes,
+              style: AppTextStyles.body17.apply(color: _pplColor)),
+        ),
+        Align(
+            alignment: Alignment.centerLeft,
+            child: Text(notes,
+                style: AppTextStyles.body14.apply(color: _pplColor))),
+        const SizedBox(height: 16),
+      ];
+    } else {
+      return [];
     }
-    return Weight(totalKg);
   }
 
   List<Widget> buildLogWidgetList() {
@@ -108,9 +98,37 @@ class _LogSessionPageState extends State<LogSessionPage> {
         .toList();
   }
 
+  Widget buildFooter() {
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(8, 8, 0, 32),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Row(
+            children: [
+              Text(Strings.logTotal,
+                  style: AppTextStyles.body17.apply(color: _pplColor)),
+              const SizedBox(width: 8),
+              Text(_getTotalVolume().toString(),
+                  style: AppTextStyles.headline3.apply(color: _pplColor))
+            ],
+          ),
+          AccentButton(text: Strings.logFinish, onTap: () => completeSession())
+        ],
+      ),
+    );
+  }
+
+  Weight _getTotalVolume() {
+    double totalKg = 0;
+    for (var log in exerciseLogMap.values) {
+      totalKg += log.volume.kg;
+    }
+    return Weight(totalKg);
+  }
+
   void foldAllExercises() {
-    expandedExerciseMap
-        .updateAll((key, _) => expandedExerciseMap[key] = false);
+    expandedExerciseMap.updateAll((key, _) => expandedExerciseMap[key] = false);
   }
 
   void completeSession() {
@@ -120,5 +138,4 @@ class _LogSessionPageState extends State<LogSessionPage> {
   }
 
   void navigateBack() => Navigator.pop(context);
-
 }
