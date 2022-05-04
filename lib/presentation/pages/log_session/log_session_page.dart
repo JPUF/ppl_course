@@ -76,7 +76,7 @@ class _LogSessionPageState extends State<LogSessionPage> {
               ))
             ],
           ),
-          AccentButton(text: Strings.logFinish, onTap: () {})
+          AccentButton(text: Strings.logFinish, onTap: () => completeSession())
         ],
       ),
     );
@@ -108,6 +108,14 @@ class _LogSessionPageState extends State<LogSessionPage> {
 
   void foldAllExercises() {
     expandedExerciseMap
-        .updateAll((key, value) => expandedExerciseMap[key] = false);
+        .updateAll((key, _) => expandedExerciseMap[key] = false);
   }
+
+  void completeSession() {
+    widget.session.completeSession();
+    navigateBack();
+  }
+
+  void navigateBack() => Navigator.pop(context);
+
 }

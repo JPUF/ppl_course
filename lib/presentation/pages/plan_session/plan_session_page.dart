@@ -292,8 +292,7 @@ class _PlanSessionPageState extends State<PlanSessionPage> {
             Session(_type, _notesText, _exerciseMap.values.toList());
         BlocProvider.of<SessionsBloc>(context).add(WriteSession(session));
       } else {
-        final session = Session.withUuid(
-            editSession.uuid, _type, _notesText, _exerciseMap.values.toList());
+        final session = constructSession(editSession);
         BlocProvider.of<SessionsBloc>(context).add(EditSession(session));
       }
     }
@@ -303,10 +302,19 @@ class _PlanSessionPageState extends State<PlanSessionPage> {
   deleteSession() {
     final editSession = _editArgs.session;
     if (editSession != null) {
-      BlocProvider.of<SessionsBloc>(context).add(DeleteSession(Session.withUuid(
-          editSession.uuid, _type, _notesText, _exerciseMap.values.toList())));
+      BlocProvider.of<SessionsBloc>(context)
+          .add(DeleteSession(constructSession(editSession)));
     }
     navigateBack();
+  }
+
+  Session constructSession(Session editSession) {
+    return Session.withUuid(
+      uuid: editSession.uuid,
+      type: _type,
+      notes: _notesText,
+      exercises: _exerciseMap.values.toList(),
+    );
   }
 
   void navigateBack() => Navigator.pop(context);

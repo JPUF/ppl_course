@@ -4,16 +4,27 @@ import 'package:ppl_course/data/models/exercise/exercise.dart';
 import 'package:uuid/uuid.dart';
 
 class Session {
-  late String uuid;
+  late final String uuid;
   final SessionType type;
   final String? notes;
   final List<Exercise> exercises;
+
+  bool completed = false;
 
   Session(this.type, this.notes, this.exercises) {
     uuid = const Uuid().v1();
   }
 
-  Session.withUuid(this.uuid, this.type, this.notes, this.exercises);
+  Session.withUuid(
+      {required this.uuid,
+      required this.type,
+      this.notes,
+      required this.exercises,
+      this.completed = false});
+
+  void completeSession() {
+    completed = true;
+  }
 
   Map<String, dynamic> toMap() {
     final result = <String, dynamic>{};
@@ -21,6 +32,7 @@ class Session {
     result.addAll({'type': type.index.toString()});
     result.addAll({'notes': notes});
     result.addAll({'exercises': exercises.map((x) => x.toMap()).toList()});
+    result.addAll({'completed': completed});
 
     return result;
   }
@@ -29,13 +41,15 @@ class Session {
     final uuid = map['uuid'];
     final type = SessionType.values[int.parse(map['type'])];
     final notes = map['notes'];
+    final completed = map['completed'];
     final exercises =
         (map['exercises'] as List).map((e) => Exercise.fromMap(e)).toList();
     return Session.withUuid(
-      uuid,
-      type,
-      notes,
-      exercises,
+      uuid: uuid,
+      type: type,
+      notes: notes,
+      exercises: exercises,
+      completed: completed,
     );
   }
 

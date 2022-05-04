@@ -35,6 +35,6 @@ class Strings {
   static const String logCompletedReps = "Completed Reps";
   static const String logVolume = "Volume";
   static const String logTotal = "Total:";
-  static const String logFinish = "FINISH SESSION";
+  static const String logFinish = "FINISH";
 
 }
