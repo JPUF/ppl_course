@@ -9,11 +9,23 @@ class SessionRepository {
   }
 
   List<Session> getAllPendingSessions() {
-    return _sessions.where((s) => !s.completed).toList();
+    final pendingSessions = _sessions.where((s) => !s.completed).toList();
+    pendingSessions.sort((a, b) {
+      int aDate = a.day.microsecondsSinceEpoch;
+      int bDate = b.day.microsecondsSinceEpoch;
+      return aDate.compareTo(bDate);
+    });
+    return pendingSessions;
   }
 
   List<Session> getAllCompletedSessions() {
-    return _sessions.where((s) => s.completed).toList();
+    final completedSessions = _sessions.where((s) => s.completed).toList();
+    completedSessions.sort((a, b) {
+      int aDate = a.day.microsecondsSinceEpoch;
+      int bDate = b.day.microsecondsSinceEpoch;
+      return aDate.compareTo(bDate);
+    });
+    return completedSessions;
   }
 
   void writeSession(Session session) {

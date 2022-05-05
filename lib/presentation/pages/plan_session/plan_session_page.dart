@@ -208,6 +208,7 @@ class _PlanSessionPageState extends State<PlanSessionPage> {
       onChanged: (day) {
         setState(() {
           _dateOther = day;
+          _selectedDay = day;
           _dayOptions = [false, false, true];
         });
       }
@@ -393,7 +394,7 @@ class _PlanSessionPageState extends State<PlanSessionPage> {
     if (_exerciseMap.isNotEmpty) {
       if (editSession == null) {
         final session =
-            Session(_type, _notesText, _exerciseMap.values.toList());
+            Session(_type, _selectedDay, _notesText, _exerciseMap.values.toList());
         BlocProvider.of<SessionsBloc>(context).add(WriteSession(session));
       } else {
         final session = constructSession(editSession);
@@ -416,6 +417,7 @@ class _PlanSessionPageState extends State<PlanSessionPage> {
     return Session.withUuid(
       uuid: editSession.uuid,
       type: _type,
+      day: _selectedDay,
       notes: _notesText,
       exercises: _exerciseMap.values.toList(),
     );

@@ -73,7 +73,8 @@ class _SessionWidgetState extends State<SessionWidget> {
       child: Row(
         children: [
           Expanded(
-            child: Text(widget.session.type.toSessionString(),
+            child: Text(
+                "${widget.session.day} ${widget.session.type.toSessionString()}",
                 style: AppTextStyles.headline3
                     .apply(color: AppColor.getPplColor(widget.session.type))),
           ),
