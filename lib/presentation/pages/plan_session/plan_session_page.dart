@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_material_pickers/flutter_material_pickers.dart';
 import 'package:ppl_course/common/components/asset_button.dart';
 import 'package:ppl_course/common/components/custom_text_field.dart';
+import 'package:ppl_course/common/utils/date_time_day.dart';
 import 'package:ppl_course/data/models/exercise/exercise.dart';
 import 'package:ppl_course/data/models/session/session.dart';
 import 'package:ppl_course/logic/sessions/sessions_bloc.dart';
@@ -40,11 +42,52 @@ class _PlanSessionPageState extends State<PlanSessionPage> {
 
   bool _editSessionPopulated = false;
 
+  late DateTimeDay _selectedDay;
+  late final DateTimeDay _dateToday;
+  late final DateTimeDay _dateTomorrow;
+  final List<DateTimeDay> _otherDayOptions = [];
+  late DateTimeDay _dateOther;
+
+  late MaterialColor _pplColor;
+
+  late List<bool> _dayOptions;
+
+  List<bool> _setDaySelection(int index) {
+    switch (index) {
+      case 0:
+        _selectedDay = _dateToday;
+        break;
+      case 1:
+        _selectedDay = _dateTomorrow;
+        break;
+      case 2:
+        _selectedDay = _dateOther;
+        break;
+    }
+    return List.generate(3, (i) => (i == index));
+  }
+
   @override
   void initState() {
     super.initState();
     _editNotesController = TextEditingController(text: _notesText);
     _notesFocusNode = FocusNode();
+    _pplColor = AppColor.getPplColor(_type);
+    final now = DateTime.now();
+    _dateToday = DateTimeDay(now.year, now.month, now.day);
+    _dateTomorrow =
+        DateTimeDay.fromDateTime(_dateToday.add(const Duration(days: 1)));
+    _dateOther =
+        DateTimeDay.fromDateTime(_dateTomorrow.add(const Duration(days: 1)));
+    _dayOptions = _setDaySelection(0);
+    initOtherDayOptions();
+  }
+
+  void initOtherDayOptions() {
+    for (int i = 1; i <= 5; i++) {
+      _otherDayOptions
+          .add(DateTimeDay.fromDateTime(_dateTomorrow.add(Duration(days: i))));
+    }
   }
 
   @override
@@ -97,9 +140,12 @@ class _PlanSessionPageState extends State<PlanSessionPage> {
                           setState(() {
                             _lastSessionCopied = false;
                             _type = newType;
+                            _pplColor = AppColor.getPplColor(newType);
                           });
                         }),
                     const SizedBox(height: 32),
+                    buildSelectDay(),
+                    const SizedBox(height: 16),
                     buildNotesTextField(),
                     buildCopyPreviousSession(),
                     const SizedBox(height: 16),
@@ -119,6 +165,64 @@ class _PlanSessionPageState extends State<PlanSessionPage> {
             buildDeleteButton()
           ],
         ),
+      ),
+    );
+  }
+
+  Widget buildSelectDay() {
+    return PhysicalModel(
+      elevation: 2,
+      color: AppColor.white,
+      shadowColor: AppColor.black,
+      borderRadius: BorderRadius.circular(8),
+      child: ToggleButtons(
+        children: [
+          dayButton(Strings.planToday, false),
+          dayButton(Strings.planTomorrow, false),
+          dayButton(_dateOther.toString(), true),
+        ],
+        isSelected: _dayOptions,
+        fillColor: _pplColor.shade50,
+        borderColor: _pplColor,
+        borderWidth: 1,
+        borderRadius: BorderRadius.circular(8),
+        selectedBorderColor: _pplColor,
+        onPressed: (int index) {
+          setState(() {
+            _dayOptions = _setDaySelection(index);
+            if (index == 2) {
+              showDayDialog();
+            }
+          });
+        },
+      ),
+    );
+  }
+
+  void showDayDialog() {
+    showMaterialScrollPicker<DateTimeDay>(
+      context: context,
+      title: Strings.planDayDialogTitle,
+      items: _otherDayOptions,
+      selectedItem: _dateOther,
+      onChanged: (day) {
+        setState(() {
+          _dateOther = day;
+          _dayOptions = [false, false, true];
+        });
+      }
+    );
+  }
+
+  Widget dayButton(String text, bool editIcon) {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 8),
+      child: Row(
+        children: [
+          Text(text, style: AppTextStyles.body17.apply(color: _pplColor)),
+          editIcon ? const SizedBox(width: 8) : Container(),
+          editIcon ? Icon(Icons.edit, color: _pplColor) : Container()
+        ],
       ),
     );
   }
