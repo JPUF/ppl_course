@@ -92,6 +92,7 @@ class _LogExerciseWidgetState extends State<LogExerciseWidget>
       height: widget.isExpanded ? null : 0,
       child: Column(
         children: [
+          buildNotesText(),
           const SizedBox(height: 16),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 8),
@@ -104,6 +105,18 @@ class _LogExerciseWidgetState extends State<LogExerciseWidget>
         ],
       ),
     );
+  }
+
+  Widget buildNotesText() {
+    final notes = widget.exercise.notes;
+    if(notes != null) {
+      return Text(notes, style: AppTextStyles.body14.apply(
+        color: _pplColor,
+        fontStyle: FontStyle.italic
+      ));
+    } else {
+      return Container();
+    }
   }
 
   List<Widget> buildCompletedSetHeader() {

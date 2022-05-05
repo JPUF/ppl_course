@@ -46,8 +46,11 @@ class _PlanExerciseWidgetState extends State<PlanExerciseWidget> {
         const SizedBox(height: 12),
         SizedBox(
             width: double.infinity,
-            child:
-                Text(notes, style: AppTextStyles.body14.apply(color: pplColor)))
+            child: Text(notes,
+                style: AppTextStyles.body14.apply(
+                  color: pplColor,
+                  fontStyle: FontStyle.italic,
+                )))
       ]);
     } else {
       return Container();

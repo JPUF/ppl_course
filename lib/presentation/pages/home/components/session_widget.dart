@@ -5,7 +5,12 @@ import 'package:ppl_course/res/color/colors.dart';
 import 'package:ppl_course/res/styles/app_text_styles.dart';
 
 class SessionWidget extends StatefulWidget {
-  const SessionWidget({Key? key, required this.session, required this.onTappedLog, required this.onTappedEdit}) : super(key: key);
+  const SessionWidget(
+      {Key? key,
+      required this.session,
+      required this.onTappedLog,
+      required this.onTappedEdit})
+      : super(key: key);
 
   final Session session;
   final VoidCallback onTappedLog;
@@ -102,8 +107,10 @@ class _SessionWidgetState extends State<SessionWidget> {
             padding: const EdgeInsets.symmetric(horizontal: 8),
             alignment: Alignment.centerLeft,
             child: Text(notes,
-                style: AppTextStyles.body14
-                    .apply(color: AppColor.getPplColor(widget.session.type))))
+                style: AppTextStyles.body14.apply(
+                  color: AppColor.getPplColor(widget.session.type),
+                  fontStyle: FontStyle.italic,
+                )))
       ];
     }
     return Column(children: widgets);

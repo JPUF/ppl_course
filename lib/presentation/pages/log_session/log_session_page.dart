@@ -65,16 +65,14 @@ class _LogSessionPageState extends State<LogSessionPage> {
     final notes = widget.session.notes;
     if (notes != null) {
       return <Widget>[
-        Align(
-          alignment: Alignment.centerLeft,
-          child: Text(Strings.logSessionNotes,
-              style: AppTextStyles.body17.apply(color: _pplColor)),
+        Padding(
+          padding: const EdgeInsets.only(top: 8, bottom: 16, left: 8, right: 8),
+          child: Text(notes,
+              style: AppTextStyles.body14.apply(
+                color: _pplColor,
+                fontStyle: FontStyle.italic,
+              )),
         ),
-        Align(
-            alignment: Alignment.centerLeft,
-            child: Text(notes,
-                style: AppTextStyles.body14.apply(color: _pplColor))),
-        const SizedBox(height: 16),
       ];
     } else {
       return [];
