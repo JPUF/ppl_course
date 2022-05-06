@@ -1,16 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
 import 'package:ppl_course/common/components/asset_button.dart';
 import 'package:ppl_course/data/models/session/session.dart';
 import 'package:ppl_course/logic/sessions/sessions_bloc.dart';
-import 'package:ppl_course/presentation/navigation/destination.dart';
 import 'package:ppl_course/presentation/pages/home/components/session_widget.dart';
+import 'package:ppl_course/presentation/pages/log_session/log_session_page.dart';
+import 'package:ppl_course/presentation/pages/menu/bottom_nav_screen.dart';
 import 'package:ppl_course/res/string/strings.dart';
 import 'package:ppl_course/res/styles/app_text_styles.dart';
 
 class HomePage extends StatefulWidget {
-  const HomePage({Key? key}) : super(key: key);
+  const HomePage({Key? key, required this.toBottomNavDestination,})
+      : super(key: key);
+
+  final ValueSetter<BottomNavDestination> toBottomNavDestination;
 
   @override
   State<HomePage> createState() => _HomePageState();
@@ -114,8 +119,7 @@ class _HomePageState extends State<HomePage> {
       padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 4),
       child: AccentButton(
         text: Strings.planSessionCTA,
-        onTap: () => Navigator.of(context)
-            .pushNamed(Destination.planSession, arguments: null),
+        onTap: () => toPlanSession(),
         endIcon: SvgPicture.asset(
           'assets/images/ic_dumbbell.svg',
           width: 24,
@@ -125,13 +129,16 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
+  void toPlanSession() {
+    // widget.toBottomNavDestination(BottomNavDestination.plan);
+  }
+
   onTapLogSession(Session sessionToLog) {
-    Navigator.of(context)
-        .pushNamed(Destination.logSession, arguments: sessionToLog);
+    pushNewScreen(context, screen: LogSessionPage(session: sessionToLog));
   }
 
   onTapEditSession(Session sessionToEdit) {
-    Navigator.of(context)
-        .pushNamed(Destination.planSession, arguments: sessionToEdit);
+    //TODO set editSession in repo. (via Bloc?)
+    widget.toBottomNavDestination(BottomNavDestination.plan);
   }
 }

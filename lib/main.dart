@@ -7,12 +7,10 @@ import 'package:ppl_course/data/models/exercise/exercise_names.dart';
 import 'package:ppl_course/data/repositories/exercise_repository.dart';
 import 'package:ppl_course/logic/exercises/exercises_bloc.dart';
 import 'package:ppl_course/logic/sessions/sessions_bloc.dart';
-import 'package:ppl_course/presentation/navigation/app_router.dart';
 import 'package:ppl_course/presentation/pages/menu/bottom_nav_screen.dart';
 import 'package:ppl_course/res/color/colors.dart';
 
 import 'logic/basic/basic_bloc.dart';
-import 'presentation/pages/home/home_page.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -24,13 +22,11 @@ void main() async {
   Hive.registerAdapter(ExerciseNamesAdapter());
   await Hive.openBox(ExerciseRepository.exerciseBox);
 
-  HydratedBlocOverrides.runZoned(() => runApp(MyApp()), storage: storage);
+  HydratedBlocOverrides.runZoned(() => runApp(const PlannerApp()), storage: storage);
 }
 
-class MyApp extends StatelessWidget {
-  MyApp({Key? key}) : super(key: key);
-
-  final AppRouter _router = AppRouter();
+class PlannerApp extends StatelessWidget {
+  const PlannerApp({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -48,7 +44,6 @@ class MyApp extends StatelessWidget {
                   foregroundColor: AppColor.dark,
                   elevation: 2),
               scaffoldBackgroundColor: AppColor.white),
-          onGenerateRoute: _router.onGenerateRoute,
           home: const BottomNavScreen()),
     );
   }

@@ -6,6 +6,8 @@ import 'package:ppl_course/presentation/pages/stats/stats_page.dart';
 import 'package:ppl_course/res/color/colors.dart';
 import 'package:ppl_course/res/styles/app_text_styles.dart';
 
+enum BottomNavDestination { home, plan, progression }
+
 class BottomNavScreen extends StatefulWidget {
   const BottomNavScreen({Key? key}) : super(key: key);
 
@@ -22,25 +24,29 @@ class _BottomNavScreenState extends State<BottomNavScreen> {
     _controller = PersistentTabController(initialIndex: 0);
   }
 
+  void navigateTo(BottomNavDestination destination) {
+    _controller.jumpToTab(destination.index);
+  }
+
   List<Widget> _buildScreens() {
     return [
-      const PlanSessionPage(),
-      const HomePage(),
-      const StatsPage(),
+      HomePage(toBottomNavDestination: (d) => navigateTo(d)),
+      PlanSessionPage(toBottomNavDestination: (d) => navigateTo(d)),
+      const StatsPage()
     ];
   }
 
   List<PersistentBottomNavBarItem> _navBarItems() {
     return [
       PersistentBottomNavBarItem(
-          icon: const Icon(Icons.edit),
-          title: "Plan Session",
+          icon: const Icon(Icons.menu),
+          title: "All Sessions",
           activeColorPrimary: AppColor.dark,
           inactiveColorPrimary: AppColor.grey50,
           textStyle: AppTextStyles.navBarItemText),
       PersistentBottomNavBarItem(
-          icon: const Icon(Icons.home),
-          title: "All Sessions",
+          icon: const Icon(Icons.edit),
+          title: "Plan Session",
           activeColorPrimary: AppColor.dark,
           inactiveColorPrimary: AppColor.grey50,
           textStyle: AppTextStyles.navBarItemText),
@@ -66,6 +72,8 @@ class _BottomNavScreenState extends State<BottomNavScreen> {
         stateManagement: true,
         hideNavigationBarWhenKeyboardShows: true,
         popActionScreens: PopActionScreensType.all,
+        screenTransitionAnimation: const ScreenTransitionAnimation(
+            animateTabTransition: true, curve: Curves.ease),
         navBarStyle: NavBarStyle.style6,
       ),
     );
