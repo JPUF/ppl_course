@@ -14,8 +14,9 @@ class AppRouter {
         return PageTransition(
             child: const HomePage(), type: PageTransitionType.fade);
       case Destination.planSession:
+        final Session? session = routeSettings.arguments as Session?;
         return PageTransition(
-            child: const PlanSessionPage(),
+            child: PlanSessionPage(editSession: session),
             settings: routeSettings,
             type: PageTransitionType.rightToLeftWithFade);
       case Destination.logSession:

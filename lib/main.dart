@@ -8,6 +8,7 @@ import 'package:ppl_course/data/repositories/exercise_repository.dart';
 import 'package:ppl_course/logic/exercises/exercises_bloc.dart';
 import 'package:ppl_course/logic/sessions/sessions_bloc.dart';
 import 'package:ppl_course/presentation/navigation/app_router.dart';
+import 'package:ppl_course/presentation/pages/menu/bottom_nav_screen.dart';
 import 'package:ppl_course/res/color/colors.dart';
 
 import 'logic/basic/basic_bloc.dart';
@@ -48,7 +49,7 @@ class MyApp extends StatelessWidget {
                   elevation: 2),
               scaffoldBackgroundColor: AppColor.white),
           onGenerateRoute: _router.onGenerateRoute,
-          home: const HomePage()),
+          home: const BottomNavScreen()),
     );
   }
 }

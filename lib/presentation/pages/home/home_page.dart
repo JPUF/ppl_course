@@ -9,8 +9,6 @@ import 'package:ppl_course/presentation/pages/home/components/session_widget.dar
 import 'package:ppl_course/res/string/strings.dart';
 import 'package:ppl_course/res/styles/app_text_styles.dart';
 
-import '../plan_session/session_args.dart';
-
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
 
@@ -33,12 +31,11 @@ class _HomePageState extends State<HomePage> {
             return Container(
                 padding: const EdgeInsets.only(bottom: 64),
                 child: Column(
-                    children:
-                    sessionsOrEmpty(Strings.upcomingSessions, pendingSessions) +
+                    children: sessionsOrEmpty(
+                            Strings.upcomingSessions, pendingSessions) +
                         [const SizedBox(height: 16)] +
                         sessionsOrEmpty(
-                            Strings.completedSessions, completedSessions)
-                ));
+                            Strings.completedSessions, completedSessions)));
           } else {
             return const SizedBox(height: 16);
           }
@@ -62,14 +59,13 @@ class _HomePageState extends State<HomePage> {
   Column buildSessionColumn(List<Session> sessions) {
     return Column(
       children: sessions
-          .map((session) =>
-          GestureDetector(
-            onTap: () => onTapLogSession(session),
-            child: SessionWidget(
-                session: session,
-                onTappedLog: () => onTapLogSession(session),
-                onTappedEdit: () => onTapEditSession(session)),
-          ))
+          .map((session) => GestureDetector(
+                onTap: () => onTapLogSession(session),
+                child: SessionWidget(
+                    session: session,
+                    onTappedLog: () => onTapLogSession(session),
+                    onTappedEdit: () => onTapEditSession(session)),
+              ))
           .toList(),
     );
   }
@@ -118,10 +114,8 @@ class _HomePageState extends State<HomePage> {
       padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 4),
       child: AccentButton(
         text: Strings.planSessionCTA,
-        onTap: () =>
-            Navigator.of(context)
-                .pushNamed(
-                Destination.planSession, arguments: SessionArgs(null)),
+        onTap: () => Navigator.of(context)
+            .pushNamed(Destination.planSession, arguments: null),
         endIcon: SvgPicture.asset(
           'assets/images/ic_dumbbell.svg',
           width: 24,
@@ -137,7 +131,7 @@ class _HomePageState extends State<HomePage> {
   }
 
   onTapEditSession(Session sessionToEdit) {
-    Navigator.of(context).pushNamed(Destination.planSession,
-        arguments: SessionArgs(sessionToEdit));
+    Navigator.of(context)
+        .pushNamed(Destination.planSession, arguments: sessionToEdit);
   }
 }

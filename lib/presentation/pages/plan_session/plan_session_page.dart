@@ -7,7 +7,6 @@ import 'package:ppl_course/common/utils/date_time_day.dart';
 import 'package:ppl_course/data/models/exercise/exercise.dart';
 import 'package:ppl_course/data/models/session/session.dart';
 import 'package:ppl_course/logic/sessions/sessions_bloc.dart';
-import 'package:ppl_course/presentation/pages/plan_session/session_args.dart';
 import 'package:ppl_course/res/color/colors.dart';
 import 'package:ppl_course/res/string/strings.dart';
 import 'package:ppl_course/res/styles/app_text_styles.dart';
@@ -20,7 +19,9 @@ import 'components/plan_exercise_widget.dart';
 import 'components/ppl_selector_switch.dart';
 
 class PlanSessionPage extends StatefulWidget {
-  const PlanSessionPage({Key? key}) : super(key: key);
+  const PlanSessionPage({Key? key, this.editSession}) : super(key: key);
+
+  final Session? editSession;
 
   @override
   _PlanSessionPageState createState() => _PlanSessionPageState();
@@ -37,8 +38,6 @@ class _PlanSessionPageState extends State<PlanSessionPage> {
 
   Map<int, Exercise> _exerciseMap = {};
   int _newExerciseCount = 0;
-
-  late SessionArgs _editArgs;
 
   bool _editSessionPopulated = false;
 
@@ -99,8 +98,7 @@ class _PlanSessionPageState extends State<PlanSessionPage> {
 
   @override
   Widget build(BuildContext context) {
-    _editArgs = ModalRoute.of(context)?.settings.arguments as SessionArgs;
-    final sessionToEdit = _editArgs.session;
+    final sessionToEdit = widget.editSession;
     if (sessionToEdit != null) {
       populateWithSessionToEdit(sessionToEdit);
     }
@@ -222,14 +220,14 @@ class _PlanSessionPageState extends State<PlanSessionPage> {
         children: [
           Text(text, style: AppTextStyles.body17.apply(color: _pplColor)),
           editIcon ? const SizedBox(width: 8) : Container(),
-          editIcon ? Icon(Icons.edit, color: _pplColor) : Container()
+          editIcon ? Icon(Icons.edit, color: _pplColor.shade500) : Container()
         ],
       ),
     );
   }
 
   Widget buildDeleteButton() {
-    if (_editArgs.session != null) {
+    if (widget.editSession != null) {
       return Container(
           padding: const EdgeInsets.fromLTRB(0, 0, 12, 12),
           height: MediaQuery.of(context).size.height,
@@ -264,7 +262,7 @@ class _PlanSessionPageState extends State<PlanSessionPage> {
           final lastSession = state.lastSession;
           if (lastSession != null &&
               !_lastSessionCopied &&
-              _editArgs.session == null) {
+              widget.editSession == null) {
             return Column(
               children: [
                 const SizedBox(height: 16),
@@ -390,7 +388,7 @@ class _PlanSessionPageState extends State<PlanSessionPage> {
         notes = null;
       }
     }
-    final editSession = _editArgs.session;
+    final editSession = widget.editSession;
     if (_exerciseMap.isNotEmpty) {
       if (editSession == null) {
         final session =
@@ -405,7 +403,7 @@ class _PlanSessionPageState extends State<PlanSessionPage> {
   }
 
   deleteSession() {
-    final editSession = _editArgs.session;
+    final editSession = widget.editSession;
     if (editSession != null) {
       BlocProvider.of<SessionsBloc>(context)
           .add(DeleteSession(constructSession(editSession)));
