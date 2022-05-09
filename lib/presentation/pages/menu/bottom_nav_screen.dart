@@ -17,6 +17,7 @@ class BottomNavScreen extends StatefulWidget {
 
 class _BottomNavScreenState extends State<BottomNavScreen> {
   late final PersistentTabController _controller;
+  bool _hideNavBar = false;
 
   @override
   void initState() {
@@ -28,10 +29,16 @@ class _BottomNavScreenState extends State<BottomNavScreen> {
     _controller.jumpToTab(destination.index);
   }
 
+  void setNavBarVisibility(bool isVisible) {
+    setState(() => _hideNavBar = !isVisible);
+  }
+
   List<Widget> _buildScreens() {
     return [
       HomePage(toBottomNavDestination: (d) => navigateTo(d)),
-      PlanSessionPage(toBottomNavDestination: (d) => navigateTo(d)),
+      PlanSessionPage(
+          toBottomNavDestination: (d) => navigateTo(d),
+          setNavBarVisibility: (v) => setNavBarVisibility(v)),
       const StatsPage()
     ];
   }
@@ -67,6 +74,7 @@ class _BottomNavScreenState extends State<BottomNavScreen> {
         controller: _controller,
         screens: _buildScreens(),
         items: _navBarItems(),
+        hideNavigationBar: _hideNavBar,
         confineInSafeArea: true,
         resizeToAvoidBottomInset: true,
         stateManagement: true,

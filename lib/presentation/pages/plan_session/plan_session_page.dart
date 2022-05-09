@@ -20,10 +20,14 @@ import 'components/plan_exercise_widget.dart';
 import 'components/ppl_selector_switch.dart';
 
 class PlanSessionPage extends StatefulWidget {
-  const PlanSessionPage({Key? key, required this.toBottomNavDestination})
+  const PlanSessionPage(
+      {Key? key,
+      required this.toBottomNavDestination,
+      required this.setNavBarVisibility})
       : super(key: key);
 
   final ValueSetter<BottomNavDestination> toBottomNavDestination;
+  final ValueSetter<bool> setNavBarVisibility;
 
   @override
   _PlanSessionPageState createState() => _PlanSessionPageState();
@@ -128,14 +132,15 @@ class _PlanSessionPageState extends State<PlanSessionPage> {
   }
 
   void _resetPage() {
+    final newPageInstance = PlanSessionPage(
+      toBottomNavDestination: (d) => widget.toBottomNavDestination(d),
+      setNavBarVisibility: (v) => widget.setNavBarVisibility(v),
+    );
     Navigator.pushReplacement(
         context,
         PageRouteBuilder(
             transitionDuration: Duration.zero,
-            pageBuilder: (_, __, ___) =>
-                PlanSessionPage(toBottomNavDestination: (d) {
-                  widget.toBottomNavDestination(d);
-                })));
+            pageBuilder: (_, __, ___) => newPageInstance));
   }
 
   @override
@@ -325,6 +330,7 @@ class _PlanSessionPageState extends State<PlanSessionPage> {
 
   void showBottomSheet(ExerciseContext addEditContext,
       [Exercise? exerciseToEdit, int? keyToEdit]) {
+    widget.setNavBarVisibility(false);
     showModalBottomSheet<void>(
         isScrollControlled: true,
         context: context,
@@ -343,7 +349,7 @@ class _PlanSessionPageState extends State<PlanSessionPage> {
                           addEditContext, exerciseToEdit, keyToEdit)),
                 ],
               ));
-        });
+        }).whenComplete(() => widget.setNavBarVisibility(true));
   }
 
   ExerciseBottomSheet exerciseBottomSheet(ExerciseContext addEditContext,
