@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
-import 'package:ppl_course/common/components/asset_button.dart';
 import 'package:ppl_course/data/models/session/session.dart';
 import 'package:ppl_course/logic/sessions/sessions_bloc.dart';
 import 'package:ppl_course/presentation/pages/home/components/session_widget.dart';
@@ -12,8 +10,10 @@ import 'package:ppl_course/res/string/strings.dart';
 import 'package:ppl_course/res/styles/app_text_styles.dart';
 
 class HomePage extends StatefulWidget {
-  const HomePage({Key? key, required this.toBottomNavDestination,})
-      : super(key: key);
+  const HomePage({
+    Key? key,
+    required this.toBottomNavDestination,
+  }) : super(key: key);
 
   final ValueSetter<BottomNavDestination> toBottomNavDestination;
 
@@ -83,10 +83,7 @@ class _HomePageState extends State<HomePage> {
         title: Text(Strings.appTitle, style: AppTextStyles.barTitle),
       ),
       body: SafeArea(
-        child: Stack(
-          alignment: AlignmentDirectional.bottomEnd,
-          children: [buildHomePageContent(), buildPlanSessionButton(context)],
-        ),
+        child: buildHomePageContent(),
       ),
     );
   }
@@ -114,21 +111,6 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  Padding buildPlanSessionButton(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 4),
-      child: AccentButton(
-        text: Strings.planSessionCTA,
-        onTap: () => toPlanSession(),
-        endIcon: SvgPicture.asset(
-          'assets/images/ic_dumbbell.svg',
-          width: 24,
-          height: 24,
-        ),
-      ),
-    );
-  }
-
   void toPlanSession() {
     // widget.toBottomNavDestination(BottomNavDestination.plan);
   }
@@ -138,7 +120,8 @@ class _HomePageState extends State<HomePage> {
   }
 
   onTapEditSession(Session sessionToEdit) {
-    //TODO set editSession in repo. (via Bloc?)
+    BlocProvider.of<SessionsBloc>(context)
+        .add(BroadcastSessionToEdit(sessionToEdit));
     widget.toBottomNavDestination(BottomNavDestination.plan);
   }
 }

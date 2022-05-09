@@ -91,10 +91,25 @@ class LastSessionOfTypeState implements SessionsState {
     final isCompleted = lastSession?.completed ?? false;
     final result = <String, dynamic>{};
     result.addAll({
-      SessionsState.stateType: SessionsState.allSessions,
+      SessionsState.stateType: SessionsState.lastSessionOfType,
       SessionsState.pendingSessions: isCompleted ? null : [lastSession],
       SessionsState.completedSessions: isCompleted ? [lastSession] : null
     });
     return result;
+  }
+}
+
+class SessionToEditState implements SessionsState {
+  final Session sessionToEdit;
+
+  SessionToEditState(this.sessionToEdit);
+
+  @override
+  String toJson() => json.encode(toMap());
+
+  @override
+  Map<String, dynamic> toMap() {
+    // Empty implementation as this State needn't persist.
+    return {};
   }
 }

@@ -44,7 +44,7 @@ class _PlanSessionPageState extends State<PlanSessionPage> {
   Session? _sessionToEdit;
   bool _editSessionPopulated = false;
 
-  bool get _hasSessionToEdit => _sessionToEdit != null;
+  bool _hasSessionToEdit() => _sessionToEdit != null;
 
   late DateTimeDay _selectedDay;
   late final DateTimeDay _dateToday;
@@ -85,6 +85,19 @@ class _PlanSessionPageState extends State<PlanSessionPage> {
         DateTimeDay.fromDateTime(_dateTomorrow.add(const Duration(days: 1)));
     _dayOptions = _setDaySelection(0);
     initOtherDayOptions();
+    _checkForSessionToEdit();
+  }
+
+  PplSelectorSwitch buildPplSwitch(SessionType type) {
+    return PplSelectorSwitch(
+        initialType: type,
+        onChanged: (newType) {
+          setState(() {
+            _lastSessionCopied = false;
+            _type = newType;
+            _pplColor = AppColor.getPplColor(newType);
+          });
+        });
   }
 
   void initOtherDayOptions() {
@@ -99,6 +112,30 @@ class _PlanSessionPageState extends State<PlanSessionPage> {
     _editNotesController.dispose();
     _notesFocusNode.dispose();
     super.dispose();
+  }
+
+  void _checkForSessionToEdit() {
+    BlocListener<SessionsBloc, SessionsState>(
+      listenWhen: (_, s) => s is BroadcastSessionToEdit,
+      listener: (_, s) {
+        if (s is BroadcastSessionToEdit) {
+          _resetPage();
+          final broadcast = s as BroadcastSessionToEdit;
+          setState(() => _sessionToEdit = broadcast.sessionToEdit);
+        }
+      },
+    );
+  }
+
+  void _resetPage() {
+    Navigator.pushReplacement(
+        context,
+        PageRouteBuilder(
+            transitionDuration: Duration.zero,
+            pageBuilder: (_, __, ___) =>
+                PlanSessionPage(toBottomNavDestination: (d) {
+                  widget.toBottomNavDestination(d);
+                })));
   }
 
   @override
@@ -137,15 +174,7 @@ class _PlanSessionPageState extends State<PlanSessionPage> {
                 child: Column(
                   children: [
                     const SizedBox(height: 16),
-                    PplSelectorSwitch(
-                        initialType: _type,
-                        onChanged: (newType) {
-                          setState(() {
-                            _lastSessionCopied = false;
-                            _type = newType;
-                            _pplColor = AppColor.getPplColor(newType);
-                          });
-                        }),
+                    buildPplSwitch(_type),
                     const SizedBox(height: 32),
                     buildSelectDay(),
                     const SizedBox(height: 16),
@@ -231,7 +260,7 @@ class _PlanSessionPageState extends State<PlanSessionPage> {
   }
 
   Widget buildDeleteButton() {
-    if (_hasSessionToEdit) {
+    if (_hasSessionToEdit()) {
       return Container(
           padding: const EdgeInsets.fromLTRB(0, 0, 12, 12),
           height: MediaQuery.of(context).size.height,
@@ -266,7 +295,7 @@ class _PlanSessionPageState extends State<PlanSessionPage> {
           final lastSession = state.lastSession;
           if (lastSession != null &&
               !_lastSessionCopied &&
-              !_hasSessionToEdit) {
+              !_hasSessionToEdit()) {
             return Column(
               children: [
                 const SizedBox(height: 16),
@@ -403,6 +432,7 @@ class _PlanSessionPageState extends State<PlanSessionPage> {
         BlocProvider.of<SessionsBloc>(context).add(EditSession(session));
       }
     }
+    _resetPage();
     navigateToHome();
   }
 
