@@ -3,6 +3,7 @@ import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
 import 'package:ppl_course/presentation/pages/home/home_page.dart';
 import 'package:ppl_course/presentation/pages/stats/stats_page.dart';
 import 'package:ppl_course/res/color/colors.dart';
+import 'package:ppl_course/res/string/strings.dart';
 import 'package:ppl_course/res/styles/app_text_styles.dart';
 
 enum BottomNavDestination { home, plan, progression }
@@ -34,7 +35,7 @@ class _BottomNavScreenState extends State<BottomNavScreen> {
 
   List<Widget> _buildScreens() {
     return [
-      const HomePage(),
+      HomePage(setNavBarVisibility: (v) => setNavBarVisibility(v)),
       const StatsPage(),
     ];
   }
@@ -43,13 +44,13 @@ class _BottomNavScreenState extends State<BottomNavScreen> {
     return [
       PersistentBottomNavBarItem(
           icon: const Icon(Icons.fitness_center),
-          title: "Sessions",
+          title: Strings.sessionsTab,
           activeColorPrimary: AppColor.dark,
           inactiveColorPrimary: AppColor.grey50,
           textStyle: AppTextStyles.navBarItemText),
       PersistentBottomNavBarItem(
           icon: const Icon(Icons.show_chart),
-          title: "Progression",
+          title: Strings.progressionTab,
           activeColorPrimary: AppColor.dark,
           inactiveColorPrimary: AppColor.grey50,
           textStyle: AppTextStyles.navBarItemText),

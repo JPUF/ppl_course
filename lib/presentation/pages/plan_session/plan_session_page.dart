@@ -19,7 +19,10 @@ import 'components/plan_exercise_widget.dart';
 import 'components/ppl_selector_switch.dart';
 
 class PlanSessionPage extends StatefulWidget {
-  const PlanSessionPage({Key? key, this.sessionToEdit}) : super(key: key);
+  const PlanSessionPage(
+      {Key? key, required this.setNavBarVisibility, this.sessionToEdit})
+      : super(key: key);
+  final ValueSetter<bool> setNavBarVisibility;
   final Session? sessionToEdit;
 
   @override
@@ -297,8 +300,7 @@ class _PlanSessionPageState extends State<PlanSessionPage> {
 
   void showBottomSheet(ExerciseContext addEditContext,
       [Exercise? exerciseToEdit, int? keyToEdit]) {
-    //TODO nav bar visibility
-    // widget.setNavBarVisibility(false);
+    widget.setNavBarVisibility(false);
     showModalBottomSheet<void>(
         isScrollControlled: true,
         context: context,
@@ -318,7 +320,7 @@ class _PlanSessionPageState extends State<PlanSessionPage> {
                 ],
               ));
         }).whenComplete(() {
-      //TODO set navbar visibility
+      widget.setNavBarVisibility(true);
     });
   }
 

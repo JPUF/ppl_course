@@ -12,7 +12,9 @@ import 'package:ppl_course/res/string/strings.dart';
 import 'package:ppl_course/res/styles/app_text_styles.dart';
 
 class HomePage extends StatefulWidget {
-  const HomePage({Key? key}) : super(key: key);
+  const HomePage({Key? key, required this.setNavBarVisibility})
+      : super(key: key);
+  final ValueSetter<bool> setNavBarVisibility;
 
   @override
   State<HomePage> createState() => _HomePageState();
@@ -127,7 +129,10 @@ class _HomePageState extends State<HomePage> {
   }
 
   void toPlanSession() {
-    pushNewScreen(context, screen: const PlanSessionPage());
+    pushNewScreen(context,
+        screen: PlanSessionPage(
+          setNavBarVisibility: widget.setNavBarVisibility,
+        ));
   }
 
   onTapLogSession(Session sessionToLog) {
@@ -136,6 +141,9 @@ class _HomePageState extends State<HomePage> {
 
   onTapEditSession(Session sessionToEdit) {
     pushNewScreen(context,
-        screen: PlanSessionPage(sessionToEdit: sessionToEdit));
+        screen: PlanSessionPage(
+          setNavBarVisibility: widget.setNavBarVisibility,
+          sessionToEdit: sessionToEdit,
+        ));
   }
 }
