@@ -1,20 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
+import 'package:ppl_course/common/components/asset_button.dart';
 import 'package:ppl_course/data/models/session/session.dart';
 import 'package:ppl_course/logic/sessions/sessions_bloc.dart';
 import 'package:ppl_course/presentation/pages/home/components/session_widget.dart';
 import 'package:ppl_course/presentation/pages/log_session/log_session_page.dart';
+import 'package:ppl_course/presentation/pages/plan_session/plan_session_page.dart';
 import 'package:ppl_course/res/string/strings.dart';
 import 'package:ppl_course/res/styles/app_text_styles.dart';
 
 class HomePage extends StatefulWidget {
-  const HomePage({
-    Key? key,
-    required this.toEditSession,
-  }) : super(key: key);
-
-  final ValueSetter<Session> toEditSession;
+  const HomePage({Key? key}) : super(key: key);
 
   @override
   State<HomePage> createState() => _HomePageState();
@@ -82,7 +80,10 @@ class _HomePageState extends State<HomePage> {
         title: Text(Strings.appTitle, style: AppTextStyles.barTitle),
       ),
       body: SafeArea(
-        child: buildHomePageContent(),
+        child: Stack(
+          alignment: AlignmentDirectional.bottomEnd,
+          children: [buildHomePageContent(), buildPlanSessionButton(context)],
+        ),
       ),
     );
   }
@@ -110,8 +111,23 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
+  Padding buildPlanSessionButton(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 4),
+      child: AccentButton(
+        text: Strings.planSessionCTA,
+        onTap: () => toPlanSession(),
+        endIcon: SvgPicture.asset(
+          'assets/images/ic_dumbbell.svg',
+          width: 24,
+          height: 24,
+        ),
+      ),
+    );
+  }
+
   void toPlanSession() {
-    // widget.toBottomNavDestination(BottomNavDestination.plan);
+    pushNewScreen(context, screen: const PlanSessionPage());
   }
 
   onTapLogSession(Session sessionToLog) {
@@ -119,6 +135,7 @@ class _HomePageState extends State<HomePage> {
   }
 
   onTapEditSession(Session sessionToEdit) {
-    widget.toEditSession(sessionToEdit);
+    pushNewScreen(context,
+        screen: PlanSessionPage(sessionToEdit: sessionToEdit));
   }
 }

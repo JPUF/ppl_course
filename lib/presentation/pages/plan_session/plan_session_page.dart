@@ -7,7 +7,6 @@ import 'package:ppl_course/common/utils/date_time_day.dart';
 import 'package:ppl_course/data/models/exercise/exercise.dart';
 import 'package:ppl_course/data/models/session/session.dart';
 import 'package:ppl_course/logic/sessions/sessions_bloc.dart';
-import 'package:ppl_course/presentation/pages/menu/bottom_nav_screen.dart';
 import 'package:ppl_course/res/color/colors.dart';
 import 'package:ppl_course/res/string/strings.dart';
 import 'package:ppl_course/res/styles/app_text_styles.dart';
@@ -20,18 +19,8 @@ import 'components/plan_exercise_widget.dart';
 import 'components/ppl_selector_switch.dart';
 
 class PlanSessionPage extends StatefulWidget {
-  const PlanSessionPage(
-      {Key? key,
-      required this.toBottomNavDestination,
-      required this.setNavBarVisibility,
-      required this.data})
-      : super(key: key);
-
-  final ValueSetter<BottomNavDestination> toBottomNavDestination;
-  final ValueSetter<bool> setNavBarVisibility;
-  final Map<String, dynamic> data;
-
-  static const String planSessionKey = 'plan_session_key';
+  const PlanSessionPage({Key? key, this.sessionToEdit}) : super(key: key);
+  final Session? sessionToEdit;
 
   @override
   _PlanSessionPageState createState() => _PlanSessionPageState();
@@ -51,8 +40,7 @@ class _PlanSessionPageState extends State<PlanSessionPage> {
 
   bool _editSessionPopulated = false;
 
-  Session? _sessionToEdit;
-  bool _hasSessionToEdit() => _sessionToEdit != null;
+  bool _hasSessionToEdit() => widget.sessionToEdit != null;
 
   late DateTimeDay _selectedDay;
   late final DateTimeDay _dateToday;
@@ -79,10 +67,6 @@ class _PlanSessionPageState extends State<PlanSessionPage> {
     return List.generate(3, (i) => (i == index));
   }
 
-  //TODO go back to main branch, create another feature branch.
-  // start again, but with a non-persistent tab bar. Two items to start with.
-
-
   @override
   void initState() {
     super.initState();
@@ -107,6 +91,7 @@ class _PlanSessionPageState extends State<PlanSessionPage> {
             _lastSessionCopied = false;
             _type = newType;
             _pplColor = AppColor.getPplColor(newType);
+            _clearExercises();
           });
         });
   }
@@ -125,23 +110,9 @@ class _PlanSessionPageState extends State<PlanSessionPage> {
     super.dispose();
   }
 
-  void _resetPage() {
-    final newPageInstance = PlanSessionPage(
-      toBottomNavDestination: (d) => widget.toBottomNavDestination(d),
-      setNavBarVisibility: (v) => widget.setNavBarVisibility(v),
-      data: widget.data,
-    );
-    Navigator.pushReplacement(
-        context,
-        PageRouteBuilder(
-            transitionDuration: Duration.zero,
-            pageBuilder: (_, __, ___) => newPageInstance));
-  }
-
   @override
   Widget build(BuildContext context) {
-    _sessionToEdit = widget.data[PlanSessionPage.planSessionKey] as Session?;
-    final sessionToEdit = _sessionToEdit;
+    final sessionToEdit = widget.sessionToEdit;
     if (sessionToEdit != null) {
       populateWithSessionToEdit(sessionToEdit);
     }
@@ -326,7 +297,8 @@ class _PlanSessionPageState extends State<PlanSessionPage> {
 
   void showBottomSheet(ExerciseContext addEditContext,
       [Exercise? exerciseToEdit, int? keyToEdit]) {
-    widget.setNavBarVisibility(false);
+    //TODO nav bar visibility
+    // widget.setNavBarVisibility(false);
     showModalBottomSheet<void>(
         isScrollControlled: true,
         context: context,
@@ -345,7 +317,9 @@ class _PlanSessionPageState extends State<PlanSessionPage> {
                           addEditContext, exerciseToEdit, keyToEdit)),
                 ],
               ));
-        }).whenComplete(() => widget.setNavBarVisibility(true));
+        }).whenComplete(() {
+      //TODO set navbar visibility
+    });
   }
 
   ExerciseBottomSheet exerciseBottomSheet(ExerciseContext addEditContext,
@@ -423,7 +397,7 @@ class _PlanSessionPageState extends State<PlanSessionPage> {
         notes = null;
       }
     }
-    final editSession = _sessionToEdit;
+    final editSession = widget.sessionToEdit;
     if (_exerciseMap.isNotEmpty) {
       if (editSession == null) {
         final session = Session(
@@ -434,12 +408,11 @@ class _PlanSessionPageState extends State<PlanSessionPage> {
         BlocProvider.of<SessionsBloc>(context).add(EditSession(session));
       }
     }
-    _resetPage();
     navigateToHome();
   }
 
   deleteSession() {
-    final editSession = _sessionToEdit;
+    final editSession = widget.sessionToEdit;
     if (editSession != null) {
       BlocProvider.of<SessionsBloc>(context)
           .add(DeleteSession(constructSession(editSession)));
@@ -457,7 +430,12 @@ class _PlanSessionPageState extends State<PlanSessionPage> {
     );
   }
 
+  void _clearExercises() {
+    _exerciseMap = {};
+    _newExerciseCount = 0;
+  }
+
   void navigateToHome() {
-    widget.toBottomNavDestination(BottomNavDestination.home);
+    Navigator.pop(context);
   }
 }
