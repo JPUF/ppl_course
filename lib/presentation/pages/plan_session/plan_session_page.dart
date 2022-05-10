@@ -130,14 +130,14 @@ class _PlanSessionPageState extends State<PlanSessionPage> {
             style: AppTextStyles.barTitle,
           ),
           actions: [
-            Container(
-                padding: const EdgeInsets.only(right: 16),
-                alignment: Alignment.centerRight,
-                child: GestureDetector(
-                    onTap: () => submitSession(),
-                    child: Text(Strings.genericDone,
-                        style:
-                            AppTextStyles.button.apply(color: AppColor.dark))))
+            MaterialButton(
+              onPressed: () => submitSession(),
+              child: Align(
+                alignment: Alignment.center,
+                child: Text(Strings.genericDone,
+                    style: AppTextStyles.button.apply(color: AppColor.dark)),
+              ),
+            ),
           ],
         ),
         body: Stack(
