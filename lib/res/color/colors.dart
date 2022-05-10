@@ -25,6 +25,7 @@ class AppColor {
   static MaterialAppColor light = MaterialAppColor(0xffE0FBFC);
   static MaterialColor dark = MaterialAppColor(0xff2C2C54);
   static MaterialAppColor accent = MaterialAppColor(0xffEE6C4D);
+  static MaterialColor darkTint = MaterialAppColor(0xff2C2C54);
 
   static MaterialAppColor push = MaterialAppColor(0xff2C2C54);
   static MaterialAppColor pull = MaterialAppColor(0xffA40E4C);

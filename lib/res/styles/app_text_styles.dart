@@ -20,6 +20,10 @@ class AppTextStyles {
       textStyle: TextStyle(
           color: AppColor.dark, fontSize: 10.0, fontWeight: FontWeight.normal));
 
+  static TextStyle chartAxisTitle = GoogleFonts.poppins(
+      textStyle: TextStyle(
+          color: AppColor.white, fontSize: 14.0, fontWeight: FontWeight.normal));
+
   static TextStyle body14 = GoogleFonts.poppins(
       textStyle: TextStyle(
           color: AppColor.dark, fontSize: 14.0, fontWeight: FontWeight.normal));

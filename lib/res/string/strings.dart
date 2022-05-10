@@ -1,5 +1,4 @@
 class Strings {
-
   // Generic
   static const String genericDone = "DONE";
 
@@ -11,7 +10,6 @@ class Strings {
   static const String planner = "Planner";
   static const String sessionsTab = "Sessions";
   static const String progressionTab = "Progression";
-
 
   // Home
   static const String planSessionCTA = "PLAN SESSION";
@@ -25,6 +23,7 @@ class Strings {
   static const String planTomorrow = "Tomorrow";
   static const String planDayDialogTitle = "Select Day";
   static const String generalNotesHint = "General session notes";
+
   static String copyLastSession(String type) => "Copy last $type session";
   static const String addExerciseCTA = "ADD EXERCISE";
   static const String editExerciseCTA = "UPDATE EXERCISE";
@@ -47,4 +46,6 @@ class Strings {
   static const String logFinish = "COMPLETE";
   static const String logSessionNotes = "Session notes:";
 
+  // Stats Page
+  static const String progressionChartTitle = "Session Volume";
 }
