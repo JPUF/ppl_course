@@ -16,6 +16,10 @@ class AppTextStyles {
       fontWeight: FontWeight.bold,
       fontFamily: AppFontFamilies.mont);
 
+  static TextStyle navBarItemText = GoogleFonts.poppins(
+      textStyle: TextStyle(
+          color: AppColor.dark, fontSize: 10.0, fontWeight: FontWeight.normal));
+
   static TextStyle body14 = GoogleFonts.poppins(
       textStyle: TextStyle(
           color: AppColor.dark, fontSize: 14.0, fontWeight: FontWeight.normal));

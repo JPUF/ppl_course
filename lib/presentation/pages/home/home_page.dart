@@ -1,18 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_svg/svg.dart';
+import 'package:flutter_svg/flutter_svg.dart';
+import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
 import 'package:ppl_course/common/components/asset_button.dart';
 import 'package:ppl_course/data/models/session/session.dart';
 import 'package:ppl_course/logic/sessions/sessions_bloc.dart';
-import 'package:ppl_course/presentation/navigation/destination.dart';
 import 'package:ppl_course/presentation/pages/home/components/session_widget.dart';
+import 'package:ppl_course/presentation/pages/log_session/log_session_page.dart';
+import 'package:ppl_course/presentation/pages/plan_session/plan_session_page.dart';
 import 'package:ppl_course/res/string/strings.dart';
 import 'package:ppl_course/res/styles/app_text_styles.dart';
 
-import '../plan_session/session_args.dart';
-
 class HomePage extends StatefulWidget {
-  const HomePage({Key? key}) : super(key: key);
+  const HomePage({Key? key, required this.setNavBarVisibility})
+      : super(key: key);
+  final ValueSetter<bool> setNavBarVisibility;
 
   @override
   State<HomePage> createState() => _HomePageState();
@@ -33,12 +35,11 @@ class _HomePageState extends State<HomePage> {
             return Container(
                 padding: const EdgeInsets.only(bottom: 64),
                 child: Column(
-                    children:
-                    sessionsOrEmpty(Strings.upcomingSessions, pendingSessions) +
+                    children: sessionsOrEmpty(
+                            Strings.upcomingSessions, pendingSessions) +
                         [const SizedBox(height: 16)] +
                         sessionsOrEmpty(
-                            Strings.completedSessions, completedSessions)
-                ));
+                            Strings.completedSessions, completedSessions)));
           } else {
             return const SizedBox(height: 16);
           }
@@ -62,14 +63,13 @@ class _HomePageState extends State<HomePage> {
   Column buildSessionColumn(List<Session> sessions) {
     return Column(
       children: sessions
-          .map((session) =>
-          GestureDetector(
-            onTap: () => onTapLogSession(session),
-            child: SessionWidget(
-                session: session,
-                onTappedLog: () => onTapLogSession(session),
-                onTappedEdit: () => onTapEditSession(session)),
-          ))
+          .map((session) => GestureDetector(
+                onTap: () => onTapLogSession(session),
+                child: SessionWidget(
+                    session: session,
+                    onTappedLog: () => onTapLogSession(session),
+                    onTappedEdit: () => onTapEditSession(session)),
+              ))
           .toList(),
     );
   }
@@ -118,10 +118,7 @@ class _HomePageState extends State<HomePage> {
       padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 4),
       child: AccentButton(
         text: Strings.planSessionCTA,
-        onTap: () =>
-            Navigator.of(context)
-                .pushNamed(
-                Destination.planSession, arguments: SessionArgs(null)),
+        onTap: () => toPlanSession(),
         endIcon: SvgPicture.asset(
           'assets/images/ic_dumbbell.svg',
           width: 24,
@@ -131,13 +128,22 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
+  void toPlanSession() {
+    pushNewScreen(context,
+        screen: PlanSessionPage(
+          setNavBarVisibility: widget.setNavBarVisibility,
+        ));
+  }
+
   onTapLogSession(Session sessionToLog) {
-    Navigator.of(context)
-        .pushNamed(Destination.logSession, arguments: sessionToLog);
+    pushNewScreen(context, screen: LogSessionPage(session: sessionToLog));
   }
 
   onTapEditSession(Session sessionToEdit) {
-    Navigator.of(context).pushNamed(Destination.planSession,
-        arguments: SessionArgs(sessionToEdit));
+    pushNewScreen(context,
+        screen: PlanSessionPage(
+          setNavBarVisibility: widget.setNavBarVisibility,
+          sessionToEdit: sessionToEdit,
+        ));
   }
 }

@@ -7,7 +7,6 @@ import 'package:ppl_course/common/utils/date_time_day.dart';
 import 'package:ppl_course/data/models/exercise/exercise.dart';
 import 'package:ppl_course/data/models/session/session.dart';
 import 'package:ppl_course/logic/sessions/sessions_bloc.dart';
-import 'package:ppl_course/presentation/pages/plan_session/session_args.dart';
 import 'package:ppl_course/res/color/colors.dart';
 import 'package:ppl_course/res/string/strings.dart';
 import 'package:ppl_course/res/styles/app_text_styles.dart';
@@ -20,7 +19,11 @@ import 'components/plan_exercise_widget.dart';
 import 'components/ppl_selector_switch.dart';
 
 class PlanSessionPage extends StatefulWidget {
-  const PlanSessionPage({Key? key}) : super(key: key);
+  const PlanSessionPage(
+      {Key? key, required this.setNavBarVisibility, this.sessionToEdit})
+      : super(key: key);
+  final ValueSetter<bool> setNavBarVisibility;
+  final Session? sessionToEdit;
 
   @override
   _PlanSessionPageState createState() => _PlanSessionPageState();
@@ -38,9 +41,9 @@ class _PlanSessionPageState extends State<PlanSessionPage> {
   Map<int, Exercise> _exerciseMap = {};
   int _newExerciseCount = 0;
 
-  late SessionArgs _editArgs;
-
   bool _editSessionPopulated = false;
+
+  bool _hasSessionToEdit() => widget.sessionToEdit != null;
 
   late DateTimeDay _selectedDay;
   late final DateTimeDay _dateToday;
@@ -83,6 +86,19 @@ class _PlanSessionPageState extends State<PlanSessionPage> {
     initOtherDayOptions();
   }
 
+  PplSelectorSwitch buildPplSwitch(SessionType type) {
+    return PplSelectorSwitch(
+        initialType: type,
+        onChanged: (newType) {
+          setState(() {
+            _lastSessionCopied = false;
+            _type = newType;
+            _pplColor = AppColor.getPplColor(newType);
+            _clearExercises();
+          });
+        });
+  }
+
   void initOtherDayOptions() {
     for (int i = 1; i <= 5; i++) {
       _otherDayOptions
@@ -99,8 +115,7 @@ class _PlanSessionPageState extends State<PlanSessionPage> {
 
   @override
   Widget build(BuildContext context) {
-    _editArgs = ModalRoute.of(context)?.settings.arguments as SessionArgs;
-    final sessionToEdit = _editArgs.session;
+    final sessionToEdit = widget.sessionToEdit;
     if (sessionToEdit != null) {
       populateWithSessionToEdit(sessionToEdit);
     }
@@ -115,14 +130,14 @@ class _PlanSessionPageState extends State<PlanSessionPage> {
             style: AppTextStyles.barTitle,
           ),
           actions: [
-            Container(
-                padding: const EdgeInsets.only(right: 16),
-                alignment: Alignment.centerRight,
-                child: GestureDetector(
-                    onTap: () => submitSession(),
-                    child: Text(Strings.genericDone,
-                        style:
-                            AppTextStyles.button.apply(color: AppColor.dark))))
+            MaterialButton(
+              onPressed: () => submitSession(),
+              child: Align(
+                alignment: Alignment.center,
+                child: Text(Strings.genericDone,
+                    style: AppTextStyles.button.apply(color: AppColor.dark)),
+              ),
+            ),
           ],
         ),
         body: Stack(
@@ -134,15 +149,7 @@ class _PlanSessionPageState extends State<PlanSessionPage> {
                 child: Column(
                   children: [
                     const SizedBox(height: 16),
-                    PplSelectorSwitch(
-                        initialType: _type,
-                        onChanged: (newType) {
-                          setState(() {
-                            _lastSessionCopied = false;
-                            _type = newType;
-                            _pplColor = AppColor.getPplColor(newType);
-                          });
-                        }),
+                    buildPplSwitch(_type),
                     const SizedBox(height: 32),
                     buildSelectDay(),
                     const SizedBox(height: 16),
@@ -201,18 +208,17 @@ class _PlanSessionPageState extends State<PlanSessionPage> {
 
   void showDayDialog() {
     showMaterialScrollPicker<DateTimeDay>(
-      context: context,
-      title: Strings.planDayDialogTitle,
-      items: _otherDayOptions,
-      selectedItem: _dateOther,
-      onChanged: (day) {
-        setState(() {
-          _dateOther = day;
-          _selectedDay = day;
-          _dayOptions = [false, false, true];
+        context: context,
+        title: Strings.planDayDialogTitle,
+        items: _otherDayOptions,
+        selectedItem: _dateOther,
+        onChanged: (day) {
+          setState(() {
+            _dateOther = day;
+            _selectedDay = day;
+            _dayOptions = [false, false, true];
+          });
         });
-      }
-    );
   }
 
   Widget dayButton(String text, bool editIcon) {
@@ -222,14 +228,14 @@ class _PlanSessionPageState extends State<PlanSessionPage> {
         children: [
           Text(text, style: AppTextStyles.body17.apply(color: _pplColor)),
           editIcon ? const SizedBox(width: 8) : Container(),
-          editIcon ? Icon(Icons.edit, color: _pplColor) : Container()
+          editIcon ? Icon(Icons.edit_outlined, color: _pplColor) : Container()
         ],
       ),
     );
   }
 
   Widget buildDeleteButton() {
-    if (_editArgs.session != null) {
+    if (_hasSessionToEdit()) {
       return Container(
           padding: const EdgeInsets.fromLTRB(0, 0, 12, 12),
           height: MediaQuery.of(context).size.height,
@@ -264,7 +270,7 @@ class _PlanSessionPageState extends State<PlanSessionPage> {
           final lastSession = state.lastSession;
           if (lastSession != null &&
               !_lastSessionCopied &&
-              _editArgs.session == null) {
+              !_hasSessionToEdit()) {
             return Column(
               children: [
                 const SizedBox(height: 16),
@@ -294,6 +300,7 @@ class _PlanSessionPageState extends State<PlanSessionPage> {
 
   void showBottomSheet(ExerciseContext addEditContext,
       [Exercise? exerciseToEdit, int? keyToEdit]) {
+    widget.setNavBarVisibility(false);
     showModalBottomSheet<void>(
         isScrollControlled: true,
         context: context,
@@ -312,7 +319,9 @@ class _PlanSessionPageState extends State<PlanSessionPage> {
                           addEditContext, exerciseToEdit, keyToEdit)),
                 ],
               ));
-        });
+        }).whenComplete(() {
+      widget.setNavBarVisibility(true);
+    });
   }
 
   ExerciseBottomSheet exerciseBottomSheet(ExerciseContext addEditContext,
@@ -390,27 +399,27 @@ class _PlanSessionPageState extends State<PlanSessionPage> {
         notes = null;
       }
     }
-    final editSession = _editArgs.session;
+    final editSession = widget.sessionToEdit;
     if (_exerciseMap.isNotEmpty) {
       if (editSession == null) {
-        final session =
-            Session(_type, _selectedDay, _notesText, _exerciseMap.values.toList());
+        final session = Session(
+            _type, _selectedDay, _notesText, _exerciseMap.values.toList());
         BlocProvider.of<SessionsBloc>(context).add(WriteSession(session));
       } else {
         final session = constructSession(editSession);
         BlocProvider.of<SessionsBloc>(context).add(EditSession(session));
       }
     }
-    navigateBack();
+    navigateToHome();
   }
 
   deleteSession() {
-    final editSession = _editArgs.session;
+    final editSession = widget.sessionToEdit;
     if (editSession != null) {
       BlocProvider.of<SessionsBloc>(context)
           .add(DeleteSession(constructSession(editSession)));
     }
-    navigateBack();
+    navigateToHome();
   }
 
   Session constructSession(Session editSession) {
@@ -423,5 +432,12 @@ class _PlanSessionPageState extends State<PlanSessionPage> {
     );
   }
 
-  void navigateBack() => Navigator.pop(context);
+  void _clearExercises() {
+    _exerciseMap = {};
+    _newExerciseCount = 0;
+  }
+
+  void navigateToHome() {
+    Navigator.pop(context);
+  }
 }
