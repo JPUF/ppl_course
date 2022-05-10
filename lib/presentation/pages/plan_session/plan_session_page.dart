@@ -23,11 +23,15 @@ class PlanSessionPage extends StatefulWidget {
   const PlanSessionPage(
       {Key? key,
       required this.toBottomNavDestination,
-      required this.setNavBarVisibility})
+      required this.setNavBarVisibility,
+      required this.data})
       : super(key: key);
 
   final ValueSetter<BottomNavDestination> toBottomNavDestination;
   final ValueSetter<bool> setNavBarVisibility;
+  final Map<String, dynamic> data;
+
+  static const String planSessionKey = 'plan_session_key';
 
   @override
   _PlanSessionPageState createState() => _PlanSessionPageState();
@@ -45,9 +49,9 @@ class _PlanSessionPageState extends State<PlanSessionPage> {
   Map<int, Exercise> _exerciseMap = {};
   int _newExerciseCount = 0;
 
-  Session? _sessionToEdit;
   bool _editSessionPopulated = false;
 
+  Session? _sessionToEdit;
   bool _hasSessionToEdit() => _sessionToEdit != null;
 
   late DateTimeDay _selectedDay;
@@ -75,6 +79,10 @@ class _PlanSessionPageState extends State<PlanSessionPage> {
     return List.generate(3, (i) => (i == index));
   }
 
+  //TODO go back to main branch, create another feature branch.
+  // start again, but with a non-persistent tab bar. Two items to start with.
+
+
   @override
   void initState() {
     super.initState();
@@ -89,7 +97,6 @@ class _PlanSessionPageState extends State<PlanSessionPage> {
         DateTimeDay.fromDateTime(_dateTomorrow.add(const Duration(days: 1)));
     _dayOptions = _setDaySelection(0);
     initOtherDayOptions();
-    _checkForSessionToEdit();
   }
 
   PplSelectorSwitch buildPplSwitch(SessionType type) {
@@ -118,23 +125,11 @@ class _PlanSessionPageState extends State<PlanSessionPage> {
     super.dispose();
   }
 
-  void _checkForSessionToEdit() {
-    BlocListener<SessionsBloc, SessionsState>(
-      listenWhen: (_, s) => s is BroadcastSessionToEdit,
-      listener: (_, s) {
-        if (s is BroadcastSessionToEdit) {
-          _resetPage();
-          final broadcast = s as BroadcastSessionToEdit;
-          setState(() => _sessionToEdit = broadcast.sessionToEdit);
-        }
-      },
-    );
-  }
-
   void _resetPage() {
     final newPageInstance = PlanSessionPage(
       toBottomNavDestination: (d) => widget.toBottomNavDestination(d),
       setNavBarVisibility: (v) => widget.setNavBarVisibility(v),
+      data: widget.data,
     );
     Navigator.pushReplacement(
         context,
@@ -145,6 +140,7 @@ class _PlanSessionPageState extends State<PlanSessionPage> {
 
   @override
   Widget build(BuildContext context) {
+    _sessionToEdit = widget.data[PlanSessionPage.planSessionKey] as Session?;
     final sessionToEdit = _sessionToEdit;
     if (sessionToEdit != null) {
       populateWithSessionToEdit(sessionToEdit);

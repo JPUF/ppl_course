@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
+import 'package:ppl_course/data/models/session/session.dart';
 import 'package:ppl_course/presentation/pages/home/home_page.dart';
 import 'package:ppl_course/presentation/pages/plan_session/plan_session_page.dart';
 import 'package:ppl_course/presentation/pages/stats/stats_page.dart';
@@ -18,6 +19,7 @@ class BottomNavScreen extends StatefulWidget {
 class _BottomNavScreenState extends State<BottomNavScreen> {
   late final PersistentTabController _controller;
   bool _hideNavBar = false;
+  Map<String, dynamic> data = {};
 
   @override
   void initState() {
@@ -33,12 +35,21 @@ class _BottomNavScreenState extends State<BottomNavScreen> {
     setState(() => _hideNavBar = !isVisible);
   }
 
+  void toEditSession(Session sessionToEdit) {
+    setState(() {
+      data[PlanSessionPage.planSessionKey] = sessionToEdit;
+      navigateTo(BottomNavDestination.plan);
+    });
+  }
+
   List<Widget> _buildScreens() {
     return [
-      HomePage(toBottomNavDestination: (d) => navigateTo(d)),
+      HomePage(toEditSession: (s) => toEditSession(s)),
       PlanSessionPage(
-          toBottomNavDestination: (d) => navigateTo(d),
-          setNavBarVisibility: (v) => setNavBarVisibility(v)),
+        toBottomNavDestination: (d) => navigateTo(d),
+        setNavBarVisibility: (v) => setNavBarVisibility(v),
+        data: data,
+      ),
       const StatsPage()
     ];
   }
@@ -50,13 +61,18 @@ class _BottomNavScreenState extends State<BottomNavScreen> {
           title: "All Sessions",
           activeColorPrimary: AppColor.dark,
           inactiveColorPrimary: AppColor.grey50,
-          textStyle: AppTextStyles.navBarItemText),
+          textStyle: AppTextStyles.navBarItemText,),
       PersistentBottomNavBarItem(
           icon: const Icon(Icons.edit),
           title: "Plan Session",
           activeColorPrimary: AppColor.dark,
           inactiveColorPrimary: AppColor.grey50,
-          textStyle: AppTextStyles.navBarItemText),
+          textStyle: AppTextStyles.navBarItemText,
+          onPressed: (_) {
+            setState(() {
+              _controller.index = 1;
+            });
+          }),
       PersistentBottomNavBarItem(
           icon: const Icon(Icons.fitness_center),
           title: "Progression",
@@ -77,7 +93,6 @@ class _BottomNavScreenState extends State<BottomNavScreen> {
         hideNavigationBar: _hideNavBar,
         confineInSafeArea: true,
         resizeToAvoidBottomInset: true,
-        stateManagement: true,
         hideNavigationBarWhenKeyboardShows: true,
         popActionScreens: PopActionScreensType.all,
         screenTransitionAnimation: const ScreenTransitionAnimation(

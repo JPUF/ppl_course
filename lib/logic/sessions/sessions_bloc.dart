@@ -26,12 +26,6 @@ class EditSession implements SessionsEvent {
   EditSession(this.editedSession);
 }
 
-class BroadcastSessionToEdit implements SessionsEvent {
-  final Session sessionToEdit;
-
-  BroadcastSessionToEdit(this.sessionToEdit);
-}
-
 class DeleteSession implements SessionsEvent {
   final Session sessionToDelete;
 
@@ -46,7 +40,6 @@ class SessionsBloc extends Bloc<SessionsEvent, SessionsState>
     on<FetchLastSessionOfType>(_fetchLastSessionOfType);
     on<WriteSession>(_writeSession);
     on<EditSession>(_editSession);
-    on<BroadcastSessionToEdit>(_broadcastEditSession);
     on<DeleteSession>(_deleteSession);
   }
 
@@ -68,11 +61,6 @@ class SessionsBloc extends Bloc<SessionsEvent, SessionsState>
     emit(AllSessionsState(
         pendingSessions: _sessionRepository.getAllPendingSessions(),
         completedSessions: _sessionRepository.getAllCompletedSessions()));
-  }
-
-  void _broadcastEditSession(
-      BroadcastSessionToEdit event, Emitter<SessionsState> emit) async {
-    emit(SessionToEditState(event.sessionToEdit));
   }
 
   void _deleteSession(DeleteSession event, Emitter<SessionsState> emit) async {
