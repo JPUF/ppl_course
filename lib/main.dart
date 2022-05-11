@@ -11,6 +11,7 @@ import 'package:ppl_course/logic/stats/stats_bloc.dart';
 import 'package:ppl_course/presentation/pages/menu/bottom_nav_screen.dart';
 import 'package:ppl_course/res/color/colors.dart';
 
+import 'data/repositories/session_repository.dart';
 import 'logic/basic/basic_bloc.dart';
 
 void main() async {
@@ -23,18 +24,27 @@ void main() async {
   Hive.registerAdapter(ExerciseNamesAdapter());
   await Hive.openBox(ExerciseRepository.exerciseBox);
 
-  HydratedBlocOverrides.runZoned(() => runApp(const PlannerApp()), storage: storage);
+  HydratedBlocOverrides.runZoned(
+    () => runApp(
+      PlannerApp(sessionRepository: SessionRepository()),
+    ),
+    storage: storage,
+  );
 }
 
 class PlannerApp extends StatelessWidget {
-  const PlannerApp({Key? key}) : super(key: key);
+  const PlannerApp({Key? key, required this.sessionRepository})
+      : super(key: key);
+
+  final SessionRepository sessionRepository;
 
   @override
   Widget build(BuildContext context) {
     return MultiBlocProvider(
       providers: [
         BlocProvider<BasicBloc>(create: (context) => BasicBloc()),
-        BlocProvider<SessionsBloc>(create: (context) => SessionsBloc()),
+        BlocProvider<SessionsBloc>(
+            create: (context) => SessionsBloc(sessionRepository)),
         BlocProvider<ExercisesBloc>(create: (context) => ExercisesBloc()),
         BlocProvider<StatsBloc>(create: (context) => StatsBloc())
       ],

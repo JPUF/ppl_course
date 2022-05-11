@@ -34,9 +34,9 @@ class DeleteSession implements SessionsEvent {
 
 class SessionsBloc extends Bloc<SessionsEvent, SessionsState>
     with HydratedMixin {
-  final SessionRepository _sessionRepository = SessionRepository();
+  final SessionRepository _sessionRepository;
 
-  SessionsBloc() : super(InitialState()) {
+  SessionsBloc(this._sessionRepository) : super(InitialState()) {
     on<FetchLastSessionOfType>(_fetchLastSessionOfType);
     on<WriteSession>(_writeSession);
     on<EditSession>(_editSession);
