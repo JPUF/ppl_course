@@ -7,6 +7,7 @@ import 'package:ppl_course/data/models/exercise/exercise_names.dart';
 import 'package:ppl_course/data/repositories/exercise_repository.dart';
 import 'package:ppl_course/logic/exercises/exercises_bloc.dart';
 import 'package:ppl_course/logic/sessions/sessions_bloc.dart';
+import 'package:ppl_course/logic/stats/stats_bloc.dart';
 import 'package:ppl_course/presentation/pages/menu/bottom_nav_screen.dart';
 import 'package:ppl_course/res/color/colors.dart';
 
@@ -34,7 +35,8 @@ class PlannerApp extends StatelessWidget {
       providers: [
         BlocProvider<BasicBloc>(create: (context) => BasicBloc()),
         BlocProvider<SessionsBloc>(create: (context) => SessionsBloc()),
-        BlocProvider<ExercisesBloc>(create: (context) => ExercisesBloc())
+        BlocProvider<ExercisesBloc>(create: (context) => ExercisesBloc()),
+        BlocProvider<StatsBloc>(create: (context) => StatsBloc())
       ],
       child: MaterialApp(
           theme: ThemeData(
