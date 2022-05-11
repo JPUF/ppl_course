@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:ppl_course/res/color/colors.dart';
@@ -17,17 +19,27 @@ class _LineChart extends StatelessWidget {
     );
   }
 
-  LineChartData get chartData => LineChartData(
-        lineTouchData: lineTouchData,
-        gridData: FlGridData(show: false),
-        titlesData: titlesData,
-        borderData: borderData,
-        lineBarsData: [barData],
-        minX: 0,
-        maxX: 14,
-        maxY: 4,
-        minY: 0,
-      );
+  LineChartData get chartData {
+    return LineChartData(
+      lineTouchData: lineTouchData,
+      gridData: FlGridData(show: false),
+      titlesData: titlesData,
+      borderData: borderData,
+      lineBarsData: [barData],
+      minX: minMaxXY(true, true),
+      maxX: minMaxXY(false, true),
+      minY: minMaxXY(true, false),
+      maxY: minMaxXY(false, false),
+    );
+  }
+
+  double minMaxXY(bool getMin, bool getX) {
+    final xValues = dataSpots.map((e) => e.x).toList();
+    final yValues = dataSpots.map((e) => e.y).toList();
+    final values = getX ? xValues : yValues;
+    final minMax = getMin ? min : max;
+    return values.reduce(minMax);
+  }
 
   LineTouchData get lineTouchData => LineTouchData(
         handleBuiltInTouches: true,
@@ -59,17 +71,20 @@ class _LineChart extends StatelessWidget {
     );
   }
 
-  SideTitles leftTitles() => SideTitles(
-        getTitlesWidget: leftTitleWidgets,
-        showTitles: true,
-        interval: 1,
-        reservedSize: 40,
-      );
+  SideTitles leftTitles() {
+    final yDiff = minMaxXY(false, false) - minMaxXY(true, false);
+    return SideTitles(
+      getTitlesWidget: leftTitleWidgets,
+      showTitles: true,
+      interval: yDiff / 4.0,
+      reservedSize: 40,
+    );
+  }
 
   Widget bottomTitleWidgets(double value, TitleMeta meta) {
     return Padding(
         child: Text("${value.toInt()}", style: AppTextStyles.chartAxisTitle),
-        padding: const EdgeInsets.only(top: 10.0));
+        padding: const EdgeInsets.only(top: 16));
   }
 
   SideTitles get bottomTitles => SideTitles(
