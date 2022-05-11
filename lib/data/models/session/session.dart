@@ -1,7 +1,9 @@
 import 'dart:convert';
 
+import 'package:collection/collection.dart';
 import 'package:ppl_course/common/utils/date_time_day.dart';
 import 'package:ppl_course/data/models/exercise/exercise.dart';
+import 'package:ppl_course/data/models/exercise/weight.dart';
 import 'package:uuid/uuid.dart';
 
 class Session {
@@ -64,6 +66,13 @@ class Session {
 
   factory Session.fromJson(String source) =>
       Session.fromMap(json.decode(source));
+}
+
+extension SessionVolume on Session {
+  Weight totalVolume() {
+    final weights = exercises.map((e) => e.weight?.kg ?? 0).toList();
+    return Weight(weights.sum);
+  }
 }
 
 enum SessionType { push, pull, legs }

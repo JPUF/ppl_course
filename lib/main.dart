@@ -46,7 +46,7 @@ class PlannerApp extends StatelessWidget {
         BlocProvider<SessionsBloc>(
             create: (context) => SessionsBloc(sessionRepository)),
         BlocProvider<ExercisesBloc>(create: (context) => ExercisesBloc()),
-        BlocProvider<StatsBloc>(create: (context) => StatsBloc())
+        BlocProvider<StatsBloc>(create: (context) => StatsBloc(sessionRepository))
       ],
       child: MaterialApp(
           theme: ThemeData(

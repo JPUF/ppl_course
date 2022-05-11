@@ -24,13 +24,8 @@ class _StatsPageState extends State<StatsPage> {
   );
 
   @override
-  void initState() {
-    super.initState();
-    BlocProvider.of<StatsBloc>(context).add(TotalVolumeEvent());
-  }
-
-  @override
   Widget build(BuildContext context) {
+    BlocProvider.of<StatsBloc>(context).add(TotalVolumeEvent());
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
